@@ -7,7 +7,7 @@ using GXPEngine;
 class Dirt : Tile
 {
 
-    public Dirt(float x) : base("Dirt.png", x)
+    public Dirt(float x, float y) : base("Dirt.png", x, y)
     {
 
     }
