@@ -1,0 +1,5 @@
+C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.exe
+C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.pdb
+C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
+C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.exe
+C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.pdb
