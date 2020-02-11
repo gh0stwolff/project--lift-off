@@ -7,7 +7,7 @@ using GXPEngine;
 class DiamondOre : Tile
 {
 
-    public DiamondOre(float x) : base("DiamondOre.png", x)
+    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y)
     {
 
     }

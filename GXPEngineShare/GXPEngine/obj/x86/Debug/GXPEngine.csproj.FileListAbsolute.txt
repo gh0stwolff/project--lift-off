@@ -3,3 +3,13 @@ C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngin
 C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
 C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.exe
 C:\Users\pamkm\Desktop\Project lift off\project-lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.pdb
+C:\Users\pamkm\Desktop\Privé\Les\Projects\Lift off\project--lift-off\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.exe
+C:\Users\pamkm\Desktop\Privé\Les\Projects\Lift off\project--lift-off\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.pdb
+C:\Users\pamkm\Desktop\Privé\Les\Projects\Lift off\project--lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
+C:\Users\pamkm\Desktop\Privé\Les\Projects\Lift off\project--lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.exe
+C:\Users\pamkm\Desktop\Privé\Les\Projects\Lift off\project--lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.pdb
+C:\Users\pamkm\Desktop\back up\project--lift-off-geoffrey\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
+C:\Users\pamkm\Desktop\back up\project--lift-off-geoffrey\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.exe
+C:\Users\pamkm\Desktop\back up\project--lift-off-geoffrey\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.pdb
+C:\Users\pamkm\Desktop\back up\project--lift-off-geoffrey\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.exe
+C:\Users\pamkm\Desktop\back up\project--lift-off-geoffrey\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.pdb

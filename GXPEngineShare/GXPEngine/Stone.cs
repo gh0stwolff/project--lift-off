@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using GXPEngine;
 
-class Dirt : Tile
+class Stone : Tile
 {
 
-    public Dirt(float x, float y) : base("Dirt.png", x, y)
+    public Stone(float x, float y) : base("Rock.png", x, y)
     {
 
     }

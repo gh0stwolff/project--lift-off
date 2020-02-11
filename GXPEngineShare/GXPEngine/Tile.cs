@@ -6,16 +6,30 @@ using GXPEngine;
 
 class Tile : Sprite
 {
-    private float _speed = 2.0f;
+    //private float _speed = 0.5f;
 
-    public Tile(string fileName, float xLoc) : base(fileName)
+    public Tile(string fileName, float xLoc, float yLoc) : base(fileName)
     {
         x = xLoc;
+        y = yLoc;
     }
 
     public void Update()
     {
-        y = y + _speed;
+        if(y > ((MyGame)game).height)
+        {
+            selfDestroy();
+        }
+    }
+
+    private void selfDestroy()
+    {
+        LateDestroy();
+    }
+
+    public int GetHeight()
+    {
+        return width;
     }
 
 }
