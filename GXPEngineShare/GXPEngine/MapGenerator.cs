@@ -6,10 +6,20 @@ using GXPEngine;
 class MapGenerator : GameObject
 {
     private int _blockCountWidth;
+    private float _lineSpeed = 0;
+    private int _lineHeight = 0;
+    private int _framesBetweenLines;
+    private float _timer = 0;
+
+    private Tile tile;
 
     public MapGenerator(int blockCountWidth) : base()
     {
         _blockCountWidth = blockCountWidth;
+        tile = new Tile("Dirt.png", 0);
+        _lineSpeed = tile.GetSpeed();
+        _lineHeight = tile.GetHeight();
+        _framesBetweenLines = (int)(tile.GetHeight() / tile.GetSpeed());
     }
 
     public void Update()
@@ -18,8 +28,24 @@ class MapGenerator : GameObject
         {
             generateNewLine();
         }
+        timerNewLine();
+        Console.WriteLine(Time.deltaTime);
     }
 
+    private void timerNewLine()
+    {
+        if (_timer <= 0)
+        {
+            generateNewLine();
+            _timer = _framesBetweenLines;
+        }
+
+        _timer--;
+
+        //count frame met int counter
+
+
+    }
 
     private void generateNewLine()
     {
@@ -38,36 +64,16 @@ class MapGenerator : GameObject
                 case 0:
                     Dirt dirt = new Dirt(getScreenLocation(i));
                     AddChild(dirt);
-                    Console.WriteLine("dirt");
+                    //Console.WriteLine("dirt");
                     break;
                 case 1:
                     DiamondOre diamond = new DiamondOre(getScreenLocation(i));
                     AddChild(diamond);
-                    Console.WriteLine("diamond");
+                    //Console.WriteLine("diamond");
                     break;
             }
         }
-        Console.WriteLine("-----------------------");
-
-        //foreach (int numb in newLine)
-        //{
-
-        //}
-
-        //array[,] tiles;
-
-        //for (int i = 0; i < tiles.GetLength(0); i++)
-        //{
-        //    for (int j = 0; j < tiles.GetLength(1); j++)
-        //    {
-        //        AnimationSprite tile = new AnimationSprite(fileName, 2, 1);
-        //        AddChild(tile);
-        //        tile.x = blockWidth * i;
-        //        tile.y = blockHeight * j;
-
-        //        tiles[i, j] = tile;
-        //    }
-        //}
+        //Console.WriteLine("-----------------------");
     }
 
     private float getScreenLocation(int index)

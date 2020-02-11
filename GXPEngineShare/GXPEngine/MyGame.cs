@@ -3,9 +3,9 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-	public MyGame() : base(3200, 6400, false, true, 600, 1200)		// Create a window that's 800x600 and NOT fullscreen
+	public MyGame() : base(1408, 1280, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        MapGenerator map = new MapGenerator(8);
+        MapGenerator map = new MapGenerator(width/64);
         AddChild(map);
 	}
 
