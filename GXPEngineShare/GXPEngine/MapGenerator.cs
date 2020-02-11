@@ -5,12 +5,17 @@ using System.Text;
 using GXPEngine;
 class MapGenerator : GameObject
 {
-    private int _DIRT = 0;
-    private int _DIAMOND = 1;
+    const int DIRT = 0;
+    const int DIAMOND = 1;
+    const int STONE = 2;
 
     private int _blockCountWidth;
     private int _framesBetweenLines;
     private int _lineNumb;
+    private int _linesTillNarrowing = -5;
+    private int _targetLine;
+    private int _rockThicknessLeft = 2;
+    private int _rockThicknessRight = 2;
 
     private float _dirtChance = 90.0f;
     private float _diamondChance = 10.0f;
@@ -31,6 +36,7 @@ class MapGenerator : GameObject
         {
             generateNewLine();
         }
+        _targetLine = _lineNumb + _linesTillNarrowing;
     }
 
     public void Update()
@@ -59,21 +65,49 @@ class MapGenerator : GameObject
 
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
-            //TODO: change the amount of rock on the sides
-            newLine[i] = getRandomNumb();
+
+            if (_lineNumb < _targetLine)
+            {
+                if (_rockThicknessLeft == _rockThicknessRight)
+                {
+                    _rockThicknessLeft++;
+                }
+                else
+                {
+                    _rockThicknessRight++;
+                }
+                _targetLine = _linesTillNarrowing + _lineNumb;
+            }
+
+            if (_rockThicknessLeft > i)
+            {
+                newLine[i] = STONE;
+            }
+            else if (i >= _blockCountWidth - _rockThicknessRight)
+            {
+                newLine[i] = STONE;
+            }
+            else
+            {
+                newLine[i] = getRandomNumb();
+            }
         }
 
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
             switch (newLine[i])
             {
-                case 0:
+                case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
                     AddChild(dirt);
                     break;
-                case 1:
+                case DIAMOND:
                     DiamondOre diamond = new DiamondOre(getXLocation(i), getYLocation(_lineNumb));
                     AddChild(diamond);
+                    break;
+                case STONE:
+                    Stone stone = new Stone(getXLocation(i), getYLocation(_lineNumb));
+                    AddChild(stone);
                     break;
             }
         }
@@ -100,9 +134,9 @@ class MapGenerator : GameObject
         switch (Type)
         {
             case BlockType.Dirt:
-                return _DIRT;
+                return DIRT;
             case BlockType.Diamond:
-                return _DIAMOND;
+                return DIAMOND;
         }
 
         return 0;
