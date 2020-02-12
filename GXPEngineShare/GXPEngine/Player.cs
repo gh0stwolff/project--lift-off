@@ -6,51 +6,64 @@ using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
 
-class Player : Sprite
+class Player : AnimationSprite
 {
-    private float gravity = 0.5f;
-    private float deceleration = 0.98f;
-    private float vSpeed = 0.0f;
-    private float hSpeed = 0.0f;
+    private float _gravity = 0.5f;
+    private float _deceleration = 0.9f;
+    private float _vSpeed = 0.0f;
+    private float _hSpeed = 0.0f;
+    private int _state = 1;
+    private int _timer = 0;
+    private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
 
     bool UP = false, DOWN = false, RIGHT = false, LEFT = false;
-    public Player() : base("player.png")
+    public Player() : base("player_sprite_sheet.png", 8, 1)
     {
-
+        SetOrigin(width / 2, height / 2);
     }
 
     void Update()
     {
         Gravity();
         Movement();
+        Animation();
     }
 
 
     void Movement()
     {
-
+        _state = 1;
         if (Input.GetKey(Key.UP))
         {
             UP = true;
-            vSpeed = 2.0f;
+            _vSpeed = 2.5f;
+            _state = 2;
+            rotation = _angleUp;
+            
         }
 
         if (Input.GetKey(Key.DOWN))
         {
             DOWN = true;
-            vSpeed = -2.0f;
+            _vSpeed = -2.0f;
+            _state = 2;
+            rotation = _angleDown;
         }
 
         if (Input.GetKey(Key.LEFT))
         {
             LEFT = true;
-            hSpeed = 2.0f;
+            _hSpeed = 2.0f;
+            _state = 2;
+            rotation = _angleLeft;
         }
 
         if (Input.GetKey(Key.RIGHT))
         {
             RIGHT = true;
-            hSpeed = -2.0f;
+            _hSpeed = -2.0f;
+            _state = 2;
+            rotation = _angleRight;
         }
 
         if (Input.GetKeyUp(Key.UP))
@@ -73,46 +86,90 @@ class Player : Sprite
             RIGHT = false;
         }
 
-            y -= vSpeed;
-            x -= hSpeed;
+            y -= _vSpeed;
+            x -= _hSpeed;
 
-            vSpeed *= 0.9f;
-            hSpeed *= 0.9f;
+            _vSpeed *= _deceleration;
+            _hSpeed *= _deceleration;
         if (UP)
         {
-            vSpeed = vSpeed < 0.1f ? 0.0f : vSpeed;
+            _vSpeed = _vSpeed < 0.1f ? 0.0f : _vSpeed;
         }
         if (DOWN)
         {
-            vSpeed = vSpeed > -0.1f ? 0.0f : vSpeed;
+            _vSpeed = _vSpeed > -0.1f ? 0.0f : _vSpeed;
         }
         if (LEFT)
         {
-            hSpeed = hSpeed < 0.1f ? 0.0f : hSpeed;
+            _hSpeed = _hSpeed < 0.1f ? 0.0f : _hSpeed;
         }
         if (RIGHT)
         {
-            hSpeed = hSpeed > -0.1f ? 0.0f : hSpeed;
+            _hSpeed = _hSpeed > -0.1f ? 0.0f : _hSpeed;
         }
 
 
-        //Collision collision = MoveUntilCollision(0.0f, -upT);
-        //if(collision != null)
+        //Collision collision = MoveUntilCollision(0.0f, _vSpeed);
+
+        //if (collision != null)
         //{
-        //    Console.Write(collision.other.name);
-        //    if(collision.other.name == "coin")
+        //    if (collision.other.name == "diamond")
         //    {
-        //       
+        //        LateDestroy();
         //    }
         //}
 
+
     }
 
+    void Animation()
+    {
+        if(_state == 1)
+        {
+            _timer++;
+            if(_timer > 5) SetFrame(1);
+            if(_timer > 10) SetFrame(0);
+            if (_timer > 15) _timer = 0;
+        }
+        if(_state == 2)
+        {
+            _timer++;
+            if (_timer > 5) SetFrame(3);
+            if (_timer > 10) SetFrame(2);
+            if (_timer > 15) _timer = 0;
+        }
+        if (_state == 3)
+        {
+            _timer++;
+            if (_timer > 5) SetFrame(5);
+            if (_timer > 10) SetFrame(4);
+            if (_timer > 15) _timer = 0;
+        }
+        if (_state == 4)
+        {
+            _timer++;
+            if (_timer > 5) SetFrame(7);
+            if (_timer > 10) SetFrame(6);
+            if (_timer > 15) _timer = 0;
+        }
+    }
+    
+    void Break()
+    {
+        
+    }
 
     void Gravity()
     {
-        y += gravity;
+        y += _gravity;
     }
 
+    void OnCollision(GameObject other)
+    {
+        if(other is DiamondOre)
+        {
+            other.LateDestroy();
+        }
+    }
 }
 
