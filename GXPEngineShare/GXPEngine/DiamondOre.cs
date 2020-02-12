@@ -12,4 +12,11 @@ class DiamondOre : Tile
 
     }
 
+    public void collect()
+    {
+        //add points
+
+        //add before LateDestroy a partical effect
+        LateDestroy();
+    }
 }

@@ -78,6 +78,7 @@
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="Stone.cs" />
+    <Compile Include="TestPlayer.cs" />
     <Compile Include="Tile.cs" />
   </ItemGroup>
   <ItemGroup />

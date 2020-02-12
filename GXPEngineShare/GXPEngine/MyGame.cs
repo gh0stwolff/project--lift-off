@@ -7,9 +7,9 @@ public class MyGame : Game
 
 	public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        MapGenerator map = new MapGenerator(width/64);
+        MapGenerator map = new MapGenerator();
         AddChild(map);
-	}
+    }
 
 	void Update()
 	{
