@@ -1,4 +1,3 @@
-
 C:\Users\Cristian\Documents\GitHub\project--lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csprojAssemblyReference.cache
 C:\Users\Cristian\Documents\GitHub\project--lift-off\GXPEngineShare\GXPEngine\obj\x86\Debug\GXPEngine.csproj.CoreCompileInputs.cache
 C:\Users\Cristian\Documents\GitHub\project--lift-off\GXPEngineShare\GXPEngine\bin\Debug\GXPEngine.exe

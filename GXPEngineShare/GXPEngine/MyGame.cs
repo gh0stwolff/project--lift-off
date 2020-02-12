@@ -3,7 +3,7 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-
+    Player player;
 	private float _speed = 1.0f;
 
 	public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
