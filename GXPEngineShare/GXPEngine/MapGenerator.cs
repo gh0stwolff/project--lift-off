@@ -23,11 +23,6 @@ class MapGenerator : GameObject
     private int _rockThicknessLeft = 2;
     private int _rockThicknessRight = 2;
 
-    //chance in percentages, for each type
-    //NOTE: All chances together need to be 100
-    private float _dirtChance = 90.0f;
-    private float _diamondChance = 5.0f;
-    private float _stoneChance = 5.0f;
 
     private bool _isGoingOutWards = false;
 
@@ -75,17 +70,16 @@ class MapGenerator : GameObject
         int[] newLine;
         newLine = new int[_blockCountWidth];
 
+        if (_lineNumb < _targetLine)
+        {
+            handleWallStat();
+            ChangeWallThickness();
+
+            _targetLine = _linesTillNarrowing + _lineNumb;
+        }
+
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
-
-            if (_lineNumb < _targetLine)
-            {
-                handleWallStat();
-                ChangeWallThickness();
-
-                _targetLine = _linesTillNarrowing + _lineNumb;
-            }
-
             if (_rockThicknessLeft > i)
             {
                 newLine[i] = STONE;
@@ -162,20 +156,23 @@ class MapGenerator : GameObject
 
     private int getRandomNumb(int index)
     {
+        float dirtChance = getDirtSpawnChance(index);
+        float diamondChance = getDiamondSpawnChance(index);
+        float stoneChance = getStoneSpawnChance(index);
 
-        float randomNumb = Utils.Random(0, getDirtSpawnChance(index) + getDiamondSpawnChance(index) + getStoneSpawnChance(index) + 1);
+        float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + 1);
 
-        Console.WriteLine("dirt: {0}, Diamond: {1}, Stone: {2}", getDirtSpawnChance(index), getDiamondSpawnChance(index), getStoneSpawnChance(index));
+        Console.WriteLine("diamond: {0}", diamondChance); //Diamond: {1}, Stone: {2}", getDirtSpawnChance(index), getDiamondSpawnChance(index), getStoneSpawnChance(index));
 
-        if (randomNumb < getDirtSpawnChance(index))
+        if (randomNumb < dirtChance)
         {
             Type = BlockType.Dirt;
         }
-        else if (randomNumb < getDirtSpawnChance(index) + getDiamondSpawnChance(index))
+        else if (randomNumb < dirtChance + diamondChance)
         {
             Type = BlockType.Diamond;
         }
-        else if (randomNumb < getDirtSpawnChance(index) + getDiamondSpawnChance(index) + getStoneSpawnChance(index))
+        else if (randomNumb < dirtChance + diamondChance + stoneChance)
         {
             Type = BlockType.Stone;
         }
@@ -195,71 +192,58 @@ class MapGenerator : GameObject
 
     private float getDirtSpawnChance(int index)
     {
-        // y = a(x*x) - bx + c ,chance lowers in the middle
-        // y = -a(x*x) - bx + c, chance is higher in the middle
-        // y = answer
-        // x = index location
-        // a = postive is peak on top, negative is peak on bottom
-        // a = < 1 makes the parabool less steep
-        // b = moves the graph on the x-axis
-        // c = moves the graph on the y-axis
-
-        float maxChance = _dirtChance;
-        float minChance = 20f;
-        float chanceChangeRate = 1.0f;
+        float maxChance = 80.0f;
+        float minChance = 50.0f;
         bool isChanceHigherInMiddle = true;
 
-        float a = chanceChangeRate;
-        float b = maxChance;
-        float c = _blockCountWidth;
-
-        if ( isChanceHigherInMiddle)
-        {
-            a = a * -1;
-            b = minChance;
-        }
-
-        return a * (index * index) - b * index + c;
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getDiamondSpawnChance(int index)
     {
-        float maxChance = _diamondChance;
-        float minChance = 1.0f;
-        float chanceChangeRate = 1.0f;
+        float maxChance = 10.0f;
+        float minChance = 5.0f;
         bool isChanceHigherInMiddle = false;
 
-        float a = chanceChangeRate;
-        float b = maxChance;
-        float c = _blockCountWidth / 2;
-
-        if ( isChanceHigherInMiddle)
-        {
-            a = a * -1;
-            c = minChance;
-        }
-
-        return a * (index * index) - b * index + c;
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = _stoneChance;
-        float minChance = 2.0f;
-        float chanceChangeRate = 1.0f;
+        float maxChance = 15.0f;
+        float minChance = 10.0f;
         bool isChanceHigherInMiddle = true;
 
-        float a = chanceChangeRate;
-        float b = maxChance;
-        float c = _blockCountWidth / 2;
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
 
-        if ( isChanceHigherInMiddle)
+    private float calculateChance(float maxChance, float minChance, bool isChanceHigherInMiddle, int index)
+    {
+        if (isChanceHigherInMiddle)
         {
-            a = a * -1;
-            c = minChance;
-        }
+            float y = minChance;
+            float x = index;
+            float p = _blockCountWidth / 2;
+            float q = maxChance;
 
-        return a * (index * index) - b * index + c;
+            double a = (y - q) / (p * p);
+
+            y = (float)(a * ((x - p) * (x - p)) + q);
+            return y;
+        }
+        else
+        {
+            float y = maxChance;
+            float x = index;
+            float p = _blockCountWidth / 2;
+            float q = minChance;
+
+            double a = (y - q) / (p * p);
+
+            y = (float)(a * ((x - p) * (x - p)) + q);
+            return y;
+
+        }
     }
 
     private float getXLocation(int index)

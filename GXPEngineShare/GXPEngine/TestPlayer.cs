@@ -6,8 +6,6 @@ using GXPEngine;
 
 class TestPlayer : GameObject
 {
-    private int _lastKeyPressed = 0;
-
     private float _speed = 4.0f;
 
     private Sprite _skin;
@@ -50,25 +48,21 @@ class TestPlayer : GameObject
         {
             //MoveUntilCollision(0, -_speed);
             Move(0, -_speed);
-            _lastKeyPressed = Key.W;
         }
         if (Input.GetKey(Key.S))
         {
             //MoveUntilCollision(0, _speed);
             Move(0, _speed);
-            _lastKeyPressed = Key.S;
         }
         if (Input.GetKey(Key.A))
         {
             //MoveUntilCollision(-_speed, 0);
             Move(-_speed, 0);
-            _lastKeyPressed = Key.A;
         }
         if (Input.GetKey(Key.D))
         {
             //MoveUntilCollision(_speed, 0);
             Move(_speed, 0);
-            _lastKeyPressed = Key.D;
         }
     }
 }
