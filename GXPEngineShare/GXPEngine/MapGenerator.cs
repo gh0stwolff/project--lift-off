@@ -16,6 +16,7 @@ class MapGenerator : GameObject
     private int _maxWidth = 18;
     private int _framesBetweenLines;
     private int _lineNumb;
+    private int _amountLinesWithRockRestirction = 10;
     private int _linesTillNarrowing = -5;
     private int _timer = 0;
     private int _targetLine;
@@ -27,20 +28,42 @@ class MapGenerator : GameObject
     private bool _isGoingOutWards = false;
 
     private Tile _tile;
+    private Lava _lava;
 
     enum BlockType { Dirt, Stone, Diamond}
     BlockType Type = BlockType.Dirt;
+    private ScreenLayer[] layers = new ScreenLayer[4];
+
 
     public MapGenerator() : base()
     {
         _tile = new Tile("Dirt.png", 0, 0);
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = -1;
+        _lineNumb = ((MyGame)game).height / _tile.GetHeight();
+        _amountLinesWithRockRestirction = -_amountLinesWithRockRestirction;
+        _amountLinesWithRockRestirction -= _lineNumb - 21;
 
-        Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
-        AddChild(spawn);
+        for (int i = 0; i < layers.Length; i++)
+        {
+            layers[i] = new ScreenLayer();
+            AddChild(layers[i]);
+        }
 
+        for (int i = 0; i < _lineNumb; i = -1)
+        {
+            generateNewLine();
+        }
+
+
+        TestPlayer player = new TestPlayer();
+        AddChild(player);
+        //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
+        //layers[2].AddChild(spawn);
+
+        _lava = new Lava();
+        layers[1].AddChild(_lava);
+ 
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
 
@@ -88,6 +111,7 @@ class MapGenerator : GameObject
             }
             else
             {
+                
                 newLine[i] = getRandomNumb(i);
             }
         }
@@ -98,15 +122,15 @@ class MapGenerator : GameObject
             {
                 case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
-                    AddChild(dirt);
+                    layers[0].AddChild(dirt);
                     break;
                 case DIAMOND:
                     DiamondOre diamond = new DiamondOre(getXLocation(i), getYLocation(_lineNumb));
-                    AddChild(diamond);
+                    layers[0].AddChild(diamond);
                     break;
                 case STONE:
                     Stone stone = new Stone(getXLocation(i), getYLocation(_lineNumb));
-                    AddChild(stone);
+                    layers[2].AddChild(stone);
                     break;
             }
         }
@@ -157,6 +181,11 @@ class MapGenerator : GameObject
         float dirtChance = getDirtSpawnChance(index);
         float diamondChance = getDiamondSpawnChance(index);
         float stoneChance = getStoneSpawnChance(index);
+        if (_amountLinesWithRockRestirction < _lineNumb)
+        {
+            stoneChance = 0;
+        }
+
 
         float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + 1);
 
