@@ -1,5 +1,7 @@
 Last update: 10-7-2019
 
+Hello :)
+
 
 0.0.1 - initial post
 0.0.2 - fixed Canvas to allow for faster writing
