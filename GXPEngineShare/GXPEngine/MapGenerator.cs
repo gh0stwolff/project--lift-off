@@ -160,8 +160,6 @@ class MapGenerator : GameObject
 
         float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + 1);
 
-        Console.WriteLine("diamond: {0}", diamondChance); //Diamond: {1}, Stone: {2}", getDirtSpawnChance(index), getDiamondSpawnChance(index), getStoneSpawnChance(index));
-
         if (randomNumb < dirtChance)
         {
             Type = BlockType.Dirt;
