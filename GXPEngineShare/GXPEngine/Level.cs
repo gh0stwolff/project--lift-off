@@ -27,7 +27,6 @@ public class Level : GameObject
             for (int column = 0; column < mainLayer.Width; column++)
             {
                 int tileNumber = tileNumbers[column, row];
-                Console.WriteLine(tileNumber);
                 if (tileNumber == 1)
                 {
                     Stone stone = new Stone(0, 0);
