@@ -81,6 +81,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Stone.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="Worm.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

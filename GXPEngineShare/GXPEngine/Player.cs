@@ -6,8 +6,11 @@ using System.Text;
 using GXPEngine;
 using GXPEngine.Core;
 
-class Player : AnimationSprite
+class Player : Sprite
 {
+    private AnimationSprite _animation;
+    private Sprite _drill;
+
     private float _gravity = 0.5f;
     private float _deceleration = 0.9f;
     private float _vSpeed = 0.0f;
@@ -15,148 +18,205 @@ class Player : AnimationSprite
     private int _state = 1;
     private int _timer = 0;
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
-
-    bool UP = false, DOWN = false, RIGHT = false, LEFT = false;
-    public Player() : base("player_sprite_sheet.png", 8, 1)
+    public Player() : base("collider.png")
     {
-        SetOrigin(width / 2, height / 2);
+        //SetOrigin(width / 2, height / 2);
+        // SetScaleXY(0.5f, 0.5f);
+        //alpha = 0.0f;
+
+        _animation = new AnimationSprite("player_sprite_sheet.png", 8, 1, -1, false, false);
+        AddChild(_animation);
+        //_animation.alpha = 0.2f;
+        _animation.SetOrigin(width/2+3, height/2+5);
+
+
+        _drill = new Sprite("drill.png");
+        AddChild(_drill);
+        _drill.alpha = 0.0f;
+        _drill.SetOrigin(width/8-22, height/3-2);
     }
 
     void Update()
     {
         Gravity();
         Movement();
+        Break();
         Animation();
     }
-
 
     void Movement()
     {
         _state = 1;
-        if (Input.GetKey(Key.UP))
+        if (Input.GetKey(Key.Z))
         {
-            UP = true;
-            _vSpeed = 2.5f;
-            _state = 2;
-            rotation = _angleUp;
-            
+            _state = 4;
         }
-
-        if (Input.GetKey(Key.DOWN))
-        {
-            DOWN = true;
-            _vSpeed = -2.0f;
-            _state = 2;
-            rotation = _angleDown;
-        }
-
         if (Input.GetKey(Key.LEFT))
         {
-            LEFT = true;
-            _hSpeed = 2.0f;
+            _hSpeed -= 1.0f;
             _state = 2;
-            rotation = _angleLeft;
-        }
+            if (Input.GetKey(Key.Z))
+            {
+                _state = 3;
+            }
 
+            _animation.SetOrigin(width / 2 + 60, height / 2 +6);
+
+            _animation.rotation = _angleLeft;
+        }
         if (Input.GetKey(Key.RIGHT))
         {
-            RIGHT = true;
-            _hSpeed = -2.0f;
+            _hSpeed += 1.0f;
             _state = 2;
-            rotation = _angleRight;
+            if (Input.GetKey(Key.Z))
+            {
+                _state = 3;
+            }
+
+            _animation.SetOrigin(width/ 2 + 2, height / 2 + 60);
+
+           _animation.rotation = _angleRight;
         }
 
-        if (Input.GetKeyUp(Key.UP))
+        DoMove(_hSpeed, 0);
+        _hSpeed *= _deceleration;
+
+        if (Input.GetKey(Key.UP))
         {
-            UP = false;
-        }
+            _vSpeed -= 1.0f;
+            _state = 2;
+            if (Input.GetKey(Key.Z))
+            {
+                _state = 3;
+            }
 
-        if (Input.GetKeyUp(Key.DOWN))
+            _animation.SetOrigin(width / 2 + 3, height / 2 + 5);
+
+            _animation.rotation = _angleUp;
+        }
+        if (Input.GetKey(Key.DOWN))
         {
-            DOWN = false;
-        }
+            _vSpeed += 1.0f;
+            _state = 2;
+            if (Input.GetKey(Key.Z))
+            {
+                _state = 3;
+            }
 
-        if (Input.GetKeyUp(Key.LEFT))
-        {
-            LEFT = false;
-        }
+            _animation.SetOrigin(width * 2 - 25, height * 2 - 20);
 
-        if (Input.GetKeyUp(Key.RIGHT))
-        {
-            RIGHT = false;
-        }
-
-            y -= _vSpeed;
-            x -= _hSpeed;
-
-            _vSpeed *= _deceleration;
-            _hSpeed *= _deceleration;
-        if (UP)
-        {
-            _vSpeed = _vSpeed < 0.1f ? 0.0f : _vSpeed;
-        }
-        if (DOWN)
-        {
-            _vSpeed = _vSpeed > -0.1f ? 0.0f : _vSpeed;
-        }
-        if (LEFT)
-        {
-            _hSpeed = _hSpeed < 0.1f ? 0.0f : _hSpeed;
-        }
-        if (RIGHT)
-        {
-            _hSpeed = _hSpeed > -0.1f ? 0.0f : _hSpeed;
+           _animation.rotation = _angleDown;
         }
 
 
-        //Collision collision = MoveUntilCollision(0.0f, _vSpeed);
-
-        //if (collision != null)
-        //{
-        //    if (collision.other.name == "diamond")
-        //    {
-        //        LateDestroy();
-        //    }
-        //}
-
+        DoMove(0, _vSpeed);
+        _vSpeed *= _deceleration;
 
     }
+
+    bool DoMove(float moveX, float moveY)
+    {
+        x += moveX;
+        y += moveY;
+
+        if (HandleCollisions(moveX, moveY) == true)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool HandleCollisions(float moveX, float moveY)
+    {
+        bool result = false;
+        foreach (GameObject other in this.GetCollisions())
+        {
+            if (other is Sprite)
+            {
+                result = result || HandleCollision(other as Sprite, moveX, moveY);
+            }
+        }
+        return result;
+    }
+
+    bool HandleCollision(Sprite other, float moveX, float moveY)
+    {
+        if (other is Tile)
+        {
+            ResolveCollision(other, moveX, moveY);
+            return true;
+        }
+
+
+        return false;
+    }
+
+    void ResolveCollision(Sprite other, float moveX, float moveY)
+    {
+        if (moveX > 0)
+        {
+            x = other.x - width;
+        }
+        if (moveX < 0)
+        {
+            x = other.x + other.width;
+        }
+        if (moveY > 0)
+        {
+            y = other.y - height;
+        }
+        if (moveY < 0)
+        {
+            y = other.y + other.height;
+        }
+    }
+
+  
 
     void Animation()
     {
         if(_state == 1)
         {
             _timer++;
-            if(_timer > 5) SetFrame(1);
-            if(_timer > 10) SetFrame(0);
+            if(_timer > 5) _animation.SetFrame(1);
+            if(_timer > 10) _animation.SetFrame(0);
             if (_timer > 15) _timer = 0;
         }
         if(_state == 2)
         {
             _timer++;
-            if (_timer > 5) SetFrame(3);
-            if (_timer > 10) SetFrame(2);
+            if (_timer > 5) _animation.SetFrame(3);
+            if (_timer > 10) _animation.SetFrame(2);
             if (_timer > 15) _timer = 0;
         }
+
         if (_state == 3)
         {
             _timer++;
-            if (_timer > 5) SetFrame(5);
-            if (_timer > 10) SetFrame(4);
+            if (_timer > 5) _animation.SetFrame(5);
+            if (_timer > 10) _animation.SetFrame(4);
             if (_timer > 15) _timer = 0;
         }
         if (_state == 4)
         {
             _timer++;
-            if (_timer > 5) SetFrame(7);
-            if (_timer > 10) SetFrame(6);
+            if (_timer > 5) _animation.SetFrame(7);
+            if (_timer > 10) _animation.SetFrame(6);
             if (_timer > 15) _timer = 0;
         }
     }
     
     void Break()
     {
-        
+        foreach(GameObject other in _drill.GetCollisions())
+        {
+            if(other is Tile && Input.GetKey(Key.Z))
+            {
+                
+                other.LateDestroy();
+            }
+        }
     }
 
     void Gravity()
@@ -164,12 +224,5 @@ class Player : AnimationSprite
         y += _gravity;
     }
 
-    void OnCollision(GameObject other)
-    {
-        if(other is DiamondOre)
-        {
-            other.LateDestroy();
-        }
-    }
 }
 

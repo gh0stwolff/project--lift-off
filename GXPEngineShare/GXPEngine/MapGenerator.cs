@@ -26,6 +26,19 @@ class MapGenerator : GameObject
     enum BlockType { Dirt, Diamond}
     BlockType Type = BlockType.Dirt;
 
+    //GameObject[,] grid = new GameObject[100, 100];
+    //grid[5, 5] = new DiamondOrb();
+
+    //int gridX = (int)(player.x / TileSize);
+    //int gridY = (int)(player.x / TileSize);
+
+    //GameObject other = grid[gridY, gridX];
+    //if (other != null) {
+    //      if (player.hitTest(other) {
+    //          return other;
+    //      }
+    //}
+
     public MapGenerator(int blockCountWidth) : base()
     {
         _blockCountWidth = blockCountWidth;
