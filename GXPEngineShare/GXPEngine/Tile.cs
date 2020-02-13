@@ -6,9 +6,8 @@ using GXPEngine;
 
 class Tile : Sprite
 {
-    //private float _speed = 0.5f;
 
-    public Tile(string fileName, float xLoc, float yLoc) : base(fileName)
+    public Tile(string fileName, float xLoc, float yLoc) : base(fileName, false , true)
     {
         x = xLoc;
         y = yLoc;
@@ -31,5 +30,4 @@ class Tile : Sprite
     {
         return width;
     }
-
 }

@@ -5,37 +5,42 @@ using System.Text;
 using GXPEngine;
 class MapGenerator : GameObject
 {
+    //types of tiles
     const int DIRT = 0;
     const int DIAMOND = 1;
     const int STONE = 2;
 
+    //for generating new lines
     private int _blockCountWidth;
+    private int _minWidth = 6;
+    private int _maxWidth = 18;
     private int _framesBetweenLines;
     private int _lineNumb;
     private int _linesTillNarrowing = -5;
+    private int _timer = 0;
     private int _targetLine;
+    //how big the outerborder is
     private int _rockThicknessLeft = 2;
     private int _rockThicknessRight = 2;
 
-    private float _dirtChance = 90.0f;
-    private float _diamondChance = 10.0f;
-    private float _timer = 0;
+
+    private bool _isGoingOutWards = false;
 
     private Tile _tile;
 
-    enum BlockType { Dirt, Diamond}
+    enum BlockType { Dirt, Stone, Diamond}
     BlockType Type = BlockType.Dirt;
 
-    public MapGenerator(int blockCountWidth) : base()
+    public MapGenerator() : base()
     {
-        _blockCountWidth = blockCountWidth;
         _tile = new Tile("Dirt.png", 0, 0);
+        _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = (((MyGame)game).height / _tile.GetHeight());
-        for (int i = 0; i < _lineNumb; i = -1)
-        {
-            generateNewLine();
-        }
+        _lineNumb = -1;
+
+        Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
+        AddChild(spawn);
+
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
 
@@ -63,22 +68,16 @@ class MapGenerator : GameObject
         int[] newLine;
         newLine = new int[_blockCountWidth];
 
+        if (_lineNumb < _targetLine)
+        {
+            handleWallStat();
+            ChangeWallThickness();
+
+            _targetLine = _linesTillNarrowing + _lineNumb;
+        }
+
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
-
-            if (_lineNumb < _targetLine)
-            {
-                if (_rockThicknessLeft == _rockThicknessRight)
-                {
-                    _rockThicknessLeft++;
-                }
-                else
-                {
-                    _rockThicknessRight++;
-                }
-                _targetLine = _linesTillNarrowing + _lineNumb;
-            }
-
             if (_rockThicknessLeft > i)
             {
                 newLine[i] = STONE;
@@ -89,7 +88,7 @@ class MapGenerator : GameObject
             }
             else
             {
-                newLine[i] = getRandomNumb();
+                newLine[i] = getRandomNumb(i);
             }
         }
 
@@ -115,20 +114,65 @@ class MapGenerator : GameObject
         _lineNumb--;
     }
 
-    private int getRandomNumb()
+    private void ChangeWallThickness()
     {
+        if (!_isGoingOutWards)
+        {
+            if (_rockThicknessLeft == _rockThicknessRight)
+            {
+                _rockThicknessLeft++;
+            }
+            else
+            {
+                _rockThicknessRight++;
+            }
+        }
+        else
+        {
+            if (_rockThicknessLeft == _rockThicknessRight)
+            {
+                _rockThicknessLeft--;
+            }
+            else
+            {
+                _rockThicknessRight--;
+            }
+        }
+    }
 
-        float randomNumb = Utils.Random(0, 101);
+    private void handleWallStat()
+    {
+        if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) <= _minWidth)
+        {
+            _isGoingOutWards = true;
+        }
+        else if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) >= _maxWidth)
+        {
+            _isGoingOutWards = false;
+        }
+    }
 
-        Console.WriteLine(randomNumb);
+    private int getRandomNumb(int index)
+    {
+        float dirtChance = getDirtSpawnChance(index);
+        float diamondChance = getDiamondSpawnChance(index);
+        float stoneChance = getStoneSpawnChance(index);
 
-        if (randomNumb < _dirtChance)
+        float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + 1);
+
+        Console.WriteLine("diamond: {0}", diamondChance); //Diamond: {1}, Stone: {2}", getDirtSpawnChance(index), getDiamondSpawnChance(index), getStoneSpawnChance(index));
+
+        if (randomNumb < dirtChance)
         {
             Type = BlockType.Dirt;
         }
-        else if (_dirtChance < randomNumb && randomNumb < _dirtChance + _diamondChance)
+        else if (randomNumb < dirtChance + diamondChance)
         {
             Type = BlockType.Diamond;
+        }
+        else if (randomNumb < dirtChance + diamondChance + stoneChance)
+        {
+            Type = BlockType.Stone;
         }
 
         switch (Type)
@@ -137,9 +181,67 @@ class MapGenerator : GameObject
                 return DIRT;
             case BlockType.Diamond:
                 return DIAMOND;
+            case BlockType.Stone:
+                return STONE;
         }
 
         return 0;
+    }
+
+    private float getDirtSpawnChance(int index)
+    {
+        float maxChance = 80.0f;
+        float minChance = 50.0f;
+        bool isChanceHigherInMiddle = true;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getDiamondSpawnChance(int index)
+    {
+        float maxChance = 10.0f;
+        float minChance = 5.0f;
+        bool isChanceHigherInMiddle = false;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getStoneSpawnChance(int index)
+    {
+        float maxChance = 15.0f;
+        float minChance = 10.0f;
+        bool isChanceHigherInMiddle = true;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float calculateChance(float maxChance, float minChance, bool isChanceHigherInMiddle, int index)
+    {
+        if (isChanceHigherInMiddle)
+        {
+            float y = minChance;
+            float x = index;
+            float p = _blockCountWidth / 2;
+            float q = maxChance;
+
+            double a = (y - q) / (p * p);
+
+            y = (float)(a * ((x - p) * (x - p)) + q);
+            return y;
+        }
+        else
+        {
+            float y = maxChance;
+            float x = index;
+            float p = _blockCountWidth / 2;
+            float q = minChance;
+
+            double a = (y - q) / (p * p);
+
+            y = (float)(a * ((x - p) * (x - p)) + q);
+            return y;
+
+        }
     }
 
     private float getXLocation(int index)
