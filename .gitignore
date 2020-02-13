@@ -2,8 +2,4 @@
 *.ide-shm
 *.ide-shm
 *.ide-wal
-GXPEngineShare/.vs/GXPEngine/v16/.suo
-GXPEngineShare/GXPEngine/GXPEngine.csproj
-GXPEngineShare/GXPEngine/obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-GXPEngineShare/.vs/GXPEngine/v16/Server/sqlite3/storage.ide-shm
-GXPEngineShare/.vs/GXPEngine/v16/Server/sqlite3/storage.ide-wal
+GXPEngineShare/.vs/*
