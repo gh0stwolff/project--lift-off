@@ -30,5 +30,4 @@ class Tile : Sprite
     {
         return width;
     }
-
 }

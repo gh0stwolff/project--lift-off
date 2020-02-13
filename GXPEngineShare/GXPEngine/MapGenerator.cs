@@ -36,13 +36,11 @@ class MapGenerator : GameObject
         _tile = new Tile("Dirt.png", 0, 0);
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = (((MyGame)game).height / _tile.GetHeight());
-        for (int i = 0; i < _lineNumb; i = -1)
-        {
-            generateNewLine();
-        }
-        TestPlayer player = new TestPlayer();
-        AddChild(player);
+        _lineNumb = -1;
+
+        Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
+        AddChild(spawn);
+
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
 

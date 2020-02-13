@@ -4,11 +4,12 @@ using GXPEngine;								// GXPEngine contains the engine
 public class MyGame : Game
 {
 	private float _speed = 1.0f;
+    private MapGenerator _map;
 
 	public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        MapGenerator map = new MapGenerator();
-        AddChild(map);
+        _map = new MapGenerator();
+        AddChild(_map);
     }
 
 	void Update()
