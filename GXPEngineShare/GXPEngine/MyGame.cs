@@ -8,7 +8,8 @@ public class MyGame : Game
     private Menu _menu;
     private int _shakeTime = 0;
 
-	public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
+    //arcade screen res: 1366x768
+    public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
         //_map = new MapGenerator();
         //AddChild(_map);
@@ -77,5 +78,20 @@ public class MyGame : Game
 
 
         return (float)(b * Math.Sin(((2 * Math.PI) / T) * (X - d)));
+    }
+
+    public float GetScreenWidth() 
+    {
+        return width;
+    }
+
+    public float GetScreenHeight()
+    {
+        return height;
+    }
+
+    public float GetScreenY()
+    {
+        return y;
     }
 }

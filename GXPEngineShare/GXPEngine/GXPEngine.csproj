@@ -42,6 +42,7 @@
     <Compile Include="Lava.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="ParticalEffect.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="ScreenLayer.cs" />
     <Compile Include="MapGenerator.cs" />
     <Compile Include="MyGame.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Stone.cs" />
     <Compile Include="TestPlayer.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="Worm.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>
