@@ -3,3 +3,15 @@
 *.ide-shm
 *.ide-wal
 GXPEngineShare/.vs/*
+
+GXPEngineShare/GXPEngine/bin/Debug/GXPEngine.exe
+
+GXPEngineShare/GXPEngine/bin/Debug/GXPEngine.pdb
+
+GXPEngineShare/GXPEngine/obj/x86/Debug/GXPEngine.csprojAssemblyReference.cache
+
+GXPEngineShare/GXPEngine/obj/x86/Debug/GXPEngine.exe
+
+GXPEngineShare/GXPEngine/obj/x86/Debug/GXPEngine.pdb
+
+GXPEngineShare/GXPEngine/obj/x86/Debug/GXPEngine.csproj.FileListAbsolute.txt
