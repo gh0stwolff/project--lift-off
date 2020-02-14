@@ -38,7 +38,8 @@
   <ItemGroup>
     <Compile Include="DiamondOre.cs" />
     <Compile Include="Dirt.cs" />
-    <Compile Include="Level.cs" />
+    <Compile Include="Lava.cs" />
+    <Compile Include="ScreenLayer.cs" />
     <Compile Include="MapGenerator.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
