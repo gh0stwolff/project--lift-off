@@ -4,13 +4,16 @@ using GXPEngine;								// GXPEngine contains the engine
 public class MyGame : Game
 {
 	private float _speed = 1.0f;
-    private MapGenerator _map;
+    //private MapGenerator _map;
+    private Menu _menu;
     private int _shakeTime = 0;
 
 	public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        _map = new MapGenerator();
-        AddChild(_map);
+        //_map = new MapGenerator();
+        //AddChild(_map);
+        _menu = new Menu(width, height);
+        AddChild(_menu);
     }
 
     public void Update()
@@ -22,6 +25,11 @@ public class MyGame : Game
             ShakeCamera(100);
         }
         shake();
+        //if (Input.GetKeyDown(Key.P))
+        //{
+        //    ParticalEffect partical = new ParticalEffect("tileExplosion.png", 8, 1);
+        //    Add
+        //}
 	}
 
 	static void Main()							// Main() is the first method that's called when the program is run
@@ -34,6 +42,11 @@ public class MyGame : Game
 		return _speed;
 	}
 
+    public void SetScreenSpeed(float speed)
+    {
+        _speed = speed;
+    }
+
     public void ShakeCamera(int timeShaking)
     {
         _shakeTime = timeShaking;
@@ -43,9 +56,11 @@ public class MyGame : Game
     {
         if (_shakeTime > 0)
         {
-            Console.WriteLine(_shakeTime);
-            _map.x = getShaking(_shakeTime);
-            _shakeTime--;
+            if (_menu._level != null)
+            {
+                _menu._level.x = getShaking(_shakeTime);
+                _shakeTime--;
+            }
         }
     }
 

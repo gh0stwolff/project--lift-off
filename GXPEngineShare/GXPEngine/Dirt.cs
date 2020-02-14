@@ -12,9 +12,9 @@ class Dirt : Tile
 
     }
 
-    public void RemoveTile()
+    public void Digged()
     {
-        LateDestroy();
+        selfDestroy();
     }
 
 }
