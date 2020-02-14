@@ -17,6 +17,6 @@ class DiamondOre : Tile
         //add points
 
         //add before LateDestroy a partical effect
-        LateDestroy();
+        selfDestroy();
     }
 }

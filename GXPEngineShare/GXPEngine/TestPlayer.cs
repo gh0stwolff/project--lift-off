@@ -31,7 +31,7 @@ class TestPlayer : GameObject
             {
                 Dirt dirt = other as Dirt;
 
-                dirt.RemoveTile();
+                dirt.Digged();
             }
             else if (other is DiamondOre)
             {

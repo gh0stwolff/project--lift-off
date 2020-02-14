@@ -41,8 +41,7 @@ class MapGenerator : GameObject
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
         _lineNumb = ((MyGame)game).height / _tile.GetHeight();
-        _amountLinesWithRockRestirction = -_amountLinesWithRockRestirction;
-        _amountLinesWithRockRestirction -= _lineNumb - 21;
+        _amountLinesWithRockRestirction += _lineNumb - 21;
 
         for (int i = 0; i < layers.Length; i++)
         {
