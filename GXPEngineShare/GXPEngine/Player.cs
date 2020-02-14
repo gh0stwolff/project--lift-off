@@ -9,6 +9,7 @@ using GXPEngine.Core;
 class Player : Sprite
 {
     private AnimationSprite _animation;
+    private AnimationSprite _mining;
     private Sprite _drill;
 
     private float _gravity = 0.5f;
@@ -22,23 +23,31 @@ class Player : Sprite
     {
         //SetOrigin(width / 2, height / 2);
         // SetScaleXY(0.5f, 0.5f);
-        //alpha = 0.0f;
+        alpha = 0.0f;
 
         _animation = new AnimationSprite("player_sprite_sheet.png", 8, 1, -1, false, false);
         AddChild(_animation);
         //_animation.alpha = 0.2f;
         _animation.SetOrigin(width/2+3, height/2+5);
 
+        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
+        AddChild(_mining);
+        _mining.SetScaleXY(2.0f, 2.0f);
+        
 
         _drill = new Sprite("drill.png");
         AddChild(_drill);
         _drill.alpha = 0.0f;
         _drill.SetOrigin(width/8-22, height/3-2);
+
+        _mining.SetOrigin(width / 4 + 5, height / 4);
+
+
     }
 
     void Update()
     {
-        Gravity();
+        //Gravity();
         Movement();
         Break();
         Animation();
@@ -47,13 +56,15 @@ class Player : Sprite
     void Movement()
     {
         _state = 1;
+
         if (Input.GetKey(Key.Z))
         {
             _state = 4;
         }
-        if (Input.GetKey(Key.LEFT))
+
+        if (Input.GetKey(Key.A))
         {
-            _hSpeed -= 1.0f;
+            _hSpeed -= 0.5f;
             _state = 2;
             if (Input.GetKey(Key.Z))
             {
@@ -63,10 +74,19 @@ class Player : Sprite
             _animation.SetOrigin(width / 2 + 60, height / 2 +6);
 
             _animation.rotation = _angleLeft;
+
+            _drill.SetOrigin(width / 2 + 15, height / 2 - 13);
+
+            _drill.rotation = _angleLeft;
+
+            _mining.SetOrigin(width / 8 - 22, height / 3 + 50);
+
+            _mining.rotation = _angleLeft;
         }
-        if (Input.GetKey(Key.RIGHT))
+
+        if (Input.GetKey(Key.D))
         {
-            _hSpeed += 1.0f;
+            _hSpeed += 0.5f;
             _state = 2;
             if (Input.GetKey(Key.Z))
             {
@@ -76,14 +96,22 @@ class Player : Sprite
             _animation.SetOrigin(width/ 2 + 2, height / 2 + 60);
 
            _animation.rotation = _angleRight;
+
+            _drill.SetOrigin(width / 8 - 22, height / 3 + 50);
+
+            _drill.rotation = _angleRight;
+
+            _mining.SetOrigin(width / 8 - 22, height / 3 + 50);
+
+            _mining.rotation = _angleRight;
         }
 
         DoMove(_hSpeed, 0);
         _hSpeed *= _deceleration;
 
-        if (Input.GetKey(Key.UP))
+        if (Input.GetKey(Key.W))
         {
-            _vSpeed -= 1.0f;
+            _vSpeed -= 0.5f;
             _state = 2;
             if (Input.GetKey(Key.Z))
             {
@@ -93,10 +121,19 @@ class Player : Sprite
             _animation.SetOrigin(width / 2 + 3, height / 2 + 5);
 
             _animation.rotation = _angleUp;
+
+            _drill.SetOrigin(width / 8 - 22, height / 3 - 2);
+
+            _drill.rotation = _angleUp;
+
+            _mining.SetOrigin(width / 4 + 5, height / 4);
+
+            _mining.rotation = _angleUp;
         }
-        if (Input.GetKey(Key.DOWN))
+
+        if (Input.GetKey(Key.S))
         {
-            _vSpeed += 1.0f;
+            _vSpeed += 0.5f;
             _state = 2;
             if (Input.GetKey(Key.Z))
             {
@@ -106,6 +143,14 @@ class Player : Sprite
             _animation.SetOrigin(width * 2 - 25, height * 2 - 20);
 
            _animation.rotation = _angleDown;
+
+            _drill.SetOrigin(width / 8 + 28, height / 3 + 60);
+
+            _drill.rotation = _angleDown;
+
+            _mining.SetOrigin(width / 4 + 5, height / 4);
+
+            _mining.rotation = _angleDown
         }
 
 
@@ -205,6 +250,15 @@ class Player : Sprite
             if (_timer > 10) _animation.SetFrame(6);
             if (_timer > 15) _timer = 0;
         }
+
+        //foreach (GameObject other in this.GetCollisions())
+        //{
+         //   if (other is Sprite)
+         //   {
+         //       
+         //   }
+        //}
+
     }
     
     void Break()

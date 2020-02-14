@@ -4,6 +4,7 @@ using GXPEngine;								// GXPEngine contains the engine
 public class MyGame : Game
 {
     Player player;
+    Worm worm;
 	private float _speed = 1.0f;
     Stone stone;
     DiamondOre ore;
@@ -15,12 +16,19 @@ public class MyGame : Game
         //AddChild(map);
         player = new Player();
         AddChild(player);
+
         player.x = 500;
         player.y = 500;
+
+        worm = new Worm();
+        AddChild(worm);
+
         dirt = new Dirt(600, 200);
         AddChild(dirt);
+
         ore = new DiamondOre(400, 200);
         AddChild(ore);
+
         stone = new Stone(200, 200);
         AddChild(stone);
     }
@@ -40,4 +48,14 @@ public class MyGame : Game
 	{
 		return _speed;
 	}
+
+    public float GetScreenWidth()
+    {
+        return width;
+    }
+
+    public float GetScreenHeight()
+    {
+        return height;
+    }
 }
