@@ -78,4 +78,13 @@ public class MyGame : Game
 
         return (float)(b * Math.Sin(((2 * Math.PI) / T) * (X - d)));
     }
+    {
+    public float GetScreenWidth()
+        return width;
+    }
+
+    public float GetScreenHeight()
+    {
+        return height;
+    }
 }
