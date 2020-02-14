@@ -19,8 +19,9 @@ class Player : Sprite
     private int _state = 1;
     private int _timer = 0;
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
-    public Player() : base("collider.png")
+    public Player(float x, float y) : base("collider.png")
     {
+        SetXY(x, y);
         //SetOrigin(width / 2, height / 2);
         // SetScaleXY(0.5f, 0.5f);
         alpha = 0.0f;
@@ -150,7 +151,7 @@ class Player : Sprite
 
             _mining.SetOrigin(width / 4 + 5, height / 4);
 
-            _mining.rotation = _angleDown
+            _mining.rotation = _angleDown;
         }
 
 

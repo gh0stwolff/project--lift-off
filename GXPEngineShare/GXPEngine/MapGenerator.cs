@@ -55,8 +55,10 @@ class MapGenerator : GameObject
         }
 
 
-        TestPlayer player = new TestPlayer();
+        Player player = new Player(((MyGame)game).width / 2, ((MyGame)game).height / 2);
         AddChild(player);
+        Worm worm = new Worm();
+        AddChild(worm);
         //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
         //layers[2].AddChild(spawn);
 
