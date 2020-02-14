@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
+using TiledMapParser;
 class MapGenerator : GameObject
 {
     //types of tiles
-    const int DIRT = 0;
-    const int DIAMOND = 1;
-    const int STONE = 2;
+    const int AIR = 1;
+    const int DIRT = 2;
+    const int STONE = 3;
+    const int DIAMOND = 4;
+
 
     //for generating new lines
     private int _blockCountWidth;
@@ -16,7 +19,7 @@ class MapGenerator : GameObject
     private int _maxWidth = 18;
     private int _framesBetweenLines;
     private int _lineNumb;
-    private int _amountLinesWithRockRestirction = 10;
+    //private int _amountOfStartingLinesWithRockRestirction = 10;
     private int _linesTillNarrowing = -5;
     private int _timer = 0;
     private int _targetLine;
@@ -40,23 +43,24 @@ class MapGenerator : GameObject
         _tile = new Tile("Dirt.png", 0, 0);
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = ((MyGame)game).height / _tile.GetHeight();
-        _amountLinesWithRockRestirction += _lineNumb - 21;
+        _lineNumb = -1; //((MyGame)game).height / _tile.GetHeight();
+        //_amountOfStartingLinesWithRockRestirction += _lineNumb - 21;
 
         for (int i = 0; i < layers.Length; i++)
         {
             layers[i] = new ScreenLayer();
             AddChild(layers[i]);
         }
+        setupSpawn();
 
-        for (int i = 0; i < _lineNumb; i = -1)
-        {
-            generateNewLine();
-        }
+        //for (int i = 0; i < _lineNumb; i = -1)
+        //{
+        //    generateNewLine();
+        //}
 
 
-        Player player = new Player(((MyGame)game).width / 2, ((MyGame)game).height / 2);
-        AddChild(player);
+        //Player player = new Player(((MyGame)game).width / 2, ((MyGame)game).height / 2);
+        //AddChild(player);
         Worm worm = new Worm();
         AddChild(worm);
         //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
@@ -182,10 +186,10 @@ class MapGenerator : GameObject
         float dirtChance = getDirtSpawnChance(index);
         float diamondChance = getDiamondSpawnChance(index);
         float stoneChance = getStoneSpawnChance(index);
-        if (_amountLinesWithRockRestirction < _lineNumb)
-        {
-            stoneChance = 0;
-        }
+        //if (_amountOfStartingLinesWithRockRestirction < _lineNumb)
+        //{
+        //    stoneChance = 0;
+        //}
 
 
         float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + 1);
@@ -283,5 +287,63 @@ class MapGenerator : GameObject
     {
         return _tile.GetHeight() * lineNumb;
     }
-}
 
+    private void setupSpawn()
+    {
+        Map levelData = MapParser.ReadMap("startPoint.tmx");
+        spawnTiles(levelData);
+        spawnObjects(levelData);
+    }
+
+    private void spawnTiles(Map levelData)
+    {
+        if (levelData.Layers == null || levelData.Layers.Length == 0)
+            return;
+
+        Layer mainLayer = levelData.Layers[0];
+        short[,] tileNumbers = mainLayer.GetTileArray();
+        for (int row = 0; row < mainLayer.Height; row++)
+        {
+            for (int column = 0; column < mainLayer.Width; column++)
+            {
+                int tileNumber = tileNumbers[column, row];
+                if (tileNumber == STONE)
+                {
+                    Stone stone = new Stone(getXLocation(column), getYLocation(row));
+                    layers[2].AddChild(stone);
+                }
+                if (tileNumber == DIRT)
+                {
+                    Dirt dirt = new Dirt(getXLocation(column), getYLocation(row));
+                    layers[0].AddChild(dirt);
+                }
+                if (tileNumber == DIAMOND)
+                {
+                    DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
+                    layers[0].AddChild(diamond);
+                }
+            }
+        }
+    }
+
+    private void spawnObjects(Map levelData)
+    {
+        if (levelData.ObjectGroups == null || levelData.ObjectGroups.Length == 0)
+            return;
+
+        ObjectGroup objectGroup = levelData.ObjectGroups[0];
+        if (objectGroup.Objects == null || objectGroup.Objects.Length == 0)
+            return;
+
+        foreach (TiledObject obj in objectGroup.Objects)
+        {
+            switch (obj.Name)
+            {
+                case "Player":
+                    Player player = new Player(obj.X, obj.Y);
+                    layers[3].AddChild(player);
+                    break;
+            }
+        }
+    }
+}
