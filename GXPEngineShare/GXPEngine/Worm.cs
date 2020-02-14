@@ -13,6 +13,8 @@ using GXPEngine;
     public Worm() : base("worm_sprite_sheet.png", 1, 8)
     {
         SetOrigin(width / 2, height / 2);
+        x = -100;
+        y = -100;
     }
 
     void Update()
@@ -30,7 +32,7 @@ using GXPEngine;
             {
                 SetFrame(4);
                 x = 0;
-                y = ((MyGame)game).GetScreenHeight() / 2;
+                y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
                 _state = 1;
                 alpha = 0.6f;
             }
@@ -39,7 +41,7 @@ using GXPEngine;
             {
                 SetFrame(0);
                 x = ((MyGame)game).GetScreenWidth(); ;
-                y = ((MyGame)game).GetScreenHeight() / 2;
+                y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
                 _state = 2;
                 alpha = 0.6f;
             }

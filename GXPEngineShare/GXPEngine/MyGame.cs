@@ -88,4 +88,9 @@ public class MyGame : Game
     {
         return height;
     }
+
+    public float GetScreenY()
+    {
+        return y;
+    }
 }

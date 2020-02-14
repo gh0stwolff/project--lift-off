@@ -18,7 +18,10 @@ class Player : Sprite
     private float _hSpeed = 0.0f;
     private int _state = 1;
     private int _timer = 0;
+    private int _timer2 = 0;
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
+
+    bool _miningAnimation = false;
     public Player(float x, float y) : base("collider.png")
     {
         SetXY(x, y);
@@ -34,6 +37,7 @@ class Player : Sprite
         _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
         AddChild(_mining);
         _mining.SetScaleXY(2.0f, 2.0f);
+        _mining.alpha = 0.0f;
         
 
         _drill = new Sprite("drill.png");
@@ -80,7 +84,7 @@ class Player : Sprite
 
             _drill.rotation = _angleLeft;
 
-            _mining.SetOrigin(width / 8 - 22, height / 3 + 50);
+            _mining.SetOrigin(width / 2 + 19, height / 2 - 13);
 
             _mining.rotation = _angleLeft;
         }
@@ -102,7 +106,7 @@ class Player : Sprite
 
             _drill.rotation = _angleRight;
 
-            _mining.SetOrigin(width / 8 - 22, height / 3 + 50);
+            _mining.SetOrigin(width / 2 - 10 , height / 3 + 23);
 
             _mining.rotation = _angleRight;
         }
@@ -149,7 +153,7 @@ class Player : Sprite
 
             _drill.rotation = _angleDown;
 
-            _mining.SetOrigin(width / 4 + 5, height / 4);
+            _mining.SetOrigin(width / 2 + 18, height / 2 +16);
 
             _mining.rotation = _angleDown;
         }
@@ -188,7 +192,7 @@ class Player : Sprite
 
     bool HandleCollision(Sprite other, float moveX, float moveY)
     {
-        if (other is Tile)
+        if (other is DiamondOre || other is Stone)
         {
             ResolveCollision(other, moveX, moveY);
             return true;
@@ -252,13 +256,21 @@ class Player : Sprite
             if (_timer > 15) _timer = 0;
         }
 
-        //foreach (GameObject other in this.GetCollisions())
-        //{
-         //   if (other is Sprite)
-         //   {
-         //       
-         //   }
-        //}
+     
+        if (_miningAnimation == true)
+        {
+        _timer2++;
+        if (_timer2 > 5) _mining.SetFrame(0);
+        if (_timer2 > 10) _mining.SetFrame(1);
+        if (_timer2 > 15) _mining.SetFrame(2);
+        if (_timer2 > 20) _mining.SetFrame(3);
+            if (_timer2 > 25)
+            {
+                _timer2 = 0;
+                _miningAnimation = false;
+                _mining.alpha = 0.0f;
+            }
+        }
 
     }
     
@@ -266,10 +278,12 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if(other is Tile && Input.GetKey(Key.Z))
+            if((other is DiamondOre || other is Dirt) && Input.GetKey(Key.Z))
             {
                 
                 other.LateDestroy();
+                _miningAnimation = true;
+                _mining.alpha = 1.0f;
             }
         }
     }
