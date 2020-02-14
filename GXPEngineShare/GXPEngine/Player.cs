@@ -62,7 +62,7 @@ class Player : Sprite
     {
         _state = 1;
 
-        if (Input.GetKey(Key.Z))
+        if (Input.GetKey(Key.SPACE))
         {
             _state = 4;
         }
@@ -71,7 +71,7 @@ class Player : Sprite
         {
             _hSpeed -= 0.5f;
             _state = 2;
-            if (Input.GetKey(Key.Z))
+            if (Input.GetKey(Key.SPACE))
             {
                 _state = 3;
             }
@@ -93,7 +93,7 @@ class Player : Sprite
         {
             _hSpeed += 0.5f;
             _state = 2;
-            if (Input.GetKey(Key.Z))
+            if (Input.GetKey(Key.SPACE))
             {
                 _state = 3;
             }
@@ -118,7 +118,7 @@ class Player : Sprite
         {
             _vSpeed -= 0.5f;
             _state = 2;
-            if (Input.GetKey(Key.Z))
+            if (Input.GetKey(Key.SPACE))
             {
                 _state = 3;
             }
@@ -140,7 +140,7 @@ class Player : Sprite
         {
             _vSpeed += 0.5f;
             _state = 2;
-            if (Input.GetKey(Key.Z))
+            if (Input.GetKey(Key.SPACE))
             {
                 _state = 3;
             }
@@ -192,7 +192,7 @@ class Player : Sprite
 
     bool HandleCollision(Sprite other, float moveX, float moveY)
     {
-        if (other is DiamondOre || other is Stone)
+        if (other is Tile)
         {
             ResolveCollision(other, moveX, moveY);
             return true;
@@ -278,7 +278,7 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if((other is DiamondOre || other is Dirt) && Input.GetKey(Key.Z))
+            if((other is DiamondOre || other is Dirt) && Input.GetKey(Key.SPACE))
             {
                 
                 other.LateDestroy();

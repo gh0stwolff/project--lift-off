@@ -8,7 +8,8 @@ public class MyGame : Game
     private Menu _menu;
     private int _shakeTime = 0;
 
-	public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
+    //arcade screen res: 1366x768
+    public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
         //_map = new MapGenerator();
         //AddChild(_map);
