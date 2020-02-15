@@ -197,6 +197,10 @@ class Player : Sprite
             ResolveCollision(other, moveX, moveY);
             return true;
         }
+        if (other is Lava || other is Worm)
+        {
+            Dead();
+        }
 
 
         return false;
@@ -286,6 +290,11 @@ class Player : Sprite
                 _mining.alpha = 1.0f;
             }
         }
+    }
+
+    private void Dead()
+    {
+        ((MyGame)game).GameOver();
     }
 
     void Gravity()

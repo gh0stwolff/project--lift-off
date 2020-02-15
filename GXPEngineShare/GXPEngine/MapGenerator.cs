@@ -43,8 +43,7 @@ class MapGenerator : GameObject
         _tile = new Tile("Dirt.png", 0, 0);
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = -1; //((MyGame)game).height / _tile.GetHeight();
-        //_amountOfStartingLinesWithRockRestirction += _lineNumb - 21;
+        _lineNumb = -1;
 
         for (int i = 0; i < layers.Length; i++)
         {
@@ -58,14 +57,8 @@ class MapGenerator : GameObject
         //    generateNewLine();
         //}
 
-
-        //Player player = new Player(((MyGame)game).width / 2, ((MyGame)game).height / 2);
-        //AddChild(player);
         Worm worm = new Worm();
-        AddChild(worm);
-        //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
-        //layers[2].AddChild(spawn);
-
+        layers[3].AddChild(worm);
         _lava = new Lava();
         layers[1].AddChild(_lava);
  
@@ -74,10 +67,6 @@ class MapGenerator : GameObject
 
     public void Update()
     {
-        if(Input.GetKey(Key.L))
-        {
-            generateNewLine();
-        }
         timerNewLine();
     }
 

@@ -78,11 +78,4 @@ using GXPEngine;
             x -= _speed;
         }
     }
-    void OnCollision(GameObject other)
-    {
-        if(other is Player)
-        {
-            other.LateDestroy();
-        }
-    }
 }

@@ -3,7 +3,8 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-	private float _speed = 1.0f;
+    private float _startScreenSpeed = 1.0f;
+    private float _speed;
     //private MapGenerator _map;
     private Menu _menu;
     private int _shakeTime = 0;
@@ -11,10 +12,9 @@ public class MyGame : Game
     //arcade screen res: 1366x768
     public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        //_map = new MapGenerator();
-        //AddChild(_map);
         _menu = new Menu(width, height);
         AddChild(_menu);
+        _speed = _startScreenSpeed;
     }
 
     public void Update()
@@ -38,14 +38,26 @@ public class MyGame : Game
 		new MyGame().Start();					// Create a "MyGame" and start it
 	}
 
+    public void GameOver()
+    {
+        _menu.GameOver();
+    }
+
 	public float GetScreenSpeed()
 	{
 		return _speed;
 	}
 
-    public void SetScreenSpeed(float speed)
+    public void SetScreenForMenu()
     {
-        _speed = speed;
+        _speed = 0.0f;
+        y = 0;
+    }
+
+    public void SetScreenForStartLevel()
+    {
+        _speed = _startScreenSpeed;
+        y = 0;
     }
 
     public void ShakeCamera(int timeShaking)

@@ -6,52 +6,85 @@ using GXPEngine;
 
 class Menu : Canvas
 {
-    private float _startScreenSpeed = 1.0f;
-
-    private bool _gameStarted = false;
+    //private bool _gameStarted = false;
 
     public MapGenerator _level;
     private Button _startButton;
+    private Button _returnToMenuButton;
+    enum Scene { Menu, Level, GameOver}
+    Scene SceneState = Scene.Menu;
 
 
     //don't forget to reset MyGame frame back to 0 and speed to 0 as long as you are in a menu screen
     public Menu(int width, int height) : base(width, height)
     {
-        ((MyGame)game).SetScreenSpeed(0.0f);
-        _startButton = new Button("startButton.png", 400, 300, 0.5f, 0.5f);
-        AddChild(_startButton);
+        ((MyGame)game).SetScreenForMenu();
     }
 
     void Update()
     {
         checkButtonPresses();
-        handleVisibilityState();
+        handleSceneState();
     }
 
     private void checkButtonPresses()
     {
-        if (_startButton.IsPressed())
+        if (_startButton != null)
         {
-            ((MyGame)game).SetScreenSpeed(_startScreenSpeed);
-            if (_level == null)
+            if (_startButton.IsPressed())
             {
-                _gameStarted = true;
-                _level = new MapGenerator();
-                AddChild(_level);
+                SceneState = Scene.Level;
+            }
+        }
+        if (_returnToMenuButton != null)
+        {
+            if (_returnToMenuButton.IsPressed())
+            {
+                SceneState = Scene.Menu;
             }
         }
     }
 
-    private void handleVisibilityState()
+    private void handleSceneState()
     {
-        if (_gameStarted)
+        switch (SceneState)
         {
-            _startButton.alpha = 0.0f;
+            case Scene.Menu:
+                if (_level != null) { _level.LateDestroy(); _level = null; }
+                if ( _returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
+                if (_startButton == null)
+                {
+                    _startButton = new Button("startButton.png", 400, 300, 0.5f, 0.5f);
+                    AddChild(_startButton);
+                }
+                ((MyGame)game).SetScreenForMenu();
+                break;
+            case Scene.Level:
+                if (_startButton != null) { _startButton.LateDestroy(); _startButton = null; }
+                if ( _returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
+                if (_level == null)
+                {
+                    ((MyGame)game).SetScreenForStartLevel();
+                    _level = new MapGenerator();
+                    AddChild(_level);
+                }
+                break;
+            case Scene.GameOver:
+                if (_startButton != null) { _startButton.LateDestroy(); _startButton = null; }
+                if (_level != null) { _level.LateDestroy(); _level = null; }
+                if (_returnToMenuButton == null)
+                {
+                    _returnToMenuButton = new Button("returnButton.png", 400, 300, 1, 1);
+                    AddChild(_returnToMenuButton);
+                }
+                ((MyGame)game).SetScreenForMenu();
+                break;
         }
-        else
-        {
-            _startButton.alpha = 1.0f;
-        }
+    }
+
+    public void GameOver()
+    {
+        SceneState = Scene.GameOver;
     }
 
 }
