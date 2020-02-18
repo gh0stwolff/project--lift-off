@@ -55,7 +55,7 @@ public class MyGame : Game
         y = 0;
     }
 
-    public void SetScreenForStartLevel()
+    public void SetScreenForBeginLevel()
     {
         _speed = _startScreenSpeed;
         y = 0;
@@ -70,9 +70,9 @@ public class MyGame : Game
     {
         if (_shakeTime > 0)
         {
-            if (_menu._level != null)
+            if (_menu != null)
             {
-                _menu._level.x = getShaking(_shakeTime);
+                _menu.x = getShaking(_shakeTime);
                 _shakeTime--;
             }
         }
@@ -116,5 +116,10 @@ public class MyGame : Game
     public void AddScore(int amount)
     {
         _score += amount;
+    }
+
+    public void IncreaseSpeed()
+    {
+        _speed += 0.0001f;
     }
 }

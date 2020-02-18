@@ -8,14 +8,14 @@ class Menu : Canvas
 {
     //private bool _gameStarted = false;
 
-    public MapGenerator _level;
-    private Button _startButton;
+    private MultiplayerMapGenerator _multiPlayer;
+    private SingleplayerMapGenerator _singlePlayer;
+    private Button _multiplayerButton;
+    private Button _singlePlayerButton;
     private Button _returnToMenuButton;
-    enum Scene { Menu, Level, GameOver}
+    enum Scene { Menu, MultiplayerLevel, SinglePlayerLevel, GameOver}
     Scene SceneState = Scene.Menu;
 
-
-    //don't forget to reset MyGame frame back to 0 and speed to 0 as long as you are in a menu screen
     public Menu(int width, int height) : base(width, height)
     {
         ((MyGame)game).SetScreenForMenu();
@@ -29,11 +29,18 @@ class Menu : Canvas
 
     private void checkButtonPresses()
     {
-        if (_startButton != null)
+        if (_multiplayerButton != null)
         {
-            if (_startButton.IsPressed())
+            if (_multiplayerButton.IsPressed())
             {
-                SceneState = Scene.Level;
+                SceneState = Scene.MultiplayerLevel;
+            }
+        }
+        if ( _singlePlayerButton != null)
+        {
+            if (_singlePlayerButton.IsPressed())
+            {
+                SceneState = Scene.SinglePlayerLevel;
             }
         }
         if (_returnToMenuButton != null)
@@ -50,28 +57,46 @@ class Menu : Canvas
         switch (SceneState)
         {
             case Scene.Menu:
-                if (_level != null) { _level.LateDestroy(); _level = null; }
+                if (_multiPlayer != null) { _multiPlayer.LateDestroy(); _multiPlayer = null; }
+                if (_singlePlayer != null) { _singlePlayer.LateDestroy(); _singlePlayer = null; }
                 if ( _returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
-                if (_startButton == null)
+                if (_multiplayerButton == null)
                 {
-                    _startButton = new Button("startButton.png", 400, 300, 0.5f, 0.5f);
-                    AddChild(_startButton);
+                    _multiplayerButton = new Button("multiplayerButton.png", 400, 300, 1, 1);
+                    AddChild(_multiplayerButton);
+                    _singlePlayerButton = new Button("singleplayerButton.png", 400, 500, 1, 1);
+                    AddChild(_singlePlayerButton);
                 }
                 ((MyGame)game).SetScreenForMenu();
                 break;
-            case Scene.Level:
-                if (_startButton != null) { _startButton.LateDestroy(); _startButton = null; }
+            case Scene.MultiplayerLevel:
+                if (_multiplayerButton != null) { _multiplayerButton.LateDestroy(); _multiplayerButton = null; }
                 if ( _returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
-                if (_level == null)
+                if (_singlePlayerButton != null) { _singlePlayerButton.LateDestroy(); _singlePlayerButton = null; }
+                if (_singlePlayer != null) { _singlePlayer.LateDestroy(); _singlePlayer = null; }
+                if (_multiPlayer == null)
                 {
-                    ((MyGame)game).SetScreenForStartLevel();
-                    _level = new MapGenerator();
-                    AddChild(_level);
+                    ((MyGame)game).SetScreenForBeginLevel();
+                    _multiPlayer = new MultiplayerMapGenerator();
+                    AddChild(_multiPlayer);
+                }
+                break;
+            case Scene.SinglePlayerLevel:
+                if (_multiplayerButton != null) { _multiplayerButton.LateDestroy(); _multiplayerButton = null; }
+                if (_returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
+                if (_singlePlayerButton != null) { _singlePlayerButton.LateDestroy(); _singlePlayerButton = null; }
+                if (_multiPlayer != null) { _multiPlayer.LateDestroy(); _multiPlayer = null; }
+                if (_singlePlayer == null)
+                {
+                    ((MyGame)game).SetScreenForBeginLevel();
+                    _singlePlayer = new SingleplayerMapGenerator();
+                    AddChild(_singlePlayer);
                 }
                 break;
             case Scene.GameOver:
-                if (_startButton != null) { _startButton.LateDestroy(); _startButton = null; }
-                if (_level != null) { _level.LateDestroy(); _level = null; }
+                if (_multiplayerButton != null) { _multiplayerButton.LateDestroy(); _multiplayerButton = null; }
+                if (_multiPlayer != null) { _multiPlayer.LateDestroy(); _multiPlayer = null; }
+                if (_singlePlayer != null) { _singlePlayer.LateDestroy(); _singlePlayer = null; }
                 if (_returnToMenuButton == null)
                 {
                     _returnToMenuButton = new Button("returnButton.png", 400, 300, 1, 1);

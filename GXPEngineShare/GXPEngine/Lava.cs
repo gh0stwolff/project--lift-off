@@ -8,6 +8,7 @@ class Lava : AnimationSprite
 {
     private float _boilingLevel = 0;
     private float _height = 0;
+    private Sprite _outOfBounds;
 
     public Lava() : base("Lava.png", 1, 1)
     {
@@ -15,6 +16,9 @@ class Lava : AnimationSprite
         Sprite glow = new Sprite("lavaGlow.png");
         AddChild(glow);
         glow.y = -200;
+        _outOfBounds = new Sprite("lavaGlow.png");
+        AddChild(_outOfBounds);
+        _outOfBounds.y = 100;
     }
 
     public void Update()
@@ -22,11 +26,23 @@ class Lava : AnimationSprite
         _height++;
         y -= ((MyGame)game).GetScreenSpeed() - _boilingLevel;
         boiling();
+        destroyTiles();
     }
 
     private void boiling()
     {
         _boilingLevel = (float)GetLevel();
+    }
+
+    private void destroyTiles()
+    {
+        foreach (GameObject other in _outOfBounds.GetCollisions())
+        {
+            if (other is Tile)
+            {
+                other.LateDestroy();
+            }
+        }
     }
 
     private double GetLevel()

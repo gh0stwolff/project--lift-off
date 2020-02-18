@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using GXPEngine;
 using TiledMapParser;
-class MapGenerator : GameObject
+class MultiplayerMapGenerator : GameObject
 {
     //types of tiles
     const int AIR = 1;
@@ -34,12 +34,10 @@ class MapGenerator : GameObject
     private Tile _tile;
     private Lava _lava;
 
-    enum BlockType { Dirt, Stone, Diamond}
-    BlockType Type = BlockType.Dirt;
     private ScreenLayer[] layers = new ScreenLayer[4];
 
 
-    public MapGenerator() : base()
+    public MultiplayerMapGenerator() : base()
     {
         _tile = new Tile("Dirt.png", 0, 0);
         _blockCountWidth = ((MyGame)game).width / _tile.width;
@@ -53,17 +51,10 @@ class MapGenerator : GameObject
         }
         setupSpawn();
 
-        //for (int i = 0; i < _lineNumb; i = -1)
-        //{
-        //    generateNewLine();
-        //}
-
         Worm worm = new Worm();
         layers[3].AddChild(worm);
         _lava = new Lava();
         layers[2].AddChild(_lava);
-        //Sprite glow = new Sprite("lavaGlow.png");
-        //layers[3].AddChild(glow);
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
  
@@ -185,35 +176,26 @@ class MapGenerator : GameObject
         float dirtChance = getDirtSpawnChance(index);
         float diamondChance = getDiamondSpawnChance(index);
         float stoneChance = getStoneSpawnChance(index);
-        //if (_amountOfStartingLinesWithRockRestirction < _lineNumb)
-        //{
-        //    stoneChance = 0;
-        //}
+        float airChance = getAirSpawnChance(index);
 
 
-        float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + 1);
+        float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + airChance + 1);
 
         if (randomNumb < dirtChance)
         {
-            Type = BlockType.Dirt;
+            return DIRT;
         }
         else if (randomNumb < dirtChance + diamondChance)
         {
-            Type = BlockType.Diamond;
+            return DIAMOND;
         }
         else if (randomNumb < dirtChance + diamondChance + stoneChance)
         {
-            Type = BlockType.Stone;
+            return STONE;
         }
-
-        switch (Type)
+        else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance)
         {
-            case BlockType.Dirt:
-                return DIRT;
-            case BlockType.Diamond:
-                return DIAMOND;
-            case BlockType.Stone:
-                return STONE;
+            return AIR;
         }
 
         return 0;
@@ -240,6 +222,15 @@ class MapGenerator : GameObject
     private float getStoneSpawnChance(int index)
     {
         float maxChance = 15.0f;
+        float minChance = 10.0f;
+        bool isChanceHigherInMiddle = true;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getAirSpawnChance(int index)
+    {
+        float maxChance = 10.0f;
         float minChance = 10.0f;
         bool isChanceHigherInMiddle = true;
 

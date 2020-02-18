@@ -18,10 +18,10 @@ class Tile : AnimationSprite
 
     public void Update()
     {
-        if(y > ((MyGame)game).height)
-        {
-            LateDestroy();
-        }
+        //if(y > ((MyGame)game).GetScreenY() + ((MyGame)game).height)
+        //{
+        //    LateDestroy();
+        //}
         Animation();
     }
 
@@ -55,6 +55,6 @@ class Tile : AnimationSprite
 
     public int GetHeight()
     {
-        return width;
+        return height;
     }
 }
