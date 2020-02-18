@@ -12,6 +12,9 @@ class Lava : AnimationSprite
     public Lava() : base("Lava.png", 1, 1)
     {
         SetXY(0, ((MyGame)game).height - height/2);
+        Sprite glow = new Sprite("lavaGlow.png");
+        AddChild(glow);
+        glow.y = -200;
     }
 
     public void Update()

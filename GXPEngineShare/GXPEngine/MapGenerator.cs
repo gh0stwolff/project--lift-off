@@ -11,6 +11,7 @@ class MapGenerator : GameObject
     const int DIRT = 2;
     const int STONE = 3;
     const int DIAMOND = 4;
+    const int EDGESTONE = 5;
 
 
     //for generating new lines
@@ -60,7 +61,11 @@ class MapGenerator : GameObject
         Worm worm = new Worm();
         layers[3].AddChild(worm);
         _lava = new Lava();
-        layers[1].AddChild(_lava);
+        layers[2].AddChild(_lava);
+        //Sprite glow = new Sprite("lavaGlow.png");
+        //layers[3].AddChild(glow);
+        HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
+        layers[3].AddChild(hud);
  
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
@@ -97,11 +102,11 @@ class MapGenerator : GameObject
         {
             if (_rockThicknessLeft > i)
             {
-                newLine[i] = STONE;
+                newLine[i] = EDGESTONE;
             }
             else if (i >= _blockCountWidth - _rockThicknessRight)
             {
-                newLine[i] = STONE;
+                newLine[i] = EDGESTONE;
             }
             else
             {
@@ -124,12 +129,17 @@ class MapGenerator : GameObject
                     break;
                 case STONE:
                     Stone stone = new Stone(getXLocation(i), getYLocation(_lineNumb));
-                    layers[2].AddChild(stone);
+                    layers[0].AddChild(stone);
+                    break;
+                case EDGESTONE:
+                    Stone edgeStone = new Stone(getXLocation(i), getYLocation(_lineNumb));
+                    layers[2].AddChild(edgeStone);
                     break;
             }
         }
 
         _lineNumb--;
+        ((MyGame)game).AddScore(1);
     }
 
     private void ChangeWallThickness()
@@ -299,7 +309,7 @@ class MapGenerator : GameObject
                 if (tileNumber == STONE)
                 {
                     Stone stone = new Stone(getXLocation(column), getYLocation(row));
-                    layers[2].AddChild(stone);
+                    layers[0].AddChild(stone);
                 }
                 if (tileNumber == DIRT)
                 {
@@ -310,6 +320,12 @@ class MapGenerator : GameObject
                 {
                     DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
                     layers[0].AddChild(diamond);
+                }
+                if (tileNumber == EDGESTONE)
+                {
+                    Stone edgeStone = new Stone(getXLocation(column), getYLocation(_lineNumb));
+                    layers[2].AddChild(edgeStone);
+                    break;
                 }
             }
         }
@@ -330,7 +346,7 @@ class MapGenerator : GameObject
             {
                 case "Player":
                     Player player = new Player(obj.X, obj.Y);
-                    layers[3].AddChild(player);
+                    layers[1].AddChild(player);
                     break;
             }
         }
