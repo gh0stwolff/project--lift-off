@@ -282,17 +282,10 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if(other is DiamondOre && Input.GetKey(Key.SPACE))
+            if((other is DiamondOre || other is Dirt) && Input.GetKey(Key.SPACE))
             {
-                DiamondOre diamond = other as DiamondOre;
-                diamond.collect();
-                _miningAnimation = true;
-                _mining.alpha = 1.0f;
-            }
-            if (other is Dirt && Input.GetKey(Key.SPACE))
-            {
-                Dirt dirt = other as Dirt;
-                dirt.Digged();
+                
+                other.LateDestroy();
                 _miningAnimation = true;
                 _mining.alpha = 1.0f;
             }

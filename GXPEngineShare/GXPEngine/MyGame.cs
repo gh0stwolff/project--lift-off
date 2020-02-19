@@ -5,16 +5,15 @@ public class MyGame : Game
 {
     private float _startScreenSpeed = 1.0f;
     private float _speed;
+    //private MapGenerator _map;
     private Menu _menu;
     private int _shakeTime = 0;
-    private int _score = 0;
 
     //arcade screen res: 1366x768
-    public MyGame() : base(1408, 768, false, true, 1366, 768)		// Create a window that's 800x600 and NOT fullscreen
+    public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
 	{
         _menu = new Menu(width, height);
         AddChild(_menu);
-
         _speed = _startScreenSpeed;
     }
 
