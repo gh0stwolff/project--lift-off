@@ -39,6 +39,7 @@
     <Compile Include="Button.cs" />
     <Compile Include="DiamondOre.cs" />
     <Compile Include="Dirt.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Lava.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="ParticalEffect.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="SingleplayerMapGenerator.cs" />
     <Compile Include="Stone.cs" />
     <Compile Include="TestPlayer.cs" />
+    <Compile Include="TextBoard.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Worm.cs" />
   </ItemGroup>
