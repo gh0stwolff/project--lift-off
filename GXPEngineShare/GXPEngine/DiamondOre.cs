@@ -8,7 +8,7 @@ class DiamondOre : Tile
 {
     private bool _doOnce = true;
 
-    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y)
+    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2)
     {
 
     }

@@ -10,7 +10,7 @@ class Tile : AnimationSprite
     private bool _startAnimation = false;
     private ParticalEffect _particals;
 
-    public Tile(string fileName, float xLoc, float yLoc) : base(fileName, 2 , 1)
+    public Tile(string fileName, float xLoc, float yLoc, int numberOfFrames) : base(fileName, numberOfFrames , 1)
     {
         x = xLoc;
         y = yLoc;

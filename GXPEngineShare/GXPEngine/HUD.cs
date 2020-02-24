@@ -11,8 +11,8 @@ public class HUD : Canvas
     public HUD(float width, float height) : base((int)width, (int)height)
     {
         SetXY(0, 100);
-        _textPoints = new TextBoard(132, 32);
-        _textPoints.x += 100;
+        _textPoints = new TextBoard(124, 24);
+        _textPoints.x += 8;
         _textPoints.y -= 32;
         AddChild(_textPoints);
     }

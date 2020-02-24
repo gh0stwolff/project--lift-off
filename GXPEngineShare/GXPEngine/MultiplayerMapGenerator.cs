@@ -12,22 +12,24 @@ class MultiplayerMapGenerator : GameObject
     const int STONE = 3;
     const int DIAMOND = 4;
     const int EDGESTONE = 5;
+    const int DARKNESS = 6;
 
 
     //for generating new lines
     private int _blockCountWidth;
     private int _minWidth = 6;
     private int _maxWidth = 18;
-    private int _framesBetweenLines;
+    private float _framesBetweenLines;
     private int _lineNumb;
     //private int _amountOfStartingLinesWithRockRestirction = 10;
     private int _linesTillNarrowing = -5;
-    private int _timer = 0;
+    private float _timer = 0;
     private int _targetLine;
     //how big the outerborder is
     private int _rockThicknessLeft = 2;
     private int _rockThicknessRight = 2;
 
+    private float _maxScreenSpeed = 3.5f;
 
     private bool _isGoingOutWards = false;
 
@@ -39,7 +41,7 @@ class MultiplayerMapGenerator : GameObject
 
     public MultiplayerMapGenerator() : base()
     {
-        _tile = new Tile("Dirt.png", 0, 0);
+        _tile = new Tile("Dirt.png", 0, 0, 2);
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
         _lineNumb = -1;
@@ -50,20 +52,26 @@ class MultiplayerMapGenerator : GameObject
             AddChild(layers[i]);
         }
         setupSpawn();
+        generateNewLine();
 
-        Worm worm = new Worm();
-        layers[3].AddChild(worm);
         _lava = new Lava();
         layers[2].AddChild(_lava);
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
- 
+        Worm worm = new Worm();
+        layers[2].AddChild(worm);
+
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
 
     public void Update()
     {
         timerNewLine();
+        if (((MyGame)game).GetScreenSpeed() < _maxScreenSpeed)
+        {
+            ((MyGame)game).IncreaseSpeed();
+        }
+        _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
     }
 
     private void timerNewLine()
@@ -91,19 +99,11 @@ class MultiplayerMapGenerator : GameObject
 
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
-            if (_rockThicknessLeft > i)
-            {
-                newLine[i] = EDGESTONE;
-            }
-            else if (i >= _blockCountWidth - _rockThicknessRight)
-            {
-                newLine[i] = EDGESTONE;
-            }
-            else
-            {
-                
-                newLine[i] = getRandomNumb(i);
-            }
+            if (_rockThicknessLeft == i + 1) { newLine[i] = EDGESTONE; }
+            else if (_rockThicknessLeft > i) { newLine[i] = DARKNESS; }
+            else if (i == _blockCountWidth - _rockThicknessRight) { newLine[i] = EDGESTONE; }
+            else if (i > _blockCountWidth - _rockThicknessRight) { newLine[i] = DARKNESS; }
+            else { newLine[i] = getRandomNumb(i); }
         }
 
         for (int i = 0; i < newLine.GetLength(0); i++)
@@ -123,8 +123,12 @@ class MultiplayerMapGenerator : GameObject
                     layers[0].AddChild(stone);
                     break;
                 case EDGESTONE:
-                    Stone edgeStone = new Stone(getXLocation(i), getYLocation(_lineNumb));
+                    EdgeStone edgeStone = new EdgeStone(getXLocation(i), getYLocation(_lineNumb), true);
                     layers[2].AddChild(edgeStone);
+                    break;
+                case DARKNESS:
+                    EdgeStone darkness = new EdgeStone(getXLocation(i), getYLocation(_lineNumb), false);
+                    layers[2].AddChild(darkness);
                     break;
             }
         }

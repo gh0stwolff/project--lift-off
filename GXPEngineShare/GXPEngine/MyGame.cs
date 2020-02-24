@@ -27,12 +27,7 @@ public class MyGame : Game
             ShakeCamera(100);
         }
         shake();
-        //if (Input.GetKeyDown(Key.P))
-        //{
-        //    ParticalEffect partical = new ParticalEffect("tileExplosion.png", 8, 1);
-        //    Add
-        //}
-	}
+    }
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{
