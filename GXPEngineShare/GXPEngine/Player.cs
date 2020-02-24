@@ -11,6 +11,7 @@ class Player : Sprite
     private AnimationSprite _animation;
     private AnimationSprite _mining;
     private Sprite _drill;
+    private Sprite _fog;
 
     private float _gravity = 0.5f;
     private float _deceleration = 0.9f;
@@ -48,6 +49,10 @@ class Player : Sprite
         _drill.SetOrigin(width/8-22, height/3-2);
 
         _mining.SetOrigin(width / 4 + 5, height / 4);
+
+        _fog = new Sprite("fog.png");
+        AddChild(_fog);
+        _fog.SetOrigin(_fog.width / 2, _fog.height / 2);
 
 
     }

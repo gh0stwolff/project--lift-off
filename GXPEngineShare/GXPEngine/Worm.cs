@@ -28,8 +28,6 @@ using GXPEngine;
 
         _mediumWorm.SetOrigin(_mediumWorm.width / 2, _mediumWorm.height / 2);
 
-        _mediumWorm.SetScaleXY(1.5f, 2.0f);
-
         // _mediumWorm.alpha = 0.0f;
 
         _bigWorm = new AnimationSprite("big_worm_sprite_sheet.png", 1, 4);
@@ -37,8 +35,6 @@ using GXPEngine;
         AddChild(_bigWorm);
 
         _bigWorm.SetOrigin(_bigWorm.width / 2, _bigWorm.height / 2);
-
-        _bigWorm.SetScaleXY(2.0f, 3.0f);
 
         // _bigWorm.alpha = 0.0f;
         for (int i = 0; i < 2; i++)
@@ -77,7 +73,6 @@ using GXPEngine;
             _bigWorm.alpha = 0.0f;
             _arrow[0].x = _arrow[0].width;
             _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
-
             if (Input.GetKey(Key.LEFT))
             {
                 _state = 1;
@@ -198,6 +193,7 @@ using GXPEngine;
         if (x < -(width) || x > ((MyGame)game).GetScreenWidth() + width) 
         {
             _shoot = false;
+            SetScaleXY(1.0f, 1.0f);
         }
 
         if(_shoot == true && _state == 1)
@@ -216,6 +212,8 @@ using GXPEngine;
             _arrow[1].alpha = 0.0f;
             if (_scale == 1)
             {
+                SetScaleXY(1.0f, 1.0f);
+
                 alpha = 1.0f;
 
                 _mediumWorm.alpha = 0.0f;
@@ -225,6 +223,8 @@ using GXPEngine;
 
             if (_scale == 2)
             {
+                SetScaleXY(1.5f, 2.0f);
+
                 alpha = 0.0f;
 
                 _mediumWorm.alpha = 1.0f;
@@ -234,6 +234,8 @@ using GXPEngine;
 
             if (_scale == 3)
             {
+                SetScaleXY(2.0f, 3.0f);
+
                 alpha = 0.0f;
 
                 _mediumWorm.alpha = 0.0f;
@@ -280,6 +282,11 @@ using GXPEngine;
         {
             other.LateDestroy();
 
+        }
+
+        if(other is Tile)
+        {
+            other.LateDestroy();
         }
     }
 }
