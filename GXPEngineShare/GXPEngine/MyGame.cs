@@ -31,7 +31,8 @@ public class MyGame : Game
         //    ParticalEffect partical = new ParticalEffect("tileExplosion.png", 8, 1);
         //    Add
         //}
-	}
+        Console.WriteLine(this.y);
+    }
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{
@@ -94,4 +95,9 @@ public class MyGame : Game
     {
         return y;
     }
+    public float GetScreenX()
+    {
+        return y;
+    }
+
 }
