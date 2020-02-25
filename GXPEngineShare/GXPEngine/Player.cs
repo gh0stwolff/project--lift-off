@@ -37,22 +37,22 @@ class Player : Sprite
         //_animation.alpha = 0.2f;
         _animation.SetOrigin(width/2+3, height/2+5);
 
-        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
-        AddChild(_mining);
-        _mining.SetScaleXY(2.0f, 2.0f);
-        _mining.alpha = 0.0f;
-        
-
         _drill = new Sprite("drill.png");
         AddChild(_drill);
         _drill.alpha = 0.0f;
         _drill.SetOrigin(width/8-22, height/3-2);
 
-        _mining.SetOrigin(width / 4 + 5, height / 4);
+        
 
         _fog = new Sprite("fog.png");
         AddChild(_fog);
         _fog.SetOrigin(_fog.width / 2, _fog.height / 2);
+
+        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
+        AddChild(_mining);
+        _mining.SetScaleXY(2.0f, 2.0f);
+        _mining.alpha = 0.0f;
+        _mining.SetOrigin(width / 4 + 5, height / 4);
 
 
     }
