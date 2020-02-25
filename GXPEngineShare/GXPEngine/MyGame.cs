@@ -5,7 +5,6 @@ public class MyGame : Game
 {
     private float _startScreenSpeed = 1.0f;
     private float _speed;
-    //private MapGenerator _map;
     private Menu _menu;
     private int _shakeTime = 0;
     private int _score = 0;
@@ -16,6 +15,8 @@ public class MyGame : Game
         _menu = new Menu(width, height);
         AddChild(_menu);
         _speed = _startScreenSpeed;
+        //HighScoreScreen high = new HighScoreScreen(width, height);
+        //AddChild(high);
     }
 
     public void Update()
@@ -36,7 +37,7 @@ public class MyGame : Game
 
     public void GameOver()
     {
-        _menu.GameOver();
+        _menu.GameOver(_score);
     }
 
 	public float GetScreenSpeed()

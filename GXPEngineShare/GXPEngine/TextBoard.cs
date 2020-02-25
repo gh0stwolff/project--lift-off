@@ -21,4 +21,14 @@ public class TextBoard : GameObject
         _text.Clear(0);
         _text.Text(text, 0, 0);
     }
+
+    public void Clear()
+    {
+        _text.Clear(0);
+    }
+
+    public void Size(int fontSize)
+    {
+        _text.TextSize(fontSize);
+    }
 }

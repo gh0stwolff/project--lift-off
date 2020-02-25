@@ -40,6 +40,7 @@
     <Compile Include="DiamondOre.cs" />
     <Compile Include="Dirt.cs" />
     <Compile Include="EdgeStone.cs" />
+    <Compile Include="HighScoreScreen.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="Lava.cs" />
     <Compile Include="MainMenu.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="ParticalEffect.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="ReadyScreen.cs" />
+    <Compile Include="ScoreScreen.cs" />
     <Compile Include="ScreenLayer.cs" />
     <Compile Include="MultiplayerMapGenerator.cs" />
     <Compile Include="MyGame.cs" />

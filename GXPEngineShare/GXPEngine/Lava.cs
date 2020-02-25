@@ -14,8 +14,8 @@ class Lava : AnimationSprite
     {
         SetXY(0, ((MyGame)game).height - height/2);
         Sprite glow = new Sprite("lavaGlow.png");
-        //AddChild(glow);
-        glow.y = -1200;
+        AddChild(glow);
+        glow.y = -720;
         glow.alpha = 0.5f;
         _outOfBounds = new Sprite("lavaGlow.png");
         AddChild(_outOfBounds);

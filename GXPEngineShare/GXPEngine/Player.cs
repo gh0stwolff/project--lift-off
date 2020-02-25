@@ -22,6 +22,8 @@ class Player : Sprite
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
 
     bool _miningAnimation = false;
+    private bool _doOnce = true;
+
     public Player(float x, float y) : base("collider.png")
     {
         SetXY(x, y);
@@ -301,7 +303,12 @@ class Player : Sprite
 
     private void Dead()
     {
-        ((MyGame)game).GameOver();
+        Console.WriteLine("{0}", _doOnce);
+        if (_doOnce)
+        {
+            ((MyGame)game).GameOver();
+            _doOnce = false;
+        }
     }
 
     void Gravity()

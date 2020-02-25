@@ -13,8 +13,15 @@ class Menu : Canvas
     //private Button _returnToMenuButton;
     private MainMenu _mainScreen;
     private ReadyScreen _readyScreen;
+    private ScoreScreen _scoreScreenMulti;
+    private ScoreScreen _scoreScreenSingle;
+    private HighScoreScreen _highScore;
 
-    enum Scene { MainMenu, ReadyScreen, MultiplayerLevel, SinglePlayerLevel, GameOver}
+    private int _scoreP1 = 0;
+    private int _scoreP2 = 0;
+    private int _playersReady = 0;
+
+    enum Scene { MainMenu, ReadyScreen, MultiplayerLevel, SinglePlayerLevel, ScoreScreen1, ScoreScreen2, HighScoreScreen}
     Scene SceneState = Scene.MainMenu;
 
     public Menu(int width, int height) : base(width, height)
@@ -35,19 +42,54 @@ class Menu : Canvas
 
     private void screenState()
     {
-        if (_mainScreen != null && Input.GetKeyDown(Key.ENTER))
+        if (_mainScreen != null && Input.GetKeyDown(Key.THREE))
         {
             SceneState = Scene.ReadyScreen;
         }
         if (_readyScreen != null)
         {
-            if (_readyScreen.GetPlayersReady() == 1 && Input.GetKeyDown(Key.ENTER))
+            _playersReady = _readyScreen.GetPlayersReady();
+            if (_playersReady == 1 && Input.GetKeyDown(Key.THREE))
             {
                 SceneState = Scene.SinglePlayerLevel;
             }
-            if (_readyScreen.GetPlayersReady() == 2 && Input.GetKeyDown(Key.ENTER))
+            if (_playersReady == 2 && Input.GetKeyDown(Key.THREE))
             {
                 SceneState = Scene.MultiplayerLevel;
+            }
+        }
+        if ( _scoreScreenMulti != null)
+        {
+            if (Input.GetKeyDown(Key.THREE))
+            {
+                Console.WriteLine(_scoreP2);
+                if (_scoreP2 == 0) 
+                { 
+                    SceneState = Scene.MultiplayerLevel; Console.WriteLine("triggert"); 
+                }
+                else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyDown(Key.THREE))
+                {
+                    _scoreScreenMulti.SafeScores();
+                    SceneState = Scene.HighScoreScreen;
+                }
+                else if (_scoreP2 != 0 && Input.GetKeyDown(Key.THREE))
+                {
+                    _scoreScreenMulti.Compare();
+                }
+            }
+        }
+        if ( _scoreScreenSingle != null)
+        {
+            if (Input.GetKeyDown(Key.THREE))
+            {
+                SceneState = Scene.HighScoreScreen;
+            }
+        }
+        if (_highScore != null)
+        {
+            if (Input.GetKeyDown(Key.THREE))
+            {
+                SceneState = Scene.MainMenu;
             }
         }
     }
@@ -58,51 +100,110 @@ class Menu : Canvas
         {
             case Scene.MainMenu:
                 ((MyGame)game).SetScreenForMenu();
-                if (_readyScreen != null) { _readyScreen = null; }
-                if (_singlePlayer != null) { _singlePlayer = null; }
-                if ( _multiPlayer != null) { _multiPlayer = null; }
                 if (_mainScreen == null)
                 {
                     _mainScreen = new MainMenu(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
                     destroyInactiveScreens(_mainScreen);
                     AddChild(_mainScreen);
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
+                    if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
                 }
                 break;
             case Scene.ReadyScreen:
-                if (_mainScreen != null) { _mainScreen = null; }
                 if (_readyScreen == null)
                 {
                     _readyScreen = new ReadyScreen(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
                     destroyInactiveScreens(_readyScreen);
                     AddChild(_readyScreen);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
+                    if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
                 }
                 break;
             case Scene.SinglePlayerLevel:
-                if (_mainScreen != null) { _mainScreen = null; }
-                if (_readyScreen != null) { _readyScreen = null; }
                 if (_singlePlayer == null)
                 {
                     ((MyGame)game).SetScreenForBeginLevel();
                     _singlePlayer = new SingleplayerMapGenerator();
                     destroyInactiveScreens(_singlePlayer);
                     AddChild(_singlePlayer);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
+                    if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
                 }
                 break;
             case Scene.MultiplayerLevel:
-                if (_mainScreen != null) { _mainScreen = null; }
-                if ( _readyScreen != null) { _readyScreen = null; }
                 if ( _multiPlayer == null)
                 {
                     ((MyGame)game).SetScreenForBeginLevel();
                     _multiPlayer = new MultiplayerMapGenerator();
                     destroyInactiveScreens(_multiPlayer);
                     AddChild(_multiPlayer);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
+                    if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
                 }
                 break;
-            case Scene.GameOver:
-                if (_multiPlayer != null) { _multiPlayer = null; }
-                if ( _singlePlayer != null) { _singlePlayer = null; }
-                
+            case Scene.ScoreScreen1:
+                if (_scoreScreenMulti == null)
+                {
+                    ((MyGame)game).SetScreenForMenu();
+                    _scoreScreenMulti = new ScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight(), _scoreP1, _scoreP2);
+                    destroyInactiveScreens(_scoreScreenMulti);
+                    AddChild(_scoreScreenMulti);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if ( _singlePlayer != null) { _singlePlayer = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
+                }
+                break;
+            case Scene.HighScoreScreen:
+                ((MyGame)game).SetScreenForMenu();
+                if ( _highScore == null)
+                {
+                    _highScore = new HighScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight());
+                    destroyInactiveScreens(_highScore);
+                    AddChild(_highScore);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
+                    if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
+
+                }
+                break;
+            case Scene.ScoreScreen2:
+                if (_scoreScreenSingle == null)
+                {
+                    ((MyGame)game).SetScreenForMenu();
+                    _scoreScreenSingle = new ScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight(), _scoreP1, _scoreP2);
+                    destroyInactiveScreens(_scoreScreenSingle);
+                    AddChild(_scoreScreenSingle);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
+                }
                 break;
         }
 
@@ -119,89 +220,26 @@ class Menu : Canvas
         }
     }
 
-    //private void checkButtonPresses()
-    //{
-    //    if (_multiplayerButton != null)
-    //    {
-    //        if (_multiplayerButton.IsPressed())
-    //        {
-    //            SceneState = Scene.MultiplayerLevel;
-    //        }
-    //    }
-    //    if ( _singlePlayerButton != null)
-    //    {
-    //        if (_singlePlayerButton.IsPressed())
-    //        {
-    //            SceneState = Scene.SinglePlayerLevel;
-    //        }
-    //    }
-    //    if (_returnToMenuButton != null)
-    //    {
-    //        if (_returnToMenuButton.IsPressed())
-    //        {
-    //            SceneState = Scene.Menu;
-    //        }
-    //    }
-    //}
-
-    //private void handleSceneState()
-    //{
-    //    switch (SceneState)
-    //    {
-    //        case Scene.Menu:
-    //            if (_multiPlayer != null) { _multiPlayer.LateDestroy(); _multiPlayer = null; }
-    //            if (_singlePlayer != null) { _singlePlayer.LateDestroy(); _singlePlayer = null; }
-    //            if ( _returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
-    //            if (_multiplayerButton == null)
-    //            {
-    //                _multiplayerButton = new Button("multiplayerButton.png", 400, 300, 1, 1);
-    //                AddChild(_multiplayerButton);
-    //                _singlePlayerButton = new Button("singleplayerButton.png", 400, 500, 1, 1);
-    //                AddChild(_singlePlayerButton);
-    //            }
-    //            ((MyGame)game).SetScreenForMenu();
-    //            break;
-    //        case Scene.MultiplayerLevel:
-    //            if (_multiplayerButton != null) { _multiplayerButton.LateDestroy(); _multiplayerButton = null; }
-    //            if ( _returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
-    //            if (_singlePlayerButton != null) { _singlePlayerButton.LateDestroy(); _singlePlayerButton = null; }
-    //            if (_singlePlayer != null) { _singlePlayer.LateDestroy(); _singlePlayer = null; }
-    //            if (_multiPlayer == null)
-    //            {
-    //                ((MyGame)game).SetScreenForBeginLevel();
-    //                _multiPlayer = new MultiplayerMapGenerator();
-    //                AddChild(_multiPlayer);
-    //            }
-    //            break;
-    //        case Scene.SinglePlayerLevel:
-    //            if (_multiplayerButton != null) { _multiplayerButton.LateDestroy(); _multiplayerButton = null; }
-    //            if (_returnToMenuButton != null) { _returnToMenuButton.LateDestroy(); _returnToMenuButton = null; }
-    //            if (_singlePlayerButton != null) { _singlePlayerButton.LateDestroy(); _singlePlayerButton = null; }
-    //            if (_multiPlayer != null) { _multiPlayer.LateDestroy(); _multiPlayer = null; }
-    //            if (_singlePlayer == null)
-    //            {
-    //                ((MyGame)game).SetScreenForBeginLevel();
-    //                _singlePlayer = new SingleplayerMapGenerator();
-    //                AddChild(_singlePlayer);
-    //            }
-    //            break;
-    //        case Scene.GameOver:
-    //            if (_multiplayerButton != null) { _multiplayerButton.LateDestroy(); _multiplayerButton = null; }
-    //            if (_multiPlayer != null) { _multiPlayer.LateDestroy(); _multiPlayer = null; }
-    //            if (_singlePlayer != null) { _singlePlayer.LateDestroy(); _singlePlayer = null; }
-    //            if (_returnToMenuButton == null)
-    //            {
-    //                _returnToMenuButton = new Button("returnButton.png", 400, 300, 1, 1);
-    //                AddChild(_returnToMenuButton);
-    //            }
-    //            ((MyGame)game).SetScreenForMenu();
-    //            break;
-    //    }
-    //}
-
-    public void GameOver()
+    public void GameOver(int score)
     {
-        SceneState = Scene.MainMenu;
+        if (_playersReady == 2)
+        {
+            if (_scoreP1 == 0)
+            {
+                _scoreP1 = score;
+                SceneState = Scene.ScoreScreen1;
+            }
+            else if (_scoreP2 == 0)
+            {
+                _scoreP2 = score;
+                SceneState = Scene.ScoreScreen1;
+            }
+        }
+        else
+        {
+            _scoreP1 = score;
+            SceneState = Scene.ScoreScreen2;
+        }
     }
 
 }
