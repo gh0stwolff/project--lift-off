@@ -6,8 +6,9 @@ using GXPEngine;
 
 class DiamondOre : Tile
 {
+    private bool _doOnce = true;
 
-    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y)
+    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2)
     {
 
     }
@@ -17,6 +18,11 @@ class DiamondOre : Tile
         //add points
 
         //add before LateDestroy a partical effect
+        if (_doOnce)
+        {
+            ((MyGame)game).AddScore(5);
+            _doOnce = false;
+        }
         selfDestroy();
     }
 }

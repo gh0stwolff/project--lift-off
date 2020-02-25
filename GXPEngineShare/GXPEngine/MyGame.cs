@@ -5,16 +5,18 @@ public class MyGame : Game
 {
     private float _startScreenSpeed = 1.0f;
     private float _speed;
-    //private MapGenerator _map;
     private Menu _menu;
     private int _shakeTime = 0;
+    private int _score = 0;
 
     //arcade screen res: 1366x768
-    public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
+    public MyGame() : base(1408, 720, false, true, 1366, 768)		// Create a window that's 800x600 and NOT fullscreen
 	{
         _menu = new Menu(width, height);
         AddChild(_menu);
         _speed = _startScreenSpeed;
+        //HighScoreScreen high = new HighScoreScreen(width, height);
+        //AddChild(high);
     }
 
     public void Update()
@@ -26,12 +28,7 @@ public class MyGame : Game
             ShakeCamera(100);
         }
         shake();
-        //if (Input.GetKeyDown(Key.P))
-        //{
-        //    ParticalEffect partical = new ParticalEffect("tileExplosion.png", 8, 1);
-        //    Add
-        //}
-	}
+    }
 
 	static void Main()							// Main() is the first method that's called when the program is run
 	{
@@ -40,7 +37,7 @@ public class MyGame : Game
 
     public void GameOver()
     {
-        _menu.GameOver();
+        _menu.GameOver(_score);
     }
 
 	public float GetScreenSpeed()
@@ -54,7 +51,7 @@ public class MyGame : Game
         y = 0;
     }
 
-    public void SetScreenForStartLevel()
+    public void SetScreenForBeginLevel()
     {
         _speed = _startScreenSpeed;
         y = 0;
@@ -69,9 +66,9 @@ public class MyGame : Game
     {
         if (_shakeTime > 0)
         {
-            if (_menu._level != null)
+            if (_menu != null)
             {
-                _menu._level.x = getShaking(_shakeTime);
+                _menu.x = getShaking(_shakeTime);
                 _shakeTime--;
             }
         }
@@ -105,5 +102,20 @@ public class MyGame : Game
     public float GetScreenY()
     {
         return y;
+    }
+
+    public int GetScore()
+    {
+        return _score;
+    }
+
+    public void AddScore(int amount)
+    {
+        _score += amount;
+    }
+
+    public void IncreaseSpeed()
+    {
+        _speed += 0.0001f;
     }
 }

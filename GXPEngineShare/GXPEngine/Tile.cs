@@ -10,7 +10,7 @@ class Tile : AnimationSprite
     private bool _startAnimation = false;
     private ParticalEffect _particals;
 
-    public Tile(string fileName, float xLoc, float yLoc) : base(fileName, 2 , 1)
+    public Tile(string fileName, float xLoc, float yLoc, int numberOfFrames) : base(fileName, numberOfFrames , 1)
     {
         x = xLoc;
         y = yLoc;
@@ -18,10 +18,10 @@ class Tile : AnimationSprite
 
     public void Update()
     {
-        if(y > ((MyGame)game).height)
-        {
-            LateDestroy();
-        }
+        //if(y > ((MyGame)game).GetScreenY() + ((MyGame)game).height)
+        //{
+        //    LateDestroy();
+        //}
         Animation();
     }
 
@@ -55,6 +55,6 @@ class Tile : AnimationSprite
 
     public int GetHeight()
     {
-        return width;
+        return height;
     }
 }

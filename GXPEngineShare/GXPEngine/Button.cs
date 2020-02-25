@@ -13,10 +13,43 @@ class Button : Sprite
         SetScaleXY(sizeX, sizeY);
     }
 
+    public void Update()
+    {
+        if ( checkIfSelected())
+        {
+            scale = 1.1f;
+        }
+        else
+        {
+            scale = 1;
+        }
+    }
+
+    private bool checkIfSelected()
+    {
+        foreach (GameObject other in GetCollisions())
+        {
+            if (other.x > x && other.x < x + width &&
+                other.y > y && other.y < y + height)
+            {
+                return true;
+            }
+        }
+
+        if (Input.mouseX > x && Input.mouseX < x + width &&
+            Input.mouseY > y && Input.mouseY < y + height)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public bool IsPressed()
     {
-        if (Input.mouseX > x && Input.mouseX < x + width &&
-            Input.mouseY > y && Input.mouseY < y + height && Input.GetMouseButtonDown(0))
+        if (checkIfSelected() && Input.GetMouseButtonDown(0))
         {
             return true;
         }

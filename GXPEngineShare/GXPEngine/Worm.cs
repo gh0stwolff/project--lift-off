@@ -28,7 +28,7 @@ using GXPEngine;
         if (_shoot == false)
         {
 
-            if (Input.GetKey(Key.LEFT))
+            if (Input.GetKey(Key.U))
             {
                 SetFrame(4);
                 x = 0;
@@ -37,7 +37,7 @@ using GXPEngine;
                 alpha = 0.6f;
             }
 
-            if (Input.GetKey(Key.RIGHT))
+            if (Input.GetKey(Key.O))
             {
                 SetFrame(0);
                 x = ((MyGame)game).GetScreenWidth(); ;
@@ -46,18 +46,18 @@ using GXPEngine;
                 alpha = 0.6f;
             }
 
-            if (Input.GetKey(Key.UP))
+            if (Input.GetKey(Key.I))
             {
                 y -= _speed;
             }
 
-            if (Input.GetKey(Key.DOWN))
+            if (Input.GetKey(Key.K))
             {
                 y += _speed;
             }
 
         }
-        if (Input.GetKey(Key.ENTER))
+        if (Input.GetKey(Key.THREE))
         {
             _shoot = true;
             alpha = 1f;

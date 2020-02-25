@@ -22,6 +22,8 @@ class Player : Sprite
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
 
     bool _miningAnimation = false;
+    private bool _doOnce = true;
+
     public Player(float x, float y) : base("collider.png")
     {
         SetXY(x, y);
@@ -282,10 +284,17 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if((other is DiamondOre || other is Dirt) && Input.GetKey(Key.SPACE))
+            if(other is DiamondOre && Input.GetKey(Key.SPACE))
             {
-                
-                other.LateDestroy();
+                DiamondOre diamond = other as DiamondOre;
+                diamond.collect();
+                _miningAnimation = true;
+                _mining.alpha = 1.0f;
+            }
+            if (other is Dirt)
+            {
+                Dirt dirt = other as Dirt;
+                dirt.Digged();
                 _miningAnimation = true;
                 _mining.alpha = 1.0f;
             }
@@ -294,7 +303,12 @@ class Player : Sprite
 
     private void Dead()
     {
-        ((MyGame)game).GameOver();
+        Console.WriteLine("{0}", _doOnce);
+        if (_doOnce)
+        {
+            ((MyGame)game).GameOver();
+            _doOnce = false;
+        }
     }
 
     void Gravity()

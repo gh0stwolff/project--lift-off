@@ -39,12 +39,18 @@
     <Compile Include="Button.cs" />
     <Compile Include="DiamondOre.cs" />
     <Compile Include="Dirt.cs" />
+    <Compile Include="EdgeStone.cs" />
+    <Compile Include="HighScoreScreen.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Lava.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="ParticalEffect.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="ReadyScreen.cs" />
+    <Compile Include="ScoreScreen.cs" />
     <Compile Include="ScreenLayer.cs" />
-    <Compile Include="MapGenerator.cs" />
+    <Compile Include="MultiplayerMapGenerator.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />
@@ -83,8 +89,10 @@
     <Compile Include="GXPEngine\FMOD\FMODSoundSystem.cs" />
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
+    <Compile Include="SingleplayerMapGenerator.cs" />
     <Compile Include="Stone.cs" />
     <Compile Include="TestPlayer.cs" />
+    <Compile Include="TextBoard.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Worm.cs" />
   </ItemGroup>
