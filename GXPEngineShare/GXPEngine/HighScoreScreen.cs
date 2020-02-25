@@ -29,6 +29,11 @@ class HighScoreScreen : Canvas
         showScores();
     }
 
+    private void AddScore(int score)
+    {
+        
+    }
+
     private void readLines()
     {
         while (_line != null)

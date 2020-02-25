@@ -48,6 +48,7 @@
     <Compile Include="ParticalEffect.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="ReadyScreen.cs" />
+    <Compile Include="ScoreBoard.cs" />
     <Compile Include="ScoreScreen.cs" />
     <Compile Include="ScreenLayer.cs" />
     <Compile Include="MultiplayerMapGenerator.cs" />

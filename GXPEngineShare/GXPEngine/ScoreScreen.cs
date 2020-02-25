@@ -16,8 +16,6 @@ class ScoreScreen : Canvas
 
     public bool IsComparing = false;
 
-    private StreamWriter _writer;
-
     public ScoreScreen(int width, int height, int scoreP1, int scoreP2) : base(width, height)
     {
         _scoreP1 = scoreP1;
@@ -33,7 +31,6 @@ class ScoreScreen : Canvas
         _youWon.Size(56);
         _youWon.SetXY(400, 400);
         AddChild(_youWon);
-        _writer = new StreamWriter("Score.txt");
     }
 
     public void Compare()
