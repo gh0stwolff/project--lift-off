@@ -15,8 +15,7 @@ public class MyGame : Game
         _menu = new Menu(width, height);
         AddChild(_menu);
         _speed = _startScreenSpeed;
-        //HighScoreScreen high = new HighScoreScreen(width, height);
-        //AddChild(high);
+        //ScoreBoard score = new ScoreBoard("Score.txt");
     }
 
     public void Update()

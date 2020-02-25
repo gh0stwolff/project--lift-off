@@ -22,11 +22,23 @@ class ScoreScreen : Canvas
         _scoreP2 = scoreP2;
         _backGround = new Sprite("backGround.jpg");
         AddChild(_backGround);
+        setupText();
+    }
+
+    private void setupText()
+    {
         _score = new TextBoard(400, 200);
         AddChild(_score);
         _score.Size(56);
         _score.SetXY(400, 400);
-        _score.SetText("Your Score:" + _scoreP1);
+        if (_scoreP2 == 0)
+        {
+            _score.SetText("Your Score:" + _scoreP1);
+        }
+        else
+        {
+            _score.SetText("Your Score:" + _scoreP2);
+        }
         _youWon = new TextBoard(500, 300);
         _youWon.Size(56);
         _youWon.SetXY(400, 400);
@@ -46,19 +58,6 @@ class ScoreScreen : Canvas
         {
             showP2Won();
         }
-    }
-
-    public void SafeScores()
-    {
-        if (_scoreP1 != 0)
-        {
-            //_writer.WriteLine(_scoreP1);
-        }
-        if (_scoreP2 != 0)
-        {
-            //_writer.WriteLine(_scoreP2);
-        }
-        //_writer.Close();
     }
 
     private void showP1Won()

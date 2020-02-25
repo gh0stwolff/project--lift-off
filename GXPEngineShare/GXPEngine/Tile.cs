@@ -18,10 +18,11 @@ class Tile : AnimationSprite
 
     public void Update()
     {
-        //if(y > ((MyGame)game).GetScreenY() + ((MyGame)game).height)
-        //{
-        //    LateDestroy();
-        //}
+        if (y > -((MyGame)game).GetScreenY() + ((MyGame)game).GetScreenHeight())
+        {
+            LateDestroy();
+        }
+
         Animation();
     }
 

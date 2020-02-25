@@ -65,11 +65,10 @@ class Menu : Canvas
                 Console.WriteLine(_scoreP2);
                 if (_scoreP2 == 0) 
                 { 
-                    SceneState = Scene.MultiplayerLevel; Console.WriteLine("triggert"); 
+                    SceneState = Scene.MultiplayerLevel; 
                 }
                 else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyDown(Key.THREE))
                 {
-                    _scoreScreenMulti.SafeScores();
                     SceneState = Scene.HighScoreScreen;
                 }
                 else if (_scoreP2 != 0 && Input.GetKeyDown(Key.THREE))
@@ -178,7 +177,7 @@ class Menu : Canvas
                 ((MyGame)game).SetScreenForMenu();
                 if ( _highScore == null)
                 {
-                    _highScore = new HighScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight());
+                    _highScore = new HighScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight(), _scoreP1, _scoreP2);
                     destroyInactiveScreens(_highScore);
                     AddChild(_highScore);
                     if (_mainScreen != null) { _mainScreen = null; }
