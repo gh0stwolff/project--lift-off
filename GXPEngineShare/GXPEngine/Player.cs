@@ -17,10 +17,12 @@ class Player : Sprite
     private float _deceleration = 0.9f;
     private float _vSpeed = 0.0f;
     private float _hSpeed = 0.0f;
+    private float _speed = 0.5f;
     private int _state = 1;
     private int _timer = 0;
     private int _timer2 = 0;
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
+    private int boost = 200;
     private float ogY;
 
     bool _miningAnimation = false;
@@ -65,22 +67,23 @@ class Player : Sprite
         Movement();
         Break();
         Animation();
+        Boost();
     }
 
     void Movement()
     {
         _state = 1;
 
-        if (Input.GetKey(Key.SPACE))
+        if (Input.GetKey(Key.Q))
         {
             _state = 4;
         }
 
         if (Input.GetKey(Key.A))
         {
-            _hSpeed -= 0.5f;
+            _hSpeed -= _speed;
             _state = 2;
-            if (Input.GetKey(Key.SPACE))
+            if (Input.GetKey(Key.Q))
             {
                 _state = 3;
             }
@@ -100,9 +103,9 @@ class Player : Sprite
 
         if (Input.GetKey(Key.D))
         {
-            _hSpeed += 0.5f;
+            _hSpeed += _speed;
             _state = 2;
-            if (Input.GetKey(Key.SPACE))
+            if (Input.GetKey(Key.Q))
             {
                 _state = 3;
             }
@@ -125,9 +128,9 @@ class Player : Sprite
 
         if (Input.GetKey(Key.W))
         {
-            _vSpeed -= 0.5f;
+            _vSpeed -= _speed;
             _state = 2;
-            if (Input.GetKey(Key.SPACE))
+            if (Input.GetKey(Key.Q))
             {
                 _state = 3;
             }
@@ -147,9 +150,9 @@ class Player : Sprite
 
         if (Input.GetKey(Key.S))
         {
-            _vSpeed += 0.5f;
+            _vSpeed += _speed;
             _state = 2;
-            if (Input.GetKey(Key.SPACE))
+            if (Input.GetKey(Key.Q))
             {
                 _state = 3;
             }
@@ -294,17 +297,21 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if((other is DiamondOre || other is Dirt))
+            if(other is DiamondOre)
             {
-                
-                if(_timer2 == 15)other.x = -1000;
-                if (Input.GetKey(Key.SPACE))
+
+                if (_timer2 == 15)
+                {
+                    DiamondOre diamond = other as DiamondOre;
+                    diamond.collect();
+                }
+                if (Input.GetKey(Key.Q))
                 {
                     _miningAnimation = true;
                     _mining.alpha = 1.0f;
                 }
             }
-            if (other is Dirt)
+            if (other is Dirt && Input.GetKey(Key.Q))
             {
                 Dirt dirt = other as Dirt;
                 dirt.Digged();
@@ -324,6 +331,19 @@ class Player : Sprite
         }
     }
 
+    void Boost()
+    {
+        if (Input.GetKey(Key.E))
+        {
+            _speed = 1.0f;
+        }
+        else
+        {
+            _speed = 0.5f;
+        }
+
+
+    }
     void Gravity()
     {
         y += _gravity;

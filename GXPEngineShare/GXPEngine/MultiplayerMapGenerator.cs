@@ -59,12 +59,10 @@ class MultiplayerMapGenerator : GameObject
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
         Worm worm = new Worm();
-        layers[2].AddChild(worm);
-<<<<<<< HEAD:GXPEngineShare/GXPEngine/MapGenerator.cs
+        layers[3].AddChild(worm);
+
         //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
         //layers[2].AddChild(spawn);
-=======
->>>>>>> master:GXPEngineShare/GXPEngine/MultiplayerMapGenerator.cs
 
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
@@ -346,7 +344,7 @@ class MultiplayerMapGenerator : GameObject
             {
                 case "Player":
                     Player player = new Player(obj.X, obj.Y);
-                    layers[1].AddChild(player);
+                    layers[3].AddChild(player);
                     break;
             }
         }

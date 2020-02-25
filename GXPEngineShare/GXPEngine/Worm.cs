@@ -19,8 +19,8 @@ using GXPEngine;
     public Worm() : base("small_worm_sprite_sheet.png", 1, 4)
     {
         SetOrigin(width / 2, height / 2);
-        x = -100;
-        y = -100;
+        x = +1000;
+        y = +1000;
 
         _mediumWorm = new AnimationSprite("medium_worm_sprite_sheet.png", 1, 4);
 
@@ -177,7 +177,7 @@ using GXPEngine;
                 y += _speed;
             }
 
-            if (Input.GetKeyUp(Key.LEFT) || Input.GetKeyUp(Key.RIGHT))
+            if (Input.GetKeyUp(Key.U) || Input.GetKeyUp(Key.O))
             {
                 _timer2 = 0;
             }
@@ -284,7 +284,7 @@ using GXPEngine;
 
         }
 
-        if(other is Tile)
+        if(other is DiamondOre || other is Dirt || other is Stone)
         {
             other.LateDestroy();
         }

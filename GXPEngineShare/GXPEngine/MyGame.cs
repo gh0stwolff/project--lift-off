@@ -23,10 +23,6 @@ public class MyGame : Game
 	{
 		y = y + _speed;
 
-        if (Input.GetKeyDown(Key.O))
-        {
-            ShakeCamera(100);
-        }
         shake();
     }
 
@@ -102,6 +98,11 @@ public class MyGame : Game
     public float GetScreenY()
     {
         return y;
+    }
+
+    public float GetScreenX()
+    {
+        return x;
     }
 
     public int GetScore()
