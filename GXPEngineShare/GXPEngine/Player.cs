@@ -24,6 +24,8 @@ class Player : Sprite
     private float ogY;
 
     bool _miningAnimation = false;
+    private bool _doOnce = true;
+
     public Player(float x, float y) : base("collider.png")
     {
         SetXY(x, y);
@@ -207,6 +209,10 @@ class Player : Sprite
             ResolveCollision(other, moveX, moveY);
             return true;
         }
+        if (other is Lava || other is Worm)
+        {
+            Dead();
+        }
 
 
         return false;
@@ -298,6 +304,23 @@ class Player : Sprite
                     _mining.alpha = 1.0f;
                 }
             }
+            if (other is Dirt)
+            {
+                Dirt dirt = other as Dirt;
+                dirt.Digged();
+                _miningAnimation = true;
+                _mining.alpha = 1.0f;
+            }
+        }
+    }
+
+    private void Dead()
+    {
+        Console.WriteLine("{0}", _doOnce);
+        if (_doOnce)
+        {
+            ((MyGame)game).GameOver();
+            _doOnce = false;
         }
     }
 

@@ -73,7 +73,7 @@ using GXPEngine;
             _bigWorm.alpha = 0.0f;
             _arrow[0].x = _arrow[0].width;
             _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
-            if (Input.GetKey(Key.LEFT))
+            if (Input.GetKey(Key.U))
             {
                 _state = 1;
               
@@ -115,7 +115,7 @@ using GXPEngine;
                 _arrow[1].Mirror(true, false);
             }
 
-            if (Input.GetKey(Key.RIGHT))
+            if (Input.GetKey(Key.O))
             {
 
                 x = ((MyGame)game).GetScreenWidth(); ;
@@ -167,12 +167,12 @@ using GXPEngine;
                 _arrow[1].x = -(((MyGame)game).GetScreenWidth() - _arrow[1].width);
             }
 
-            if (Input.GetKey(Key.UP))
+            if (Input.GetKey(Key.I))
             {
                 y -= _speed;
             }
 
-            if (Input.GetKey(Key.DOWN))
+            if (Input.GetKey(Key.K))
             {
                 y += _speed;
             }
@@ -184,7 +184,7 @@ using GXPEngine;
 
 
         }
-        if (Input.GetKeyUp(Key.ENTER))
+        if (Input.GetKey(Key.THREE))
         {
             _shoot = true;
             ((MyGame)game).ShakeCamera(60);

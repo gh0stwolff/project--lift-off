@@ -3,18 +3,20 @@ using GXPEngine;								// GXPEngine contains the engine
 
 public class MyGame : Game
 {
-	private float _speed = 1.0f;
-    //private MapGenerator _map;
+    private float _startScreenSpeed = 1.0f;
+    private float _speed;
     private Menu _menu;
     private int _shakeTime = 0;
+    private int _score = 0;
 
     //arcade screen res: 1366x768
-    public MyGame() : base(1408, 720, false)		// Create a window that's 800x600 and NOT fullscreen
+    public MyGame() : base(1408, 720, false, true, 1366, 768)		// Create a window that's 800x600 and NOT fullscreen
 	{
-        //_map = new MapGenerator();
-        //AddChild(_map);
         _menu = new Menu(width, height);
         AddChild(_menu);
+        _speed = _startScreenSpeed;
+        //HighScoreScreen high = new HighScoreScreen(width, height);
+        //AddChild(high);
     }
 
     public void Update()
@@ -26,12 +28,6 @@ public class MyGame : Game
             ShakeCamera(100);
         }
         shake();
-        //if (Input.GetKeyDown(Key.P))
-        //{
-        //    ParticalEffect partical = new ParticalEffect("tileExplosion.png", 8, 1);
-        //    Add
-        //}
-        Console.WriteLine(this.y);
     }
 
 	static void Main()							// Main() is the first method that's called when the program is run
@@ -39,14 +35,26 @@ public class MyGame : Game
 		new MyGame().Start();					// Create a "MyGame" and start it
 	}
 
+    public void GameOver()
+    {
+        _menu.GameOver(_score);
+    }
+
 	public float GetScreenSpeed()
 	{
 		return _speed;
 	}
 
-    public void SetScreenSpeed(float speed)
+    public void SetScreenForMenu()
     {
-        _speed = speed;
+        _speed = 0.0f;
+        y = 0;
+    }
+
+    public void SetScreenForBeginLevel()
+    {
+        _speed = _startScreenSpeed;
+        y = 0;
     }
 
     public void ShakeCamera(int timeShaking)
@@ -58,9 +66,9 @@ public class MyGame : Game
     {
         if (_shakeTime > 0)
         {
-            if (_menu._level != null)
+            if (_menu != null)
             {
-                _menu._level.x = getShaking(_shakeTime);
+                _menu.x = getShaking(_shakeTime);
                 _shakeTime--;
             }
         }
@@ -95,9 +103,19 @@ public class MyGame : Game
     {
         return y;
     }
-    public float GetScreenX()
+
+    public int GetScore()
     {
-        return y;
+        return _score;
     }
 
+    public void AddScore(int amount)
+    {
+        _score += amount;
+    }
+
+    public void IncreaseSpeed()
+    {
+        _speed += 0.0001f;
+    }
 }

@@ -7,7 +7,7 @@ using GXPEngine;
 class Stone : Tile
 {
 
-    public Stone(float x, float y) : base("Rock.png", x, y)
+    public Stone(float x, float y) : base("Rock.png", x, y, 2)
     {
 
     }

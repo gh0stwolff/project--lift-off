@@ -148,7 +148,7 @@ namespace GXPEngine
 
 		public void Clear(int grayScale) 
 		{
-			graphics.Clear(Color.FromArgb(255, grayScale, grayScale, grayScale));
+			graphics.Clear(Color.FromArgb(0, grayScale, grayScale, grayScale));
 		}
 
 		public void Clear(int red, int green, int blue) 
