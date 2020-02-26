@@ -37,7 +37,7 @@ class TestPlayer : GameObject
             {
                 DiamondOre diamond = other as DiamondOre;
 
-                diamond.collect();
+                diamond.Collect();
             }
         }
     }
