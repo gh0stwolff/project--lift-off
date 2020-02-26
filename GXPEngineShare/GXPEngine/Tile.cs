@@ -6,6 +6,7 @@ using GXPEngine;
 
 class Tile : AnimationSprite
 {
+
     private bool _doOnce = true;
     private bool _startAnimation = false;
     private ParticalEffect _particals;

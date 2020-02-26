@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class Gold : Tile
+class Gold : Collectable
 {
-    private int PointsOnPickUp = 5;
+    private const int _pointsOnPickUp = 5;
 
-    public Gold(float locX, float locY) : base("Gold.png", locX, locY, 2)
+    public Gold(float locX, float locY) : base("Gold.png", locX, locY, 2, _pointsOnPickUp)
     {
 
-    }
-
-    public void Collect()
-    {
-        selfDestroy(PointsOnPickUp);
     }
 
 }

@@ -4,17 +4,12 @@ using System.Linq;
 using System.Text;
 using GXPEngine;
 
-class DiamondOre : Tile
+class DiamondOre : Collectable
 {
-    private int PointsOnPickUp = 5;
+    private const int _pointsOnPickUp = 5;
 
-    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2)
+    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2, _pointsOnPickUp)
     {
 
-    }
-
-    public void Collect()
-    {
-        selfDestroy(PointsOnPickUp);
     }
 }

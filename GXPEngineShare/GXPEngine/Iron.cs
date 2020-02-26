@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-class Iron : Tile
+class Iron : Collectable
 {
-    private int PointsOnPickUp = 5;
+    private const int _pointsOnPickUp = 5;
 
-    public Iron(float locX, float locY) : base("Iron.png", locX, locY, 2)
+    public Iron(float locX, float locY) : base("Iron.png", locX, locY, 2, _pointsOnPickUp)
     {
 
-    }
-
-    public void Collect()
-    {
-        selfDestroy(PointsOnPickUp);
     }
 
 }
