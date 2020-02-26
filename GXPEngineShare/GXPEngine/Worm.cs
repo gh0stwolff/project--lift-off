@@ -67,21 +67,31 @@ using GXPEngine;
         if (_shoot == false)
         {
 
-            Console.WriteLine(_scale);
             alpha = 0.0f;
             _mediumWorm.alpha = 0.0f;
             _bigWorm.alpha = 0.0f;
             _arrow[0].x = _arrow[0].width;
             _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
-            if (Input.GetKey(Key.U))
+
+            if (Input.GetKeyDown(Key.U))
             {
                 _state = 1;
-              
+   
                 x = 0;
                 y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
                 Mirror(false, false);
                 _mediumWorm.Mirror(false, false);
                 _bigWorm.Mirror(false, false);
+                
+
+                
+
+                _arrow[0].alpha = 0.5f;
+                _arrow[1].alpha = 0.5f;
+
+                _arrow[0].Mirror(false, false);
+                _arrow[1].Mirror(true, false);
+
                 _timer2++;
 
                 if (_timer2 <= 50)
@@ -108,14 +118,9 @@ using GXPEngine;
                     _arrow[1].SetFrame(2);
                 }
 
-                _arrow[0].alpha = 0.5f;
-                _arrow[1].alpha = 0.5f;
-
-                _arrow[0].Mirror(false, false);
-                _arrow[1].Mirror(true, false);
             }
 
-            if (Input.GetKey(Key.O))
+            if (Input.GetKeyDown(Key.O))
             {
 
                 x = ((MyGame)game).GetScreenWidth(); ;
@@ -177,14 +182,14 @@ using GXPEngine;
                 y += _speed;
             }
 
-            if (Input.GetKeyUp(Key.U) || Input.GetKeyUp(Key.O))
+            if (_timer2 > 150)
             {
                 _timer2 = 0;
             }
 
 
         }
-        if (Input.GetKey(Key.THREE))
+        if (Input.GetKeyUp(Key.U) || Input.GetKeyUp(Key.O))
         {
             _shoot = true;
             ((MyGame)game).ShakeCamera(60);

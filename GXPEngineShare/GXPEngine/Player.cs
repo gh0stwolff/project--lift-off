@@ -34,7 +34,7 @@ class Player : Sprite
         ogY = y;
         //SetOrigin(width / 2, height / 2);
         // SetScaleXY(0.5f, 0.5f);
-        alpha = 0.0f;
+        //alpha = 0.0f;
 
         _animation = new AnimationSprite("player_sprite_sheet.png", 8, 1, -1, false, false);
         AddChild(_animation);
@@ -78,7 +78,7 @@ class Player : Sprite
         {
             _state = 4;
         }
-
+        
         if (Input.GetKey(Key.A))
         {
             _hSpeed -= _speed;
@@ -101,7 +101,7 @@ class Player : Sprite
             _mining.rotation = _angleLeft;
         }
 
-        if (Input.GetKey(Key.D))
+       else if (Input.GetKey(Key.D))
         {
             _hSpeed += _speed;
             _state = 2;
@@ -123,10 +123,9 @@ class Player : Sprite
             _mining.rotation = _angleRight;
         }
 
-        DoMove(_hSpeed, 0);
-        _hSpeed *= _deceleration;
+        
 
-        if (Input.GetKey(Key.W))
+        else if (Input.GetKey(Key.W))
         {
             _vSpeed -= _speed;
             _state = 2;
@@ -148,7 +147,7 @@ class Player : Sprite
             _mining.rotation = _angleUp;
         }
 
-        if (Input.GetKey(Key.S))
+        else if (Input.GetKey(Key.S))
         {
             _vSpeed += _speed;
             _state = 2;
@@ -174,7 +173,10 @@ class Player : Sprite
         DoMove(0, _vSpeed);
         _vSpeed *= _deceleration;
 
-        
+        DoMove(_hSpeed, 0);
+        _hSpeed *= _deceleration;
+
+
         if (y < -((MyGame)game).GetScreenY()) y += 4;
 
     }
@@ -323,7 +325,6 @@ class Player : Sprite
 
     private void Dead()
     {
-        Console.WriteLine("{0}", _doOnce);
         if (_doOnce)
         {
             ((MyGame)game).GameOver();

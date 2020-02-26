@@ -62,10 +62,9 @@ class Menu : Canvas
         {
             if (Input.GetKeyDown(Key.THREE))
             {
-                Console.WriteLine(_scoreP2);
                 if (_scoreP2 == 0) 
                 { 
-                    SceneState = Scene.MultiplayerLevel; Console.WriteLine("triggert"); 
+                    SceneState = Scene.MultiplayerLevel; 
                 }
                 else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyDown(Key.THREE))
                 {

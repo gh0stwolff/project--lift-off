@@ -16,7 +16,7 @@ class Lava : AnimationSprite
         Sprite glow = new Sprite("lavaGlow.png");
         AddChild(glow);
         glow.y = -720;
-        glow.alpha = 0.5f;
+        glow.alpha = 0.3f;
         _outOfBounds = new Sprite("lavaGlow.png");
         AddChild(_outOfBounds);
         _outOfBounds.y = 100;

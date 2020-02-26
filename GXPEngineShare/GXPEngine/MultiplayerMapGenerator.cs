@@ -36,7 +36,7 @@ class MultiplayerMapGenerator : GameObject
     private Tile _tile;
     private Lava _lava;
 
-    private ScreenLayer[] layers = new ScreenLayer[4];
+    private ScreenLayer[] layers = new ScreenLayer[6];
 
 
     public MultiplayerMapGenerator() : base()
@@ -55,11 +55,11 @@ class MultiplayerMapGenerator : GameObject
         generateNewLine();
 
         _lava = new Lava();
-        layers[2].AddChild(_lava);
+        layers[5].AddChild(_lava);
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
         Worm worm = new Worm();
-        layers[3].AddChild(worm);
+        layers[5].AddChild(worm);
 
         //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
         //layers[2].AddChild(spawn);
@@ -338,15 +338,15 @@ class MultiplayerMapGenerator : GameObject
         if (objectGroup.Objects == null || objectGroup.Objects.Length == 0)
             return;
 
-        foreach (TiledObject obj in objectGroup.Objects)
+        /*foreach (TiledObject obj in objectGroup.Objects)
         {
             switch (obj.Name)
             {
                 case "Player":
                     Player player = new Player(obj.X, obj.Y);
-                    layers[3].AddChild(player);
+                    layers[5].AddChild(player);
                     break;
             }
-        }
+        }*/
     }
 }
