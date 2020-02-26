@@ -26,10 +26,11 @@ class Tile : AnimationSprite
         Animation();
     }
 
-    protected void selfDestroy()
+    protected void selfDestroy(int points)
     {
         if (_doOnce)
         {
+            ((MyGame)game).AddScore(points);
             _startAnimation = true;
             _doOnce = false;
         }

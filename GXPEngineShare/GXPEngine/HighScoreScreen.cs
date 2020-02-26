@@ -33,8 +33,6 @@ class HighScoreScreen : Canvas
     private void getData()
     {
         scores = _board.getHighScores();
-        scores.Sort();
-        scores.Reverse();
     }
 
     private void setNewData()
@@ -76,7 +74,6 @@ class HighScoreScreen : Canvas
                 _scoreBoard[i].Size(56);
                 _scoreBoard[i].SetXY(400, 50 + 100 * place);
                 Int32.TryParse(scores[i], out score);
-                Console.WriteLine("{0}. {1}", place, score);
                 _scoreBoard[i].SetText(place + ":" + score);
                 place++;
             }

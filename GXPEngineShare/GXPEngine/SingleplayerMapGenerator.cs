@@ -13,7 +13,10 @@ class SingleplayerMapGenerator : GameObject
     const int DIAMOND = 4;
     const int EDGESTONE = 5;
     const int DARKNESS = 6;
-
+    const int IRON = 7;
+    const int GOLD = 8;
+    const int COAL = 9;
+    const int EMERALD = 10;
 
     //for generating new lines
     private int _blockCountWidth;
@@ -45,6 +48,7 @@ class SingleplayerMapGenerator : GameObject
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
         _lineNumb = -1;
+        ((MyGame)game).ResetScore();
 
         for (int i = 0; i < layers.Length; i++)
         {
@@ -127,6 +131,18 @@ class SingleplayerMapGenerator : GameObject
                 case DARKNESS:
                     EdgeStone darkness = new EdgeStone(getXLocation(i), getYLocation(_lineNumb), false);
                     layers[2].AddChild(darkness);
+                    break;
+                case IRON:
+                    Iron iron = new Iron(getXLocation(i), getYLocation(_lineNumb));
+                    break;
+                case GOLD:
+
+                    break;
+                case COAL:
+
+                    break;
+                case EMERALD:
+
                     break;
             }
         }

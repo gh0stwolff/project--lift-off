@@ -287,7 +287,7 @@ class Player : Sprite
             if(other is DiamondOre && Input.GetKey(Key.SPACE))
             {
                 DiamondOre diamond = other as DiamondOre;
-                diamond.collect();
+                diamond.Collect();
                 _miningAnimation = true;
                 _mining.alpha = 1.0f;
             }
@@ -303,7 +303,6 @@ class Player : Sprite
 
     private void Dead()
     {
-        Console.WriteLine("{0}", _doOnce);
         if (_doOnce)
         {
             ((MyGame)game).GameOver();

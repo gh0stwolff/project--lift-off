@@ -6,23 +6,15 @@ using GXPEngine;
 
 class DiamondOre : Tile
 {
-    private bool _doOnce = true;
+    private int PointsOnPickUp = 5;
 
     public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2)
     {
 
     }
 
-    public void collect()
+    public void Collect()
     {
-        //add points
-
-        //add before LateDestroy a partical effect
-        if (_doOnce)
-        {
-            ((MyGame)game).AddScore(5);
-            _doOnce = false;
-        }
-        selfDestroy();
+        selfDestroy(PointsOnPickUp);
     }
 }

@@ -45,6 +45,7 @@ class MultiplayerMapGenerator : GameObject
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
         _lineNumb = -1;
+        ((MyGame)game).ResetScore();
 
         for (int i = 0; i < layers.Length; i++)
         {
@@ -59,7 +60,7 @@ class MultiplayerMapGenerator : GameObject
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
         Worm worm = new Worm();
-        layers[2].AddChild(worm);
+        AddChild(worm);
 
         _targetLine = _lineNumb + _linesTillNarrowing;
     }

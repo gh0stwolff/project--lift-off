@@ -8,9 +8,6 @@ class Menu : Canvas
 {
     private MultiplayerMapGenerator _multiPlayer;
     private SingleplayerMapGenerator _singlePlayer;
-    //private Button _multiplayerButton;
-    //private Button _singlePlayerButton;
-    //private Button _returnToMenuButton;
     private MainMenu _mainScreen;
     private ReadyScreen _readyScreen;
     private ScoreScreen _scoreScreenMulti;
@@ -60,21 +57,20 @@ class Menu : Canvas
         }
         if ( _scoreScreenMulti != null)
         {
-            if (Input.GetKeyDown(Key.THREE))
+            if (_scoreP2 == 0 && Input.GetKeyDown(Key.THREE))
             {
-                Console.WriteLine(_scoreP2);
-                if (_scoreP2 == 0) 
-                { 
-                    SceneState = Scene.MultiplayerLevel; 
-                }
-                else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyDown(Key.THREE))
-                {
-                    SceneState = Scene.HighScoreScreen;
-                }
-                else if (_scoreP2 != 0 && Input.GetKeyDown(Key.THREE))
-                {
-                    _scoreScreenMulti.Compare();
-                }
+                SceneState = Scene.MultiplayerLevel;
+                Console.WriteLine("load 2nd level");
+            }
+            else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyUp(Key.THREE))
+            {
+                SceneState = Scene.HighScoreScreen;
+                Console.WriteLine("highscore");
+            }
+            else if (_scoreP2 != 0 && Input.GetKeyUp(Key.THREE))
+            {
+                _scoreScreenMulti.Compare();
+                Console.WriteLine("comparing");
             }
         }
         if ( _scoreScreenSingle != null)
@@ -89,6 +85,8 @@ class Menu : Canvas
             if (Input.GetKeyDown(Key.THREE))
             {
                 SceneState = Scene.MainMenu;
+                _scoreP1 = 0;
+                _scoreP2 = 0;
             }
         }
     }
@@ -154,8 +152,6 @@ class Menu : Canvas
                     if (_highScore != null) { _highScore = null; }
                     if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
                     if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
-                    if (_readyScreen != null) { _readyScreen = null; }
-                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
                 }
                 break;
             case Scene.ScoreScreen1:
@@ -167,10 +163,25 @@ class Menu : Canvas
                     AddChild(_scoreScreenMulti);
                     if (_mainScreen != null) { _mainScreen = null; }
                     if (_readyScreen != null) { _readyScreen = null; }
-                    if ( _singlePlayer != null) { _singlePlayer = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
                     if (_multiPlayer != null) { _multiPlayer = null; }
                     if (_highScore != null) { _highScore = null; }
                     if (_scoreScreenSingle != null) { _scoreScreenSingle = null; }
+                }
+                break;
+            case Scene.ScoreScreen2:
+                if (_scoreScreenSingle == null)
+                {
+                    ((MyGame)game).SetScreenForMenu();
+                    _scoreScreenSingle = new ScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight(), _scoreP1, _scoreP2);
+                    destroyInactiveScreens(_scoreScreenSingle);
+                    AddChild(_scoreScreenSingle);
+                    if (_mainScreen != null) { _mainScreen = null; }
+                    if (_readyScreen != null) { _readyScreen = null; }
+                    if (_singlePlayer != null) { _singlePlayer = null; }
+                    if (_multiPlayer != null) { _multiPlayer = null; }
+                    if (_highScore != null) { _highScore = null; }
+                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
                 }
                 break;
             case Scene.HighScoreScreen:
@@ -189,21 +200,6 @@ class Menu : Canvas
 
                 }
                 break;
-            case Scene.ScoreScreen2:
-                if (_scoreScreenSingle == null)
-                {
-                    ((MyGame)game).SetScreenForMenu();
-                    _scoreScreenSingle = new ScoreScreen((int)((MyGame)game).GetScreenWidth(), (int)((MyGame)game).GetScreenHeight(), _scoreP1, _scoreP2);
-                    destroyInactiveScreens(_scoreScreenSingle);
-                    AddChild(_scoreScreenSingle);
-                    if (_mainScreen != null) { _mainScreen = null; }
-                    if (_readyScreen != null) { _readyScreen = null; }
-                    if (_singlePlayer != null) { _singlePlayer = null; }
-                    if (_multiPlayer != null) { _multiPlayer = null; }
-                    if (_highScore != null) { _highScore = null; }
-                    if (_scoreScreenMulti != null) { _scoreScreenMulti = null; }
-                }
-                break;
         }
 
     }
@@ -214,6 +210,7 @@ class Menu : Canvas
         {
             if (other != objType)
             {
+                Console.WriteLine(other);
                 other.LateDestroy();
             }
         }
@@ -223,6 +220,8 @@ class Menu : Canvas
     {
         if (_playersReady == 2)
         {
+            Console.WriteLine(_scoreP1);
+            Console.WriteLine(_scoreP2);
             if (_scoreP1 == 0)
             {
                 _scoreP1 = score;

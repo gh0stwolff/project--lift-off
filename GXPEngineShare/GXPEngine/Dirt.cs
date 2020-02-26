@@ -6,6 +6,7 @@ using GXPEngine;
 
 class Dirt : Tile
 {
+    private int PointsOnPickUp = 0;
 
     public Dirt(float x, float y) : base("Dirt.png", x, y, 2)
     {
@@ -14,7 +15,7 @@ class Dirt : Tile
 
     public void Digged()
     {
-        selfDestroy();
+        selfDestroy(PointsOnPickUp);
     }
 
 }
