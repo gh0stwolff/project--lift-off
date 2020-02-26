@@ -11,6 +11,7 @@ class Player : Sprite
     private AnimationSprite _animation;
     private AnimationSprite _mining;
     private Sprite _drill;
+    private Sprite _fog;
 
     private float _gravity = 0.5f;
     private float _deceleration = 0.9f;
@@ -20,6 +21,7 @@ class Player : Sprite
     private int _timer = 0;
     private int _timer2 = 0;
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
+    private float ogY;
 
     bool _miningAnimation = false;
     private bool _doOnce = true;
@@ -27,6 +29,7 @@ class Player : Sprite
     public Player(float x, float y) : base("collider.png")
     {
         SetXY(x, y);
+        ogY = y;
         //SetOrigin(width / 2, height / 2);
         // SetScaleXY(0.5f, 0.5f);
         alpha = 0.0f;
@@ -36,17 +39,21 @@ class Player : Sprite
         //_animation.alpha = 0.2f;
         _animation.SetOrigin(width/2+3, height/2+5);
 
-        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
-        AddChild(_mining);
-        _mining.SetScaleXY(2.0f, 2.0f);
-        _mining.alpha = 0.0f;
-        
-
         _drill = new Sprite("drill.png");
         AddChild(_drill);
         _drill.alpha = 0.0f;
         _drill.SetOrigin(width/8-22, height/3-2);
 
+        
+
+        _fog = new Sprite("fog.png");
+        AddChild(_fog);
+        _fog.SetOrigin(_fog.width / 2, _fog.height / 2);
+
+        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
+        AddChild(_mining);
+        _mining.SetScaleXY(2.0f, 2.0f);
+        _mining.alpha = 0.0f;
         _mining.SetOrigin(width / 4 + 5, height / 4);
 
 
@@ -164,6 +171,9 @@ class Player : Sprite
         DoMove(0, _vSpeed);
         _vSpeed *= _deceleration;
 
+        
+        if (y < -((MyGame)game).GetScreenY()) y += 4;
+
     }
 
     bool DoMove(float moveX, float moveY)
@@ -266,11 +276,11 @@ class Player : Sprite
         if (_miningAnimation == true)
         {
         _timer2++;
-        if (_timer2 > 5) _mining.SetFrame(0);
-        if (_timer2 > 10) _mining.SetFrame(1);
-        if (_timer2 > 15) _mining.SetFrame(2);
-        if (_timer2 > 20) _mining.SetFrame(3);
-            if (_timer2 > 25)
+        if (_timer2 > 3) _mining.SetFrame(0);
+        if (_timer2 > 6) _mining.SetFrame(1);
+        if (_timer2 > 9) _mining.SetFrame(2);
+        if (_timer2 > 12) _mining.SetFrame(3);
+            if (_timer2 > 15)
             {
                 _timer2 = 0;
                 _miningAnimation = false;
