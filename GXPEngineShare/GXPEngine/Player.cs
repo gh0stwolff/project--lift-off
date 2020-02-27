@@ -101,7 +101,7 @@ class Player : Sprite
             _mining.rotation = _angleLeft;
         }
 
-       else if (Input.GetKey(Key.D))
+        if (Input.GetKey(Key.D))
         {
             _hSpeed += _speed;
             _state = 2;
@@ -125,7 +125,7 @@ class Player : Sprite
 
         
 
-        else if (Input.GetKey(Key.W))
+        if (Input.GetKey(Key.W))
         {
             _vSpeed -= _speed;
             _state = 2;
@@ -147,7 +147,7 @@ class Player : Sprite
             _mining.rotation = _angleUp;
         }
 
-        else if (Input.GetKey(Key.S))
+        if (Input.GetKey(Key.S))
         {
             _vSpeed += _speed;
             _state = 2;
@@ -299,28 +299,19 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if(other is DiamondOre)
+            if(other is Collectable && Input.GetKey(Key.Q))
             {
-
-                if (_timer2 == 15)
-                {
-                    DiamondOre diamond = other as DiamondOre;
-                    diamond.collect();
-                }
-                if (Input.GetKey(Key.Q))
-                {
-                    _miningAnimation = true;
-                    _mining.alpha = 1.0f;
-                }
-            }
-            if (other is Dirt && Input.GetKey(Key.Q))
-            {
-                Dirt dirt = other as Dirt;
-                dirt.Digged();
-                _miningAnimation = true;
-                _mining.alpha = 1.0f;
+                Collectable coll = other as Collectable;
+                coll.Collect();
+                startMiningAnimation();
             }
         }
+    }
+
+    private void startMiningAnimation()
+    {
+        _miningAnimation = true;
+        _mining.alpha = 1.0f;
     }
 
     private void Dead()

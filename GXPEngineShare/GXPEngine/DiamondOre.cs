@@ -4,25 +4,12 @@ using System.Linq;
 using System.Text;
 using GXPEngine;
 
-class DiamondOre : Tile
+class DiamondOre : Collectable
 {
-    private bool _doOnce = true;
+    private const int _pointsOnPickUp = 5;
 
-    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2)
+    public DiamondOre(float x, float y) : base("DiamondOre.png", x, y, 2, _pointsOnPickUp)
     {
 
-    }
-
-    public void collect()
-    {
-        //add points
-
-        //add before LateDestroy a partical effect
-        if (_doOnce)
-        {
-            ((MyGame)game).AddScore(5);
-            _doOnce = false;
-        }
-        selfDestroy();
     }
 }
