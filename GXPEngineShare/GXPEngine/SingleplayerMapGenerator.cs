@@ -138,10 +138,6 @@ class SingleplayerMapGenerator : GameObject
         {
             switch (newLine[i])
             {
-                //case AIR:
-                //    Air air = new Air(getXLocation(i), getYLocation(_lineNumb));
-                //    layers[0].AddChild(air);
-                //    break;
                 case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
                     layers[0].AddChild(dirt);

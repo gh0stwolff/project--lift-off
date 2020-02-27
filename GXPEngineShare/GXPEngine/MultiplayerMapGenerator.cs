@@ -87,6 +87,11 @@ class MultiplayerMapGenerator : GameObject
         layers[7].AddChild(hud);
         Worm worm = new Worm();
         layers[7].AddChild(worm);
+        _background = new Sprite("inGameBackground.png");
+        layers[0].AddChild(_background);
+        _background.alpha = 0.3f;
+    }
+    #endregion
 
     public void Update()
     {
@@ -137,10 +142,6 @@ class MultiplayerMapGenerator : GameObject
         {
             switch (newLine[i])
             {
-                //case AIR:
-                //    Air air = new Air(getXLocation(i), getYLocation(_lineNumb));
-                //    layers[0].AddChild(air);
-                //    break;
                 case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
                     layers[0].AddChild(dirt);

@@ -48,14 +48,6 @@ class Menu : Canvas
         setupSounds();
     }
 
-    void Update()
-    {
-        displayScreen();
-        screenState();
-        playingSound();
-    }
-    #endregion
-
     private void setupSounds()
     {
         _backgroundMusic = new Sound("Music.mp3", true, true);
@@ -67,6 +59,13 @@ class Menu : Canvas
         _diggingSound = new Sound("diggingSound.wav", true);
         _distantGrowl = new Sound("wormGrowlFar.wav");
         _distantGrowlChannel = new SoundChannel(7);
+    }
+
+    void Update()
+    {
+        displayScreen();
+        screenState();
+        playingSound();
     }
 
     private void playingSound()
@@ -92,7 +91,7 @@ class Menu : Canvas
         #endregion
 
         #region Thruster
-        if ( _singlePlayer != null || _multiPlayer != null)
+        if (_singlePlayer != null || _multiPlayer != null)
         {
             if (Input.GetKey(Key.W) || Input.GetKey(Key.A) || Input.GetKey(Key.S) || Input.GetKey(Key.D))
             {
@@ -104,7 +103,7 @@ class Menu : Canvas
             }
             else
             {
-                if ( _thrusterChannel != null)
+                if (_thrusterChannel != null)
                 {
                     _thrusterChannel.IsPaused = true;
                     _thrusterChannel = null;
@@ -114,7 +113,8 @@ class Menu : Canvas
         #endregion
 
         #region digging sound
-        if (_singlePlayer != null || _multiPlayer != null) {
+        if (_singlePlayer != null || _multiPlayer != null)
+        {
             if (Input.GetKey(Key.Q))
             {
                 if (_diggingSoundChannel == null)
@@ -125,7 +125,7 @@ class Menu : Canvas
             }
             else
             {
-                if (_diggingSoundChannel != null) 
+                if (_diggingSoundChannel != null)
                 {
                     _diggingSoundChannel.IsPaused = true;
                     _diggingSoundChannel = null;
@@ -141,12 +141,14 @@ class Menu : Canvas
             if (_randomGrowlTimer <= 0)
             {
                 _distantGrowlChannel = _distantGrowl.Play();
-                _randomGrowlTimer = Utils.Random(100, 400);
+                _randomGrowlTimer = Utils.Random(600, 2400);
             }
         }
         #endregion
     }
+    #endregion
 
+    #region handle screen state
     private void screenState()
     {
         if (_mainScreen != null && Input.GetKeyDown(Key.THREE))
@@ -325,6 +327,7 @@ class Menu : Canvas
             }
         }
     }
+    #endregion
 
     public void GameOver(int score)
     {
