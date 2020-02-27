@@ -294,29 +294,23 @@ class Player : Sprite
     {
         foreach(GameObject other in _drill.GetCollisions())
         {
-            if((other is DiamondOre || other is Dirt))
+            if(other is Collectable && Input.GetKey(Key.SPACE))
             {
-                
-                if(_timer2 == 15)other.x = -1000;
-                if (Input.GetKey(Key.SPACE))
-                {
-                    _miningAnimation = true;
-                    _mining.alpha = 1.0f;
-                }
-            }
-            if (other is Dirt)
-            {
-                Dirt dirt = other as Dirt;
-                dirt.Digged();
-                _miningAnimation = true;
-                _mining.alpha = 1.0f;
+                Collectable coll = other as Collectable;
+                coll.Collect();
+                startMiningAnimation();
             }
         }
     }
 
+    private void startMiningAnimation()
+    {
+        _miningAnimation = true;
+        _mining.alpha = 1.0f;
+    }
+
     private void Dead()
     {
-        Console.WriteLine("{0}", _doOnce);
         if (_doOnce)
         {
             ((MyGame)game).GameOver();

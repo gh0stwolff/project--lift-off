@@ -36,12 +36,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Air.cs" />
     <Compile Include="Button.cs" />
+    <Compile Include="Coal.cs" />
+    <Compile Include="Collectable.cs" />
     <Compile Include="DiamondOre.cs" />
     <Compile Include="Dirt.cs" />
     <Compile Include="EdgeStone.cs" />
+    <Compile Include="Emerald.cs" />
+    <Compile Include="Gold.cs" />
     <Compile Include="HighScoreScreen.cs" />
     <Compile Include="HUD.cs" />
+    <Compile Include="Iron.cs" />
     <Compile Include="Lava.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="Menu.cs" />

@@ -15,6 +15,7 @@ class ScoreBoard
     {
         _filePath = filePath;
         readFile();
+        getHighScores();
     }
 
     private void readFile()
@@ -39,10 +40,28 @@ class ScoreBoard
         File.WriteAllLines(_filePath, Lines);
     }
 
+    private void SortList(List<string> list)
+    {
+        for (int i = 0; i <= list.Count - 2; i++)
+        {
+            for (int j = 0; j <= list.Count - 2; j++)
+            {
+                Int32.TryParse(list[j], out int score1);
+                Int32.TryParse(list[j + 1], out int score2);
+
+                if (score1 < score2)
+                {
+                    string t = list[j + 1];
+                    list[j + 1] = list[j];
+                    list[j] = t;
+                }
+            }
+        }
+    }
+
     public List<string> getHighScores()
     {
-        Lines.Sort();
-        Lines.Reverse();
+        SortList(Lines);
         return Lines;
     }
 
