@@ -131,11 +131,14 @@ class Menu : Canvas
         #endregion
 
         #region random Growl
-        _randomGrowlTimer--;
-        if (_randomGrowlTimer <= 0)
+        if (_singlePlayer != null || _multiPlayer != null)
         {
-            _distantGrowlChannel = _distantGrowl.Play();
-            _randomGrowlTimer = Utils.Random(100, 400);
+            _randomGrowlTimer--;
+            if (_randomGrowlTimer <= 0)
+            {
+                _distantGrowlChannel = _distantGrowl.Play();
+                _randomGrowlTimer = Utils.Random(100, 400);
+            }
         }
         #endregion
     }

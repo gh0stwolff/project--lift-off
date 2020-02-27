@@ -369,26 +369,56 @@ class MultiplayerMapGenerator : GameObject
             for (int column = 0; column < mainLayer.Width; column++)
             {
                 int tileNumber = tileNumbers[column, row];
-                if (tileNumber == STONE)
+                switch (tileNumber)
                 {
-                    Stone stone = new Stone(getXLocation(column), getYLocation(row));
-                    layers[0].AddChild(stone);
-                }
-                if (tileNumber == DIRT)
-                {
-                    Dirt dirt = new Dirt(getXLocation(column), getYLocation(row));
-                    layers[0].AddChild(dirt);
-                }
-                if (tileNumber == DIAMOND)
-                {
-                    DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
-                    layers[0].AddChild(diamond);
-                }
-                if (tileNumber == EDGESTONE)
-                {
-                    Stone edgeStone = new Stone(getXLocation(column), getYLocation(_lineNumb));
-                    layers[2].AddChild(edgeStone);
-                    break;
+                    case AIR:
+                        Console.WriteLine("air");
+                        break;
+                    case DIRT:
+                        Dirt dirt = new Dirt(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(dirt);
+                        Console.WriteLine("dirt");
+                        break;
+                    case STONE:
+                        Stone stone = new Stone(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(stone);
+                        Console.WriteLine("stone");
+                        break;
+                    case DIAMOND:
+                        DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(diamond);
+                        Console.WriteLine("diamond");
+                        break;
+                    case EDGESTONE:
+                        EdgeStone edge = new EdgeStone(getXLocation(column), getYLocation(row), true);
+                        layers[3].AddChild(edge);
+                        Console.WriteLine("edge");
+                        break;
+                    case DARKNESS:
+                        EdgeStone dark = new EdgeStone(getXLocation(column), getYLocation(row), false);
+                        layers[3].AddChild(dark);
+                        Console.WriteLine("dark");
+                        break;
+                    case IRON:
+                        Iron iron = new Iron(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(iron);
+                        Console.WriteLine("iron");
+                        break;
+                    case GOLD:
+                        Gold gold = new Gold(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(gold);
+                        Console.WriteLine("gold");
+                        break;
+                    case COAL:
+                        Coal coal = new Coal(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(coal);
+                        Console.WriteLine("coal");
+                        break;
+                    case EMERALD:
+                        Emerald emerald = new Emerald(getXLocation(column), getYLocation(row));
+                        layers[1].AddChild(emerald);
+                        Console.WriteLine("emerald");
+                        break;
                 }
             }
         }
