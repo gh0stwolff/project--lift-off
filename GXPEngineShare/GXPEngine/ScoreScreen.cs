@@ -22,7 +22,7 @@ class ScoreScreen : Canvas
     public ScoreScreen(int width, int height, int scoreP1, int scoreP2) : base(width, height)
     {
         
-        _backGround = new Sprite("backGround.jpg");
+        _backGround = new Sprite("scoreScreen.png");
         AddChild(_backGround);
         _scoreP1 = scoreP1;
         _scoreP2 = scoreP2;
