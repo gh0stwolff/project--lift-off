@@ -60,7 +60,7 @@ class SingleplayerMapGenerator : GameObject
     private void setupVariables()
     {
         //giving tile a block
-        _tile = new Tile("Dirt.png", 0, 0, 2);
+        _tile = new Tile("Dirt.png", 0, 0, 2, 0);
         //calc how many tiles fit in the width
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         //how low it takes before a new line needs to be drawn

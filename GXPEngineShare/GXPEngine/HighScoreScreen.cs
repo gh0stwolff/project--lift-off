@@ -9,10 +9,10 @@ class HighScoreScreen : Canvas
 {
     #region variables
     #region text modifiers
-    private int _textSize = 56;
-    private int _textX = 575;
-    private int _textY = 200;
-    private int _textYDist = 75;
+    private int _textSize = 72;
+    private int _textX = 420;
+    private int _textY = 40;
+    private int _textYDist = 100;
     #endregion
 
     private string _scoreP1;
@@ -27,7 +27,7 @@ class HighScoreScreen : Canvas
     #region setup
     public HighScoreScreen(int width, int height, int scoreP1, int scoreP2) : base(width, height)
     {
-        Sprite background = new Sprite("scoreScreen.png");
+        Sprite background = new Sprite("highScore.png");
         AddChild(background);
         checkScores(scoreP1, scoreP2);
         setNewData();

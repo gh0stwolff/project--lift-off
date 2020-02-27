@@ -9,7 +9,6 @@ class ScoreScreen : Canvas
 {
     #region variables
     private Sprite _backGround;
-    private TextBoard _yourScore;
     private TextBoard _score;
     private TextBoard _youWon;
     private Sound _gameOverSound;
@@ -25,7 +24,7 @@ class ScoreScreen : Canvas
     public ScoreScreen(int width, int height, int scoreP1, int scoreP2) : base(width, height)
     {
         
-        _backGround = new Sprite("Background.png");
+        _backGround = new Sprite("scoreScreen.png");
         AddChild(_backGround);
         _scoreP1 = scoreP1;
         _scoreP2 = scoreP2;
@@ -38,9 +37,7 @@ class ScoreScreen : Canvas
 
     private void setupText()
     {
-        _yourScore = new TextBoard(400, 200);
-        AddChild(_yourScore);
-        _score = new TextBoard(400, 200);
+        _score = new TextBoard(600, 200);
         AddChild(_score);
         _youWon = new TextBoard(500, 300);
         AddChild(_youWon);
@@ -48,12 +45,8 @@ class ScoreScreen : Canvas
 
     private void setTextProps()
     {
-        _yourScore.Size(56);
-        _yourScore.SetXY(500, 250);
-        _yourScore.SetText("Your Score:");
-
-        _score.Size(56);
-        _score.SetXY(550, 350);
+        _score.Size(128);
+        _score.SetXY(450, 350);
         if (_scoreP2 == 0) { _score.SetText(_scoreP1.ToString()); }
         else { _score.SetText(_scoreP2.ToString()); }
 
