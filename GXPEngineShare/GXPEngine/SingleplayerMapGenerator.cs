@@ -6,6 +6,7 @@ using GXPEngine;
 using TiledMapParser;
 class SingleplayerMapGenerator : GameObject
 {
+    #region variables
     //types of tiles
     const int AIR = 1;
     const int DIRT = 2;
@@ -39,12 +40,11 @@ class SingleplayerMapGenerator : GameObject
     private Tile _tile;
     private Lava _lava;
     private Sprite _background;
-    private Sound _music;
-    private SoundChannel _musicChannel;
 
     private ScreenLayer[] layers = new ScreenLayer[4];
+    #endregion
 
-
+    #region setup & update
     public SingleplayerMapGenerator() : base()
     {
         _tile = new Tile("Dirt.png", 0, 0, 2);
@@ -61,9 +61,6 @@ class SingleplayerMapGenerator : GameObject
         _background = new Sprite("inGameBackground.png");
         layers[0].AddChild(_background);
         _background.alpha = 0.5f;
-        _music = new Sound("Music.mp3", true, true);
-        _musicChannel = new SoundChannel(1);
-        _musicChannel = _music.Play();
 
         setupSpawn();
         generateNewLine();
@@ -85,7 +82,9 @@ class SingleplayerMapGenerator : GameObject
         }
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
     }
+    #endregion
 
+    #region lineGeneration
     private void timerNewLine()
     {
         if (_timer <= 0)
@@ -241,6 +240,7 @@ class SingleplayerMapGenerator : GameObject
         return 0;
     }
 
+    #region spawnChances
     private float getDirtSpawnChance(int index)
     {
         float maxChance = 80.0f;
@@ -341,6 +341,7 @@ class SingleplayerMapGenerator : GameObject
 
         }
     }
+    #endregion
 
     private float getXLocation(int index)
     {
@@ -353,7 +354,9 @@ class SingleplayerMapGenerator : GameObject
     {
         return _tile.GetHeight() * lineNumb;
     }
+    #endregion
 
+    #region loading Tiled map
     private void setupSpawn()
     {
         Map levelData = MapParser.ReadMap("startPoint.tmx");
@@ -418,4 +421,5 @@ class SingleplayerMapGenerator : GameObject
             }
         }
     }
+    #endregion
 }

@@ -13,10 +13,24 @@ class Menu : Canvas
     private ScoreScreen _scoreScreenMulti;
     private ScoreScreen _scoreScreenSingle;
     private HighScoreScreen _highScore;
+    
+    //all sounds
+    private Sound _backgroundMusic;
+    private SoundChannel _backgroundMusicChannel;
+    private Sound _boiling;
+    private SoundChannel _boilingChannel;
+    private Sound _thruster;
+    private SoundChannel _thrusterChannel;
+    private Sound _diggingSound;
+    private SoundChannel _diggingSoundChannel;
+    private Sound _distantGrowl;
+    private SoundChannel _distantGrowlChannel;
+
 
     private int _scoreP1 = 0;
     private int _scoreP2 = 0;
     private int _playersReady = 0;
+    private int _randomGrowlTimer = 200;
 
     enum Scene { MainMenu, ReadyScreen, MultiplayerLevel, SinglePlayerLevel, ScoreScreen1, ScoreScreen2, HighScoreScreen}
     Scene SceneState = Scene.MainMenu;
@@ -26,15 +40,104 @@ class Menu : Canvas
         ((MyGame)game).SetScreenForMenu();
         _mainScreen = new MainMenu(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         AddChild(_mainScreen);
+        setupSounds();
     }
 
     void Update()
     {
         displayScreen();
         screenState();
-
+        playingSound();
         //checkButtonPresses();
         //handleSceneState();
+    }
+
+    private void setupSounds()
+    {
+        _backgroundMusic = new Sound("Music.mp3", true, true);
+        _backgroundMusicChannel = new SoundChannel(1);
+        _backgroundMusicChannel.Volume = 0.15f;
+        _backgroundMusicChannel = _backgroundMusic.Play();
+        _boiling = new Sound("lavaSound.wav", true);
+        _thruster = new Sound("thruster.wav", true);
+        _diggingSound = new Sound("diggingSound.wav", true);
+        _distantGrowl = new Sound("wormGrowlFar.wav");
+        _distantGrowlChannel = new SoundChannel(7);
+    }
+
+    private void playingSound()
+    {
+        #region lava sound
+        if (_multiPlayer != null || _singlePlayer != null)
+        {
+            if (_boilingChannel == null)
+            {
+                _boilingChannel = new SoundChannel(2);
+                _boilingChannel.IsPaused = false;
+                _boilingChannel = _boiling.Play();
+            }
+        }
+        else
+        {
+            if (_boilingChannel != null)
+            {
+                _boilingChannel.IsPaused = true;
+                _boilingChannel = null;
+            }
+        }
+        #endregion
+
+        #region Thruster
+        if ( _singlePlayer != null || _multiPlayer != null)
+        {
+            if (Input.GetKey(Key.W) || Input.GetKey(Key.A) || Input.GetKey(Key.S) || Input.GetKey(Key.D))
+            {
+                if (_thrusterChannel == null)
+                {
+                    _thrusterChannel = new SoundChannel(3);
+                    _thrusterChannel = _thruster.Play();
+                }
+            }
+            else
+            {
+                if ( _thrusterChannel != null)
+                {
+                    _thrusterChannel.IsPaused = true;
+                    _thrusterChannel = null;
+                }
+            }
+        }
+        #endregion
+
+        #region digging sound
+        if (_singlePlayer != null || _multiPlayer != null) {
+            if (Input.GetKey(Key.Q))
+            {
+                if (_diggingSoundChannel == null)
+                {
+                    _diggingSoundChannel = new SoundChannel(6);
+                    _diggingSoundChannel = _diggingSound.Play();
+                }
+            }
+            else
+            {
+                if (_diggingSoundChannel != null) 
+                {
+                    _diggingSoundChannel.IsPaused = true;
+                    _diggingSoundChannel = null;
+                }
+            }
+        }
+        #endregion
+
+        #region random Growl
+        _randomGrowlTimer--;
+        if (_randomGrowlTimer <= 0)
+        {
+            _distantGrowlChannel = _distantGrowl.Play();
+            _randomGrowlTimer = Utils.Random(100, 400);
+        }
+        #endregion
     }
 
     private void screenState()
