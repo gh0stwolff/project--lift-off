@@ -39,6 +39,8 @@ class SingleplayerMapGenerator : GameObject
     private Tile _tile;
     private Lava _lava;
     private Sprite _background;
+    private Sound _music;
+    private SoundChannel _musicChannel;
 
     private ScreenLayer[] layers = new ScreenLayer[4];
 
@@ -58,6 +60,11 @@ class SingleplayerMapGenerator : GameObject
         }
         _background = new Sprite("inGameBackground.png");
         layers[0].AddChild(_background);
+        _background.alpha = 0.5f;
+        _music = new Sound("Music.mp3", true, true);
+        _musicChannel = new SoundChannel(1);
+        _musicChannel = _music.Play();
+
         setupSpawn();
         generateNewLine();
 
@@ -115,10 +122,10 @@ class SingleplayerMapGenerator : GameObject
         {
             switch (newLine[i])
             {
-                case AIR:
-                    Air air = new Air(getXLocation(i), getYLocation(_lineNumb));
-                    layers[0].AddChild(air);
-                    break;
+                //case AIR:
+                //    Air air = new Air(getXLocation(i), getYLocation(_lineNumb));
+                //    layers[0].AddChild(air);
+                //    break;
                 case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
                     layers[0].AddChild(dirt);
@@ -245,8 +252,8 @@ class SingleplayerMapGenerator : GameObject
 
     private float getDiamondSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 5.0f;
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -254,17 +261,17 @@ class SingleplayerMapGenerator : GameObject
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = 15.0f;
-        float minChance = 10.0f;
-        bool isChanceHigherInMiddle = true;
+        float maxChance = 10.0f;
+        float minChance = 5.0f;
+        bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getAirSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 10.0f;
+        float maxChance = 20.0f;
+        float minChance = 20.0f;
         bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -272,8 +279,8 @@ class SingleplayerMapGenerator : GameObject
 
     private float getCoalSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 10.0f;
+        float maxChance = 5.0f;
+        float minChance = 5.0f;
         bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -281,27 +288,27 @@ class SingleplayerMapGenerator : GameObject
 
     private float getEmeraldSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 10.0f;
-        bool isChanceHigherInMiddle = true;
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
+        bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getGoldSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 10.0f;
-        bool isChanceHigherInMiddle = true;
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
+        bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getIronSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 10.0f;
-        bool isChanceHigherInMiddle = true;
+        float maxChance = 5.0f;
+        float minChance = 4.0f;
+        bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }

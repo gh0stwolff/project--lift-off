@@ -100,6 +100,11 @@ public class MyGame : Game
     {
         return y;
     }
+
+    public float GetScreenX()
+    {
+        return x;
+    }
     public int GetScore()
     {
         return _score;
