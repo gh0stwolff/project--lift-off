@@ -58,7 +58,6 @@ class Player : Sprite
         _mining.alpha = 0.0f;
         _mining.SetOrigin(width / 4 + 5, height / 4);
 
-
     }
 
     void Update()

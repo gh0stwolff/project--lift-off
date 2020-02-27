@@ -11,6 +11,8 @@ class ScoreScreen : Canvas
     private TextBoard _yourScore;
     private TextBoard _score;
     private TextBoard _youWon;
+    private Sound _gameOverSound;
+    private SoundChannel _gameOverSoundChannel;
 
     private int _scoreP1 = 0;
     private int _scoreP2 = 0;
@@ -25,6 +27,9 @@ class ScoreScreen : Canvas
         _scoreP1 = scoreP1;
         _scoreP2 = scoreP2;
         setupText();
+        _gameOverSound = new Sound("gameOver.wav");
+        _gameOverSoundChannel = new SoundChannel(8);
+        _gameOverSoundChannel = _gameOverSound.Play();
     }
 
     private void setupText()
