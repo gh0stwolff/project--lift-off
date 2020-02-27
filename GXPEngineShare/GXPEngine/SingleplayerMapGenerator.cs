@@ -7,6 +7,7 @@ using TiledMapParser;
 class SingleplayerMapGenerator : GameObject
 {
     #region variables
+    #region constants
     //types of tiles
     const int AIR = 1;
     const int DIRT = 2;
@@ -18,14 +19,15 @@ class SingleplayerMapGenerator : GameObject
     const int GOLD = 8;
     const int COAL = 9;
     const int EMERALD = 10;
+    #endregion
 
+    #region lineGeneration
     //for generating new lines
     private int _blockCountWidth;
     private int _minWidth = 6;
     private int _maxWidth = 18;
     private float _framesBetweenLines;
     private int _lineNumb;
-    //private int _amountOfStartingLinesWithRockRestirction = 10;
     private int _linesTillNarrowing = -5;
     private float _timer = 0;
     private int _targetLine;
@@ -33,9 +35,8 @@ class SingleplayerMapGenerator : GameObject
     private int _rockThicknessLeft = 2;
     private int _rockThicknessRight = 2;
 
-    private float _maxScreenSpeed = 2.5f;
-
     private bool _isGoingOutWards = false;
+    #endregion
 
     private Tile _tile;
     private Lava _lava;
@@ -47,36 +48,53 @@ class SingleplayerMapGenerator : GameObject
     #region setup & update
     public SingleplayerMapGenerator() : base()
     {
-        _tile = new Tile("Dirt.png", 0, 0, 2);
-        _blockCountWidth = ((MyGame)game).width / _tile.width;
-        _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = -1;
-        ((MyGame)game).ResetScore();
+        setupVariables();
+        addObject();
+        //spawn the first area from tiled
+        setupSpawn();
+        //generate the first line after the tiled map
+        generateNewLine();
+    }
 
+    #region setup methods
+    private void setupVariables()
+    {
+        //giving tile a block
+        _tile = new Tile("Dirt.png", 0, 0, 2);
+        //calc how many tiles fit in the width
+        _blockCountWidth = ((MyGame)game).width / _tile.width;
+        //how low it takes before a new line needs to be drawn
+        _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
+        //reset the score in case it is the 2nd round
+        ((MyGame)game).ResetScore();
+        //next line number before the wall becomes one block smaller/wider
+        _targetLine = _lineNumb + _linesTillNarrowing;
+    }
+
+    private void addObject()
+    {
+        //initialize layers
         for (int i = 0; i < layers.Length; i++)
         {
             layers[i] = new ScreenLayer();
             AddChild(layers[i]);
         }
-        _background = new Sprite("inGameBackground.png");
-        layers[0].AddChild(_background);
-        _background.alpha = 0.5f;
-
-        setupSpawn();
-        generateNewLine();
-
+        //adding lava
         _lava = new Lava();
         layers[2].AddChild(_lava);
+        //adding a hud
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
-
-        _targetLine = _lineNumb + _linesTillNarrowing;
+        //adding a background
+        _background = new Sprite("inGameBackground.png");
+        layers[0].AddChild(_background);
     }
+    #endregion
 
     public void Update()
     {
         timerNewLine();
-        if (((MyGame)game).GetScreenSpeed() < _maxScreenSpeed)
+        if (((MyGame)game).GetScreenSpeed() < ((MyGame)game).GetMaxScreenSpeed())
         {
             ((MyGame)game).IncreaseSpeed();
         }
@@ -84,7 +102,7 @@ class SingleplayerMapGenerator : GameObject
     }
     #endregion
 
-    #region lineGeneration
+    #region lineGenerator
     private void timerNewLine()
     {
         if (_timer <= 0)
@@ -102,9 +120,8 @@ class SingleplayerMapGenerator : GameObject
 
         if (_lineNumb < _targetLine)
         {
-            handleWallStat();
-            ChangeWallThickness();
-
+            handleWallState();
+            changeWallThickness();
             _targetLine = _linesTillNarrowing + _lineNumb;
         }
 
@@ -168,46 +185,32 @@ class SingleplayerMapGenerator : GameObject
         ((MyGame)game).AddScore(1);
     }
 
-    private void ChangeWallThickness()
+    #region handle sides
+    private void changeWallThickness()
     {
         if (!_isGoingOutWards)
         {
-            if (_rockThicknessLeft == _rockThicknessRight)
-            {
-                _rockThicknessLeft++;
-            }
-            else
-            {
-                _rockThicknessRight++;
-            }
+            if (_rockThicknessLeft == _rockThicknessRight) { _rockThicknessLeft++; }
+            else { _rockThicknessRight++; }
         }
         else
         {
             if (_rockThicknessLeft == _rockThicknessRight)
-            {
-                _rockThicknessLeft--;
-            }
-            else
-            {
-                _rockThicknessRight--;
-            }
+            { _rockThicknessLeft--; }
+            else { _rockThicknessRight--; }
         }
     }
 
-    private void handleWallStat()
+    private void handleWallState()
     {
-        if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) <= _minWidth)
-        {
-            _isGoingOutWards = true;
-        }
-        else if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) >= _maxWidth)
-        {
-            _isGoingOutWards = false;
-        }
+        if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) <= _minWidth) { _isGoingOutWards = true; }
+        else if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) >= _maxWidth) { _isGoingOutWards = false; }
     }
+    #endregion
 
     private int getRandomNumb(int index)
     {
+        #region get all chances
         float dirtChance = getDirtSpawnChance(index);
         float diamondChance = getDiamondSpawnChance(index);
         float stoneChance = getStoneSpawnChance(index);
@@ -216,10 +219,11 @@ class SingleplayerMapGenerator : GameObject
         float ironChance = getIronSpawnChance(index);
         float goldChance = getGoldSpawnChance(index);
         float emeraldChance = getEmeraldSpawnChance(index);
-
+        #endregion
 
         float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance + emeraldChance + 1);
 
+        #region check which tile
         if (randomNumb < dirtChance)
         { return DIRT; }
         else if (randomNumb < dirtChance + diamondChance)
@@ -236,8 +240,8 @@ class SingleplayerMapGenerator : GameObject
         { return GOLD; }
         else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance + emeraldChance)
         { return EMERALD; }
-
-        return 0;
+        else { return 0; }
+        #endregion
     }
 
     #region spawnChances
@@ -356,7 +360,7 @@ class SingleplayerMapGenerator : GameObject
     }
     #endregion
 
-    #region loading Tiled map
+    #region load tiled map
     private void setupSpawn()
     {
         Map levelData = MapParser.ReadMap("startPoint.tmx");
@@ -376,54 +380,45 @@ class SingleplayerMapGenerator : GameObject
             for (int column = 0; column < mainLayer.Width; column++)
             {
                 int tileNumber = tileNumbers[column, row];
-                switch(tileNumber) {
+                switch (tileNumber)
+                {
                     case AIR:
-                        Console.WriteLine("air");
                         break;
                     case DIRT:
                         Dirt dirt = new Dirt(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(dirt);
-                        Console.WriteLine("dirt");
+                        layers[0].AddChild(dirt);
                         break;
                     case STONE:
                         Stone stone = new Stone(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(stone);
-                        Console.WriteLine("stone");
+                        layers[0].AddChild(stone);
                         break;
                     case DIAMOND:
                         DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(diamond);
-                        Console.WriteLine("diamond");
+                        layers[0].AddChild(diamond);
                         break;
                     case EDGESTONE:
                         EdgeStone edge = new EdgeStone(getXLocation(column), getYLocation(row), true);
                         layers[3].AddChild(edge);
-                        Console.WriteLine("edge");
                         break;
                     case DARKNESS:
                         EdgeStone dark = new EdgeStone(getXLocation(column), getYLocation(row), false);
                         layers[3].AddChild(dark);
-                        Console.WriteLine("dark");
                         break;
                     case IRON:
                         Iron iron = new Iron(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(iron);
-                        Console.WriteLine("iron");
+                        layers[0].AddChild(iron);
                         break;
                     case GOLD:
                         Gold gold = new Gold(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(gold);
-                        Console.WriteLine("gold");
+                        layers[0].AddChild(gold);
                         break;
                     case COAL:
                         Coal coal = new Coal(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(coal);
-                        Console.WriteLine("coal");
+                        layers[0].AddChild(coal);
                         break;
                     case EMERALD:
                         Emerald emerald = new Emerald(getXLocation(column), getYLocation(row));
-                        layers[1].AddChild(emerald);
-                        Console.WriteLine("emerald");
+                        layers[0].AddChild(emerald);
                         break;
                 }
             }

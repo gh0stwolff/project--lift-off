@@ -9,7 +9,5 @@ class Iron : Collectable
 
     public Iron(float locX, float locY) : base("Iron.png", locX, locY, 2, _pointsOnPickUp)
     {
-
     }
-
 }

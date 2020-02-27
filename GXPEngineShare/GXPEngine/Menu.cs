@@ -6,6 +6,8 @@ using GXPEngine;
 
 class Menu : Canvas
 {
+    #region variables
+    //all screens
     private MultiplayerMapGenerator _multiPlayer;
     private SingleplayerMapGenerator _singlePlayer;
     private MainMenu _mainScreen;
@@ -26,15 +28,18 @@ class Menu : Canvas
     private Sound _distantGrowl;
     private SoundChannel _distantGrowlChannel;
 
-
+    //values that need to be stored during session
     private int _scoreP1 = 0;
     private int _scoreP2 = 0;
     private int _playersReady = 0;
     private int _randomGrowlTimer = 200;
 
+    //states for the menu to be in
     enum Scene { MainMenu, ReadyScreen, MultiplayerLevel, SinglePlayerLevel, ScoreScreen1, ScoreScreen2, HighScoreScreen}
     Scene SceneState = Scene.MainMenu;
+    #endregion
 
+    #region setup & update
     public Menu(int width, int height) : base(width, height)
     {
         ((MyGame)game).SetScreenForMenu();
@@ -48,9 +53,8 @@ class Menu : Canvas
         displayScreen();
         screenState();
         playingSound();
-        //checkButtonPresses();
-        //handleSceneState();
     }
+    #endregion
 
     private void setupSounds()
     {

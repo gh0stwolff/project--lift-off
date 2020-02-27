@@ -7,21 +7,42 @@ using System.IO;
 
 class HighScoreScreen : Canvas
 {
+    #region variables
+    #region text modifiers
+    private int _textSize = 56;
+    private int _textX = 575;
+    private int _textY = 200;
+    private int _textYDist = 75;
+    #endregion
+
     private string _scoreP1;
     private string _scoreP2;
 
     private List<string> scores = new List<string>();
+
     private TextBoard[] _scoreBoard = new TextBoard[5];
     private ScoreBoard _board = new ScoreBoard("Score.txt");
+    #endregion
 
+    #region setup
     public HighScoreScreen(int width, int height, int scoreP1, int scoreP2) : base(width, height)
     {
+        Sprite background = new Sprite("scoreScreen.png");
+        AddChild(background);
         checkScores(scoreP1, scoreP2);
         setNewData();
         getData();
-        setupScoreBoard();
+        showScores();
     }
+    #endregion
 
+    #region checkscores
+    /// <summary>
+    /// checks if the score is not zero
+    /// prevent singleplayer form uploading two scores
+    /// </summary>
+    /// <param name="scoreP1">score of player 1</param>
+    /// <param name="scoreP2">score of player 2</param>
     private void checkScores(int scoreP1, int scoreP2)
     {
         if (scoreP1 != 0) { _scoreP1 = scoreP1.ToString(); }
@@ -29,7 +50,9 @@ class HighScoreScreen : Canvas
         if (scoreP2 != 0) { _scoreP2 = scoreP2.ToString(); }
         else { _scoreP2 = null; }
     }
+    #endregion
 
+    #region get & set data
     private void getData()
     {
         scores = _board.getHighScores();
@@ -40,12 +63,12 @@ class HighScoreScreen : Canvas
         if (_scoreP1 != null) { _board.AddLine(_scoreP1); }
         if (_scoreP2 != null) { _board.AddLine(_scoreP2); }
     }
+    #endregion
 
-    private void setupScoreBoard()
-    {
-        showScores();
-    }
-
+    #region show scores
+    /// <summary>
+    /// show the top 5 highscores on the screen
+    /// </summary>
     private void showScores()
     {
         int place = 1;
@@ -57,8 +80,8 @@ class HighScoreScreen : Canvas
             {
                 _scoreBoard[i] = new TextBoard(500, 300);
                 AddChild(_scoreBoard[i]);
-                _scoreBoard[i].Size(56);
-                _scoreBoard[i].SetXY(400, 50 + 100 * place);
+                _scoreBoard[i].Size(_textSize);
+                _scoreBoard[i].SetXY(_textX, _textY + _textYDist * place);
                 Int32.TryParse(scores[i], out score);
                 Console.WriteLine("{0}. {1}", place, score);
                 _scoreBoard[i].SetText(place + ":" + score);
@@ -71,8 +94,8 @@ class HighScoreScreen : Canvas
             {
                 _scoreBoard[i] = new TextBoard(500, 300);
                 AddChild(_scoreBoard[i]);
-                _scoreBoard[i].Size(56);
-                _scoreBoard[i].SetXY(400, 50 + 100 * place);
+                _scoreBoard[i].Size(_textSize);
+                _scoreBoard[i].SetXY(_textX, _textY + _textYDist * place);
                 Int32.TryParse(scores[i], out score);
                 _scoreBoard[i].SetText(place + ":" + score);
                 place++;
@@ -80,5 +103,5 @@ class HighScoreScreen : Canvas
         }
         
     }
-
+    #endregion
 }

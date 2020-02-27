@@ -6,31 +6,34 @@ using GXPEngine;
 
 class MainMenu : Canvas
 {
+    #region variables
     private int _time = 0;
 
-    private Sprite _backGround;
-    private Sprite _pressButton;
+    private Sprite _pressStart;
+    #endregion
 
+    #region setup & update
     public MainMenu(float width, float height) : base((int)width, (int)height)
     {
-        _backGround = new Sprite("backGround.jpg");
-        AddChild(_backGround);
-        _pressButton = new Sprite("singleplayerButton.png");
-        AddChild(_pressButton);
-        _pressButton.SetOrigin(_pressButton.width/2, _pressButton.height/2);
-        _pressButton.SetXY(300, 500);
+        Sprite backGround = new Sprite("Background.png");
+        AddChild(backGround);
+        _pressStart = new Sprite("pressStart.png");
+        AddChild(_pressStart);
+        _pressStart.SetOrigin(_pressStart.width/2, _pressStart.height/2);
+        _pressStart.SetXY(704, 500);
     }
 
     public void Update()
     {
         _time++;
-        _pressButton.scale = (float)getSize(_time);
+        _pressStart.scale = (float)getSize(_time);
     }
+    #endregion
 
     private double getSize(int time)
     {
-        double shakeOffSet = 0.3;
-        double speed = 100;     //lower number increases frequency
+        double shakeOffSet = 0.1;
+        double speed = 80;     //lower number increases frequency
         double horizontalOffSet = 0;
 
         double b = shakeOffSet;
@@ -41,5 +44,4 @@ class MainMenu : Canvas
 
         return (b * Math.Sin(((2 * Math.PI) / T) * (X - d))) + shakeOffSet+1;
     }
-
 }

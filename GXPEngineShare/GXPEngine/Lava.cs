@@ -6,20 +6,19 @@ using GXPEngine;
 
 class Lava : AnimationSprite
 {
+    #region variables
     private float _boilingLevel = 0;
     private float _height = 0;
-    private Sprite _outOfBounds;
+    #endregion
 
+    #region setup & update
     public Lava() : base("Lava.png", 1, 1)
     {
         SetXY(0, ((MyGame)game).height - height/2);
         Sprite glow = new Sprite("lavaGlow.png");
         AddChild(glow);
         glow.y = -720;
-        glow.alpha = 0.3f;
-        _outOfBounds = new Sprite("lavaGlow.png");
-        AddChild(_outOfBounds);
-        _outOfBounds.y = 100;
+        glow.alpha = 0.5f;
     }
 
     public void Update()
@@ -27,30 +26,13 @@ class Lava : AnimationSprite
         _height++;
         y -= ((MyGame)game).GetScreenSpeed() - _boilingLevel;
         boiling();
-        destroyTiles();
     }
+    #endregion
 
+    #region boiling effect
     private void boiling()
     {
         _boilingLevel = (float)GetLevel();
-    }
-
-    private void destroyTiles()
-    {
-        foreach (GameObject other in _outOfBounds.GetCollisions())
-        {
-            if (other is Tile)
-            {
-                if (other is EdgeStone)
-                {
-                    //do nothing
-                }
-                else
-                {
-                    other.LateDestroy();
-                }
-            }
-        }
     }
 
     private double GetLevel()
@@ -66,5 +48,5 @@ class Lava : AnimationSprite
 
         return (b * Math.Sin(((2 * Math.PI) / T) * (X - d)));
     }
-
+    #endregion
 }

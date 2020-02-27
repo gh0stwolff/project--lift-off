@@ -7,29 +7,29 @@ using System.IO;
 
 class ScoreBoard
 {
+    #region variables
     private string _filePath;
 
     List<string> Lines = new List<string>();
+    #endregion
 
+    #region setup
     public ScoreBoard(string filePath)
     {
         _filePath = filePath;
         readFile();
         getHighScores();
     }
+    #endregion
 
-    private void readFile()
-    {
-        Lines = File.ReadAllLines(_filePath).ToList();
-    }
 
+    #region add a new line
     public void AddLine(string score)
     {
         addLine(score);
         StoreData();
         readFile();
     }
-
     private void addLine(string score)
     {
         Lines.Add(score);
@@ -38,6 +38,19 @@ class ScoreBoard
     private void StoreData()
     {
         File.WriteAllLines(_filePath, Lines);
+    }
+
+    private void readFile()
+    {
+        Lines = File.ReadAllLines(_filePath).ToList();
+    }
+    #endregion
+
+    #region sort and sent array
+    public List<string> getHighScores()
+    {
+        SortList(Lines);
+        return Lines;
     }
 
     private void SortList(List<string> list)
@@ -58,11 +71,5 @@ class ScoreBoard
             }
         }
     }
-
-    public List<string> getHighScores()
-    {
-        SortList(Lines);
-        return Lines;
-    }
-
+    #endregion
 }

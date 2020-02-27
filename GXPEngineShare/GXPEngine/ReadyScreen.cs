@@ -6,14 +6,17 @@ using GXPEngine;
 
 class ReadyScreen : Canvas
 {
+    #region variables
     private Sprite _manual;
     private Sprite _backGround;
     private AnimationSprite _player1;
     private AnimationSprite _player2;
+    #endregion
 
+    #region setup & update
     public ReadyScreen(float width, float height) : base((int)width, (int)height)
     {
-        _backGround = new Sprite("backGround.jpg");
+        _backGround = new Sprite("Background.png");
         AddChild(_backGround);
         _manual = new Sprite("manual.png");
         AddChild(_manual);
@@ -30,21 +33,12 @@ class ReadyScreen : Canvas
         if (Input.GetKey(Key.ONE)) { _player1.SetFrame(1); }
         if (Input.GetKey(Key.TWO)) { _player2.SetFrame(1); }
     }
+    #endregion
 
     public int GetPlayersReady()
     {
-        if (_player1.currentFrame == 1 && _player2.currentFrame == 1)
-        {
-            return 2;
-        }
-        else if (_player1.currentFrame == 1)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
+        if (_player1.currentFrame == 1 && _player2.currentFrame == 1) { return 2; }
+        else if (_player1.currentFrame == 1) { return 1; }
+        else { return 0; }
     }
-
 }

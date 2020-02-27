@@ -7,14 +7,18 @@ using GXPEngine;
 
 public class TextBoard : GameObject
 {
+    #region variables
     private EasyDraw _text;
+    #endregion
 
+    #region setup
     public TextBoard(int width, int height) : base()
     {
         _text = new EasyDraw(width, height);
         _text.TextAlign(CenterMode.Min, CenterMode.Min);
         AddChild(_text);
     }
+    #endregion
 
     public void SetText(string text)
     {

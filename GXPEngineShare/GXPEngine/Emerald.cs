@@ -9,7 +9,6 @@ class Emerald : Collectable
 
     public Emerald(float locX, float locY) : base("Emerald.png", locX, locY, 2, _pointsOnPickUp)
     {
-
     }
 
 }
