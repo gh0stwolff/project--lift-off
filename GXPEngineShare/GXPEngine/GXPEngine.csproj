@@ -36,8 +36,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Air.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Coal.cs" />
+    <Compile Include="Collectable.cs" />
     <Compile Include="DiamondOre.cs" />
     <Compile Include="Dirt.cs" />
     <Compile Include="EdgeStone.cs" />
