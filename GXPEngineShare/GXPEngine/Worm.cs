@@ -76,13 +76,17 @@ using GXPEngine;
             _bigWorm.alpha = 0.0f;
             _arrow[0].x = _arrow[0].width;
             _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
-
-            if (Input.GetKeyDown(Key.U))
+            if(Input.GetKeyDown(Key.O))
+            {
+                x = 0;
+                y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
+                _timer2 = 0;
+            }
+            if (Input.GetKey(Key.O))
             {
                 _state = 1;
    
-                x = 0;
-                y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
+                
                 Mirror(false, false);
                 _mediumWorm.Mirror(false, false);
                 _bigWorm.Mirror(false, false);
@@ -98,7 +102,7 @@ using GXPEngine;
 
                 _timer2++;
 
-                if (_timer2 <= 50)
+                if (_timer2 <= 75)
                 {
                     _scale = 1;
                     SetFrame(0);
@@ -106,7 +110,7 @@ using GXPEngine;
                     _arrow[1].SetFrame(0);
                 }
 
-                if (_timer2 > 50)
+                if (_timer2 > 150)
                 {
                     _scale = 2;
                     _mediumWorm.SetFrame(0);
@@ -114,21 +118,28 @@ using GXPEngine;
                     _arrow[1].SetFrame(1);
                 }
 
-                if (_timer2 > 100)
+                if (_timer2 > 225)
                 {
                     _scale = 3;
                     _bigWorm.SetFrame(0);
                     _arrow[0].SetFrame(2);
                     _arrow[1].SetFrame(2);
                 }
-
+                if (_timer2 > 225)
+                {
+                    _timer2 = 225;
+                }
             }
-
-            if (Input.GetKeyDown(Key.O))
+            if(Input.GetKeyDown(Key.U))
             {
-
                 x = ((MyGame)game).GetScreenWidth(); ;
                 y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
+                _timer2 = 0;
+            }
+            if (Input.GetKey(Key.U))
+            {
+
+                
                 _state = 2;
                 Mirror(true, false);
                 _mediumWorm.Mirror(true, false);
@@ -136,7 +147,7 @@ using GXPEngine;
 
                 _timer2++;
 
-                if (_timer2 <= 50)
+                if (_timer2 <= 75)
                 {
                     _scale = 1;
                     SetFrame(0);
@@ -144,7 +155,7 @@ using GXPEngine;
                     _arrow[1].SetFrame(0);
                 }
 
-                if (_timer2 > 50)
+                if (_timer2 > 150)
                 {
                     _scale = 2;
                     _mediumWorm.SetFrame(0);
@@ -152,12 +163,16 @@ using GXPEngine;
                     _arrow[1].SetFrame(1);
                 }
 
-                if (_timer2 > 100)
+                if (_timer2 > 225)
                 {
                     _scale = 3;
                     _bigWorm.SetFrame(0);
                     _arrow[0].SetFrame(2);
                     _arrow[1].SetFrame(2);
+                }
+                if (_timer2 > 225)
+                {
+                    _timer2 = 225;
                 }
 
                 _arrow[0].alpha = 0.5f;
@@ -186,7 +201,7 @@ using GXPEngine;
                 y += _speed;
             }
 
-            if (_timer2 > 150)
+            if (_timer2 > 225)
             {
                 _timer2 = 0;
             }
@@ -290,11 +305,11 @@ using GXPEngine;
     {
         if(other is Player)
         {
-            other.LateDestroy();
+            ((MyGame)game).GameOver();
 
         }
 
-        if(other is DiamondOre || other is Dirt || other is Stone)
+        if(other is Collectable || other is Stone)
         {
             other.LateDestroy();
         }

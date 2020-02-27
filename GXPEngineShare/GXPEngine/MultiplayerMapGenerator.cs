@@ -40,7 +40,7 @@ class MultiplayerMapGenerator : GameObject
     private Lava _lava;
     private Sprite _background;
 
-    private ScreenLayer[] layers = new ScreenLayer[6];
+    private ScreenLayer[] layers = new ScreenLayer[8];
 
 
     public MultiplayerMapGenerator() : base()
@@ -64,9 +64,9 @@ class MultiplayerMapGenerator : GameObject
         _lava = new Lava();
         layers[5].AddChild(_lava);
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
-        layers[3].AddChild(hud);
+        layers[7].AddChild(hud);
         Worm worm = new Worm();
-        layers[5].AddChild(worm);
+        layers[7].AddChild(worm);
 
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
@@ -136,11 +136,11 @@ class MultiplayerMapGenerator : GameObject
                     break;
                 case EDGESTONE:
                     EdgeStone edgeStone = new EdgeStone(getXLocation(i), getYLocation(_lineNumb), true);
-                    layers[2].AddChild(edgeStone);
+                    layers[6].AddChild(edgeStone);
                     break;
                 case DARKNESS:
                     EdgeStone darkness = new EdgeStone(getXLocation(i), getYLocation(_lineNumb), false);
-                    layers[2].AddChild(darkness);
+                    layers[6].AddChild(darkness);
                     break;
                 case IRON:
                     Iron iron = new Iron(getXLocation(i), getYLocation(_lineNumb));
@@ -248,8 +248,8 @@ class MultiplayerMapGenerator : GameObject
 
     private float getDiamondSpawnChance(int index)
     {
-        float maxChance = 5.0f;
-        float minChance = 2.0f;
+        float maxChance = 0.5f;
+        float minChance = 0.1f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -257,17 +257,17 @@ class MultiplayerMapGenerator : GameObject
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 5.0f;
-        bool isChanceHigherInMiddle = false;
+        float maxChance = 25.0f;
+        float minChance = 30.0f;
+        bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getAirSpawnChance(int index)
     {
-        float maxChance = 20.0f;
-        float minChance = 20.0f;
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
         bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -284,8 +284,8 @@ class MultiplayerMapGenerator : GameObject
 
     private float getEmeraldSpawnChance(int index)
     {
-        float maxChance = 5.0f;
-        float minChance = 2.0f;
+        float maxChance = 0.5f;
+        float minChance = 0.1f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -293,8 +293,8 @@ class MultiplayerMapGenerator : GameObject
 
     private float getGoldSpawnChance(int index)
     {
-        float maxChance = 5.0f;
-        float minChance = 2.0f;
+        float maxChance = 1.0f;
+        float minChance = 1.0f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -302,9 +302,9 @@ class MultiplayerMapGenerator : GameObject
 
     private float getIronSpawnChance(int index)
     {
-        float maxChance = 5.0f;
-        float minChance = 4.0f;
-        bool isChanceHigherInMiddle = false;
+        float maxChance = 3.0f;
+        float minChance = 3.0f;
+        bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
@@ -403,7 +403,7 @@ class MultiplayerMapGenerator : GameObject
         if (objectGroup.Objects == null || objectGroup.Objects.Length == 0)
             return;
 
-        /*foreach (TiledObject obj in objectGroup.Objects)
+        foreach (TiledObject obj in objectGroup.Objects)
         {
             switch (obj.Name)
             {
@@ -412,6 +412,6 @@ class MultiplayerMapGenerator : GameObject
                     layers[5].AddChild(player);
                     break;
             }
-        }*/
+        }
     }
 }

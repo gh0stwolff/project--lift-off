@@ -32,7 +32,7 @@ class SingleplayerMapGenerator : GameObject
     private int _rockThicknessLeft = 2;
     private int _rockThicknessRight = 2;
 
-    private float _maxScreenSpeed = 3.5f;
+    private float _maxScreenSpeed = 2.5f;
 
     private bool _isGoingOutWards = false;
 
