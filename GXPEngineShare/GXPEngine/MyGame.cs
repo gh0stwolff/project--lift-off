@@ -15,8 +15,7 @@ public class MyGame : Game
         _menu = new Menu(width, height);
         AddChild(_menu);
         _speed = _startScreenSpeed;
-        //HighScoreScreen high = new HighScoreScreen(width, height);
-        //AddChild(high);
+        //ScoreBoard score = new ScoreBoard("Score.txt");
     }
 
     public void Update()
@@ -89,12 +88,10 @@ public class MyGame : Game
     {
         return width;
     }
-
     public float GetScreenHeight()
     {
         return height;
     }
-
     public float GetScreenY()
     {
         return y;
@@ -109,12 +106,14 @@ public class MyGame : Game
     {
         return _score;
     }
-
     public void AddScore(int amount)
     {
         _score += amount;
     }
-
+    public void ResetScore()
+    {
+        _score = 0;
+    }
     public void IncreaseSpeed()
     {
         _speed += 0.0001f;

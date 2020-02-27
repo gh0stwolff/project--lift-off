@@ -13,7 +13,10 @@ class MultiplayerMapGenerator : GameObject
     const int DIAMOND = 4;
     const int EDGESTONE = 5;
     const int DARKNESS = 6;
-
+    const int IRON = 7;
+    const int GOLD = 8;
+    const int COAL = 9;
+    const int EMERALD = 10;
 
     //for generating new lines
     private int _blockCountWidth;
@@ -35,6 +38,7 @@ class MultiplayerMapGenerator : GameObject
 
     private Tile _tile;
     private Lava _lava;
+    private Sprite _background;
 
     private ScreenLayer[] layers = new ScreenLayer[6];
 
@@ -45,12 +49,15 @@ class MultiplayerMapGenerator : GameObject
         _blockCountWidth = ((MyGame)game).width / _tile.width;
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
         _lineNumb = -1;
+        ((MyGame)game).ResetScore();
 
         for (int i = 0; i < layers.Length; i++)
         {
             layers[i] = new ScreenLayer();
             AddChild(layers[i]);
         }
+        _background = new Sprite("inGameBackground.png");
+        layers[0].AddChild(_background);
         setupSpawn();
         generateNewLine();
 
@@ -60,9 +67,6 @@ class MultiplayerMapGenerator : GameObject
         layers[3].AddChild(hud);
         Worm worm = new Worm();
         layers[5].AddChild(worm);
-
-        //Level spawn = new Level("startPoint.tmx", _blockCountWidth, 13);
-        //layers[2].AddChild(spawn);
 
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
@@ -76,6 +80,7 @@ class MultiplayerMapGenerator : GameObject
         }
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
     }
+
 
     private void timerNewLine()
     {
@@ -113,6 +118,10 @@ class MultiplayerMapGenerator : GameObject
         {
             switch (newLine[i])
             {
+                //case AIR:
+                //    Air air = new Air(getXLocation(i), getYLocation(_lineNumb));
+                //    layers[0].AddChild(air);
+                //    break;
                 case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
                     layers[0].AddChild(dirt);
@@ -133,9 +142,25 @@ class MultiplayerMapGenerator : GameObject
                     EdgeStone darkness = new EdgeStone(getXLocation(i), getYLocation(_lineNumb), false);
                     layers[2].AddChild(darkness);
                     break;
+                case IRON:
+                    Iron iron = new Iron(getXLocation(i), getYLocation(_lineNumb));
+                    layers[0].AddChild(iron);
+                    break;
+                case GOLD:
+                    Gold gold = new Gold(getXLocation(i), getYLocation(_lineNumb));
+                    layers[0].AddChild(gold);
+                    break;
+                case COAL:
+                    Coal coal = new Coal(getXLocation(i), getYLocation(_lineNumb));
+                    layers[0].AddChild(coal);
+                    break;
+                case EMERALD:
+                    Emerald emerald = new Emerald(getXLocation(i), getYLocation(_lineNumb));
+                    layers[0].AddChild(emerald);
+                    break;
             }
         }
-
+        _background.y = -((MyGame)game).GetScreenY() - _tile.height;
         _lineNumb--;
         ((MyGame)game).AddScore(1);
     }
@@ -184,26 +209,30 @@ class MultiplayerMapGenerator : GameObject
         float diamondChance = getDiamondSpawnChance(index);
         float stoneChance = getStoneSpawnChance(index);
         float airChance = getAirSpawnChance(index);
+        float coalChance = getCoalSpawnChance(index);
+        float ironChance = getIronSpawnChance(index);
+        float goldChance = getGoldSpawnChance(index);
+        float emeraldChance = getEmeraldSpawnChance(index);
 
 
-        float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + airChance + 1);
+        float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance + emeraldChance + 1);
 
         if (randomNumb < dirtChance)
-        {
-            return DIRT;
-        }
+        { return DIRT; }
         else if (randomNumb < dirtChance + diamondChance)
-        {
-            return DIAMOND;
-        }
+        { return DIAMOND; }
         else if (randomNumb < dirtChance + diamondChance + stoneChance)
-        {
-            return STONE;
-        }
+        { return STONE; }
         else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance)
-        {
-            return AIR;
-        }
+        { return AIR; }
+        else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance + coalChance)
+        { return COAL; }
+        else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance)
+        { return IRON; }
+        else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance)
+        { return GOLD; }
+        else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance + emeraldChance)
+        { return EMERALD; }
 
         return 0;
     }
@@ -219,8 +248,8 @@ class MultiplayerMapGenerator : GameObject
 
     private float getDiamondSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 5.0f;
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -228,18 +257,54 @@ class MultiplayerMapGenerator : GameObject
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = 15.0f;
-        float minChance = 10.0f;
-        bool isChanceHigherInMiddle = true;
+        float maxChance = 10.0f;
+        float minChance = 5.0f;
+        bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }
 
     private float getAirSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 10.0f;
+        float maxChance = 20.0f;
+        float minChance = 20.0f;
         bool isChanceHigherInMiddle = true;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getCoalSpawnChance(int index)
+    {
+        float maxChance = 5.0f;
+        float minChance = 5.0f;
+        bool isChanceHigherInMiddle = true;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getEmeraldSpawnChance(int index)
+    {
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
+        bool isChanceHigherInMiddle = false;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getGoldSpawnChance(int index)
+    {
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
+        bool isChanceHigherInMiddle = false;
+
+        return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
+    }
+
+    private float getIronSpawnChance(int index)
+    {
+        float maxChance = 5.0f;
+        float minChance = 4.0f;
+        bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
     }

@@ -41,7 +41,14 @@ class Lava : AnimationSprite
         {
             if (other is Tile)
             {
-                other.LateDestroy();
+                if (other is EdgeStone)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    other.LateDestroy();
+                }
             }
         }
     }

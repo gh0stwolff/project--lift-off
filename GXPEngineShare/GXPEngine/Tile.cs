@@ -6,6 +6,7 @@ using GXPEngine;
 
 class Tile : AnimationSprite
 {
+
     private bool _doOnce = true;
     private bool _startAnimation = false;
     private ParticalEffect _particals;
@@ -18,17 +19,19 @@ class Tile : AnimationSprite
 
     public void Update()
     {
-        //if(y > ((MyGame)game).GetScreenY() + ((MyGame)game).height)
-        //{
-        //    LateDestroy();
-        //}
+        if (y > -((MyGame)game).GetScreenY() + ((MyGame)game).GetScreenHeight())
+        {
+            LateDestroy();
+        }
+
         Animation();
     }
 
-    protected void selfDestroy()
+    protected void selfDestroy(int points)
     {
         if (_doOnce)
         {
+            ((MyGame)game).AddScore(points);
             _startAnimation = true;
             _doOnce = false;
         }

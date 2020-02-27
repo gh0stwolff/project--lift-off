@@ -10,6 +10,8 @@ using GXPEngine;
     private AnimationSprite _mediumWorm;
     private AnimationSprite _bigWorm;
     private AnimationSprite[] _arrow = new AnimationSprite[2];
+    private Sound _growl;
+    private SoundChannel _growlChannel;
     private float _speed = 10.0f;
     private int _state = 0;
     bool _shoot = false;
@@ -53,6 +55,8 @@ using GXPEngine;
         _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
         _arrow[1].Mirror(true, false);
 
+        _growl = new Sound("wormGrowlPassing.wav");
+        _growlChannel = new SoundChannel(2);
     }
 
     void Update()
@@ -193,6 +197,7 @@ using GXPEngine;
         {
             _shoot = true;
             ((MyGame)game).ShakeCamera(60);
+            _growlChannel = _growl.Play();
         }
 
         if (x < -(width) || x > ((MyGame)game).GetScreenWidth() + width) 
