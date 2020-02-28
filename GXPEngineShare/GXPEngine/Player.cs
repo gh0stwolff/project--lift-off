@@ -54,7 +54,7 @@ class Player : Sprite
         AddChild(_mining);
         _mining.SetScaleXY(2.0f, 2.0f);
         _mining.alpha = 0.0f;
-        _mining.SetOrigin(_mining.width/2 - width + 5, _mining.height/ 2 - height);
+        _mining.SetOrigin(_mining.width/2 - width , _mining.height/ 2 - height);
 
         _glow = new AnimationSprite("lavaPlayer.png", 4, 1, -1, false, false);
         AddChild(_glow);
@@ -97,7 +97,7 @@ class Player : Sprite
 
             _drill.rotation = _angleLeft;
 
-            _mining.SetOrigin(_mining.width / 2 - 20 , _mining.height / 2 - height);
+            _mining.SetOrigin(_mining.width / 2 - 20 , _mining.height / 2 - height + 5);
 
             _mining.rotation = _angleLeft;
 
@@ -124,11 +124,11 @@ class Player : Sprite
 
             _drill.rotation = _angleRight;
 
-            _mining.SetOrigin(_mining.width / 2 - width + 5, _mining.height / 2 - height / 2);
+            _mining.SetOrigin(_mining.width / 2 - width + 5, _mining.height / 2 - height / 2 + 6);
 
             _mining.rotation = _angleRight;
 
-            _glow.SetOrigin(_animation.width / 2 - width / 2 - 12, _animation.height / 2 + height / 2);
+            _glow.SetOrigin(_animation.width / 2 - width / 2 - 12, _animation.height / 2 + height / 2 + 5);
 
             _glow.rotation = _angleRight;
 
@@ -153,7 +153,7 @@ class Player : Sprite
 
             _drill.rotation = _angleUp;
 
-            _mining.SetOrigin(_mining.width / 2 - width + 5, _mining.height / 2 - height);
+            _mining.SetOrigin(_mining.width / 2 - width + 8, _mining.height / 2 - height + 6);
 
             _mining.rotation = _angleUp;
 
@@ -180,11 +180,11 @@ class Player : Sprite
 
             _drill.rotation = _angleDown;
 
-            _mining.SetOrigin(_mining.width / 2 - width /2 + 5, _mining.height / 2 - height / 2);
+            _mining.SetOrigin(_mining.width / 2 - width /2 + 6, _mining.height / 2 - height / 2 + 5);
 
             _mining.rotation = _angleDown;
 
-            _glow.SetOrigin(_animation.width / 2 + width / 2 - 12, _animation.height / 2 + height / 2);
+            _glow.SetOrigin(_animation.width / 2 + width / 2 - 8, _animation.height / 2 + height / 2);
 
             _glow.rotation = _angleDown;
 

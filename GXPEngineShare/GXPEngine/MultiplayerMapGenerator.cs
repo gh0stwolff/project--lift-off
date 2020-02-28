@@ -94,7 +94,7 @@ class MultiplayerMapGenerator : GameObject
         _background = new Sprite("inGameBackground.png");
         layers[0].AddChild(_background);
         _background.alpha = 0.3f;
-
+    }
     public void Update()
     {
         timerNewLine();
@@ -104,6 +104,8 @@ class MultiplayerMapGenerator : GameObject
         }
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
     }
+    #endregion
+
     #endregion
 
     #region lineGenerator

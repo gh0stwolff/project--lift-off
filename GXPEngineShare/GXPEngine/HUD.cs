@@ -16,7 +16,7 @@ public class HUD : Canvas
         SetXY(0, 100);
         _textScore = new TextBoard(150, 24);
         _textScore.x = 8;
-        _textScore.y = 32;
+        _textScore.y = 96;
         AddChild(_textScore);
     }
 
