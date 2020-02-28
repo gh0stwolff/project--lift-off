@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -105,8 +105,8 @@ class ReadyScreen : Canvas
 
     public int GetPlayersReady()
     {
-        if (_player1.currentFrame == 1 && _player2.currentFrame == 1) { return 2; }
-        else if (_player1.currentFrame == 1) { return 1; }
+        if (_player1.currentFrame > 1 && _player2.currentFrame > 1) { return 2; }
+        else if (_player1.currentFrame > 1) { return 1; }
         else { return 0; }
     }
 }
