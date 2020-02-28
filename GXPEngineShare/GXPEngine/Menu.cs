@@ -172,17 +172,14 @@ class Menu : Canvas
             if (_scoreP2 == 0 && Input.GetKeyDown(Key.THREE))
             {
                 SceneState = Scene.MultiplayerLevel;
-                Console.WriteLine("load 2nd level");
             }
             else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyUp(Key.THREE))
             {
                 SceneState = Scene.HighScoreScreen;
-                Console.WriteLine("highscore");
             }
             else if (_scoreP2 != 0 && Input.GetKeyUp(Key.THREE))
             {
                 _scoreScreenMulti.Compare();
-                Console.WriteLine("comparing");
             }
         }
         if ( _scoreScreenSingle != null)
@@ -322,7 +319,6 @@ class Menu : Canvas
         {
             if (other != objType)
             {
-                Console.WriteLine(other);
                 other.LateDestroy();
             }
         }
