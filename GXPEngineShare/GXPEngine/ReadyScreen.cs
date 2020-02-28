@@ -18,7 +18,7 @@ class ReadyScreen : Canvas
     {
         _backGround = new Sprite("Background.png");
         AddChild(_backGround);
-        _manual = new Sprite("manual.png");
+        _manual = new Sprite("Contract.png");
         AddChild(_manual);
         _player1 = new AnimationSprite("playerReady.png", 1, 2);
         AddChild(_player1);

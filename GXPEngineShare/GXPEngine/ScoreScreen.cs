@@ -1,14 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GXPEngine;
 using System.IO;
+using System.Drawing;
+using System.Drawing.Text;
 
 class ScoreScreen : Canvas
 {
     #region variables
     private Sprite _backGround;
+    
     private TextBoard _score;
     private TextBoard _youWon;
     private Sound _gameOverSound;
@@ -30,6 +33,7 @@ class ScoreScreen : Canvas
         _scoreP2 = scoreP2;
         setupText();
         setTextProps();
+        
         _gameOverSound = new Sound("gameOver.wav");
         _gameOverSoundChannel = new SoundChannel(8);
         _gameOverSoundChannel = _gameOverSound.Play();
