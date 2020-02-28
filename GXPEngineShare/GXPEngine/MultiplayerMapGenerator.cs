@@ -258,7 +258,7 @@ class MultiplayerMapGenerator : GameObject
 
     private float getDiamondSpawnChance(int index)
     {
-        float maxChance = 0.5f;
+        float maxChance = 1.0f;
         float minChance = 0.1f;
         bool isChanceHigherInMiddle = false;
 
@@ -267,7 +267,7 @@ class MultiplayerMapGenerator : GameObject
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = 25.0f;
+        float maxChance = 22.0f;
         float minChance = 30.0f;
         bool isChanceHigherInMiddle = true;
 
@@ -276,8 +276,8 @@ class MultiplayerMapGenerator : GameObject
 
     private float getAirSpawnChance(int index)
     {
-        float maxChance = 5.0f;
-        float minChance = 2.0f;
+        float maxChance = 17.0f;
+        float minChance = 12.0f;
         bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -285,7 +285,7 @@ class MultiplayerMapGenerator : GameObject
 
     private float getCoalSpawnChance(int index)
     {
-        float maxChance = 5.0f;
+        float maxChance = 10.0f;
         float minChance = 5.0f;
         bool isChanceHigherInMiddle = true;
 
@@ -295,7 +295,7 @@ class MultiplayerMapGenerator : GameObject
     private float getEmeraldSpawnChance(int index)
     {
         float maxChance = 0.5f;
-        float minChance = 0.1f;
+        float minChance = 0.5f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);

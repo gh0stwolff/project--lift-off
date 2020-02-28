@@ -261,8 +261,8 @@ class SingleplayerMapGenerator : GameObject
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = 10.0f;
-        float minChance = 5.0f;
+        float maxChance = 35.0f;
+        float minChance = 30.0f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -270,8 +270,8 @@ class SingleplayerMapGenerator : GameObject
 
     private float getAirSpawnChance(int index)
     {
-        float maxChance = 20.0f;
-        float minChance = 20.0f;
+        float maxChance = 5.0f;
+        float minChance = 2.0f;
         bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);

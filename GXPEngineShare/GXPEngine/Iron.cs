@@ -5,7 +5,7 @@ using System.Text;
 
 class Iron : Collectable
 {
-    private const int _pointsOnPickUp = 5;
+    private const int _pointsOnPickUp = 20;
 
     public Iron(float locX, float locY) : base("Iron.png", locX, locY, 2, _pointsOnPickUp)
     {

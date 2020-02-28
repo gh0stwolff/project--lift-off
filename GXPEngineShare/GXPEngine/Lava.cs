@@ -37,9 +37,9 @@ class Lava : AnimationSprite
 
     private double GetLevel()
     {
-        double waveAmplitude = 0.5;
-        double waveSpeed = 100; //lower number increases frequency
-        double horizontalOffset = 0;
+        double waveAmplitude = 0.8;
+        double waveSpeed = 250; //lower number increases frequency
+        double horizontalOffset = 100;
 
         double b = waveAmplitude;
         double T = waveSpeed;

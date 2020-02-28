@@ -330,7 +330,7 @@ class Player : Sprite
         }
         else
         {
-            _speed = 0.5f;
+            _speed = 0.4f;
         }
 
 
