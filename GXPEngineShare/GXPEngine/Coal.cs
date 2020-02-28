@@ -6,7 +6,7 @@ using GXPEngine;
 
 class Coal : Collectable
 {
-    private const int _pointsOnPickUp = 5;
+    private const int _pointsOnPickUp = 10;
 
     public Coal(float locX, float locY) : base("Coal.png", locX, locY, 2, _pointsOnPickUp)
     {
