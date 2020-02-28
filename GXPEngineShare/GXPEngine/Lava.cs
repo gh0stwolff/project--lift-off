@@ -6,20 +6,25 @@ using GXPEngine;
 
 class Lava : AnimationSprite
 {
+    #region variables
     private float _boilingLevel = 0;
     private float _height = 0;
-    private Sprite _outOfBounds;
+    private float timer = 0;
 
-    public Lava() : base("Lava.png", 1, 1)
+    private AnimationSprite _secondLava;
+    #endregion
+
+    #region setup & update
+    public Lava() : base("Lava.png", 1, 4)
     {
         SetXY(0, ((MyGame)game).height - height/2);
+        _secondLava = new AnimationSprite("Lava.png", 1, 4);
+        _secondLava.SetXY(0, 50);
         Sprite glow = new Sprite("lavaGlow.png");
         AddChild(glow);
+        AddChild(_secondLava);
         glow.y = -720;
-        glow.alpha = 0.3f;
-        _outOfBounds = new Sprite("lavaGlow.png");
-        AddChild(_outOfBounds);
-        _outOfBounds.y = 100;
+        glow.alpha = 0.5f;
     }
 
     public void Update()
@@ -27,37 +32,33 @@ class Lava : AnimationSprite
         _height++;
         y -= ((MyGame)game).GetScreenSpeed() - _boilingLevel;
         boiling();
-        destroyTiles();
+        animation();
     }
 
+    private void animation()
+    {
+        int startFrame = 0;
+        int numbOfFrames = 4;
+        int timeBetweenFrames = 500;
+        timer += Time.deltaTime;
+
+        int currentFrame = (int)(timer / timeBetweenFrames) % numbOfFrames + startFrame;
+        SetFrame(currentFrame);
+        _secondLava.SetFrame(currentFrame);
+    }
+    #endregion
+
+    #region boiling effect
     private void boiling()
     {
         _boilingLevel = (float)GetLevel();
     }
 
-    private void destroyTiles()
-    {
-        foreach (GameObject other in _outOfBounds.GetCollisions())
-        {
-            if (other is Tile)
-            {
-                if (other is EdgeStone)
-                {
-                    //do nothing
-                }
-                else
-                {
-                    other.LateDestroy();
-                }
-            }
-        }
-    }
-
     private double GetLevel()
     {
-        double waveAmplitude = 0.5;
-        double waveSpeed = 100; //lower number increases frequency
-        double horizontalOffset = 0;
+        double waveAmplitude = 0.8;
+        double waveSpeed = 250; //lower number increases frequency
+        double horizontalOffset = 100;
 
         double b = waveAmplitude;
         double T = waveSpeed;
@@ -66,5 +67,5 @@ class Lava : AnimationSprite
 
         return (b * Math.Sin(((2 * Math.PI) / T) * (X - d)));
     }
-
+    #endregion
 }

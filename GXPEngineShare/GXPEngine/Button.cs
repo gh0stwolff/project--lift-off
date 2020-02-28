@@ -6,7 +6,7 @@ using GXPEngine;
 
 class Button : Sprite
 {
-
+    #region setup & update
     public Button(string fileName, float x, float y, float sizeX, float sizeY) : base(fileName)
     {
         SetXY(x, y);
@@ -24,6 +24,7 @@ class Button : Sprite
             scale = 1;
         }
     }
+    #endregion
 
     private bool checkIfSelected()
     {

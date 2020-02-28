@@ -6,6 +6,8 @@ using GXPEngine;
 using TiledMapParser;
 class MultiplayerMapGenerator : GameObject
 {
+    #region variables
+    #region constats
     //types of tiles
     const int AIR = 1;
     const int DIRT = 2;
@@ -17,50 +19,68 @@ class MultiplayerMapGenerator : GameObject
     const int GOLD = 8;
     const int COAL = 9;
     const int EMERALD = 10;
+    #endregion
 
     //for generating new lines
     private int _blockCountWidth;
     private int _minWidth = 6;
     private int _maxWidth = 18;
-    private float _framesBetweenLines;
-    private int _lineNumb;
-    //private int _amountOfStartingLinesWithRockRestirction = 10;
+    private int _lineNumb = -1;
     private int _linesTillNarrowing = -5;
-    private float _timer = 0;
     private int _targetLine;
+
+    private float _framesBetweenLines;
+    private float _timer = 0;
+
     //how big the outerborder is
     private int _rockThicknessLeft = 2;
     private int _rockThicknessRight = 2;
 
-    private float _maxScreenSpeed = 3.5f;
-
     private bool _isGoingOutWards = false;
 
+    //ohter
     private Tile _tile;
     private Lava _lava;
     private Sprite _background;
 
     private ScreenLayer[] layers = new ScreenLayer[8];
+    #endregion
 
-
+    #region setup & update
     public MultiplayerMapGenerator() : base()
     {
-        _tile = new Tile("Dirt.png", 0, 0, 2);
-        _blockCountWidth = ((MyGame)game).width / _tile.width;
-        _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
-        _lineNumb = -1;
-        ((MyGame)game).ResetScore();
+        setupVariables();
+        addObject();
+        //spawn the first area from tiled
+        setupSpawn();
+        //generate the first line after the tiled map
+        generateNewLine();
+    }
 
+    #region setup methods
+    private void setupVariables()
+    {
+        //giving tile a block
+        _tile = new Tile("Dirt.png", 0, 0, 2, 0);
+        //calc how many tiles fit in the width
+        _blockCountWidth = ((MyGame)game).width / _tile.width;
+        //how low it takes before a new line needs to be drawn
+        _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
+        //reset the score in case it is the 2nd round
+        ((MyGame)game).ResetScore();
+        //next line number before the wall becomes one block smaller/wider
+        _targetLine = _lineNumb + _linesTillNarrowing;
+    }
+
+    private void addObject()
+    {
+        //initialize layers
         for (int i = 0; i < layers.Length; i++)
         {
             layers[i] = new ScreenLayer();
             AddChild(layers[i]);
         }
-        _background = new Sprite("inGameBackground.png");
-        layers[0].AddChild(_background);
-        setupSpawn();
-        generateNewLine();
-
+        //adding lava
         _lava = new Lava();
         layers[5].AddChild(_lava);
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
@@ -71,21 +91,22 @@ class MultiplayerMapGenerator : GameObject
         layers[3].AddChild(worm);
         BoostBar boostbar = new BoostBar();
         layers[7].AddChild(boostbar);
-
-        _targetLine = _lineNumb + _linesTillNarrowing;
-    }
+        _background = new Sprite("inGameBackground.png");
+        layers[0].AddChild(_background);
+        _background.alpha = 0.3f;
 
     public void Update()
     {
         timerNewLine();
-        if (((MyGame)game).GetScreenSpeed() < _maxScreenSpeed)
+        if (((MyGame)game).GetScreenSpeed() < ((MyGame)game).GetMaxScreenSpeed())
         {
             ((MyGame)game).IncreaseSpeed();
         }
         _framesBetweenLines = (int)(_tile.GetHeight() / ((MyGame)game).GetScreenSpeed());
     }
+    #endregion
 
-
+    #region lineGenerator
     private void timerNewLine()
     {
         if (_timer <= 0)
@@ -105,10 +126,10 @@ class MultiplayerMapGenerator : GameObject
         {
             handleWallStat();
             ChangeWallThickness();
-
             _targetLine = _linesTillNarrowing + _lineNumb;
         }
 
+        //apply edges before getting a random tile
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
             if (_rockThicknessLeft == i + 1) { newLine[i] = EDGESTONE; }
@@ -118,14 +139,11 @@ class MultiplayerMapGenerator : GameObject
             else { newLine[i] = getRandomNumb(i); }
         }
 
+        //reading the array and applying the right tile
         for (int i = 0; i < newLine.GetLength(0); i++)
         {
             switch (newLine[i])
             {
-                //case AIR:
-                //    Air air = new Air(getXLocation(i), getYLocation(_lineNumb));
-                //    layers[0].AddChild(air);
-                //    break;
                 case DIRT:
                     Dirt dirt = new Dirt(getXLocation(i), getYLocation(_lineNumb));
                     layers[0].AddChild(dirt);
@@ -164,51 +182,38 @@ class MultiplayerMapGenerator : GameObject
                     break;
             }
         }
+
+        //makes sure the back ground keeps up
         _background.y = -((MyGame)game).GetScreenY() - _tile.height;
+        //nieuw line number, so it doesn't place the new layer over the old one
         _lineNumb--;
+        //adds score for getting a bit further
         ((MyGame)game).AddScore(1);
+    }
+
+    private void handleWallStat()
+    {
+        if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) <= _minWidth) { _isGoingOutWards = true; }
+        else if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) >= _maxWidth) { _isGoingOutWards = false; }
     }
 
     private void ChangeWallThickness()
     {
         if (!_isGoingOutWards)
         {
-            if (_rockThicknessLeft == _rockThicknessRight)
-            {
-                _rockThicknessLeft++;
-            }
-            else
-            {
-                _rockThicknessRight++;
-            }
+            if (_rockThicknessLeft == _rockThicknessRight) { _rockThicknessLeft++; }
+            else { _rockThicknessRight++; }
         }
         else
         {
-            if (_rockThicknessLeft == _rockThicknessRight)
-            {
-                _rockThicknessLeft--;
-            }
-            else
-            {
-                _rockThicknessRight--;
-            }
-        }
-    }
-
-    private void handleWallStat()
-    {
-        if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) <= _minWidth)
-        {
-            _isGoingOutWards = true;
-        }
-        else if (_blockCountWidth - (_rockThicknessRight + _rockThicknessLeft) >= _maxWidth)
-        {
-            _isGoingOutWards = false;
+            if (_rockThicknessLeft == _rockThicknessRight) { _rockThicknessLeft--; }
+            else { _rockThicknessRight--; }
         }
     }
 
     private int getRandomNumb(int index)
     {
+        //getting all spawn chances
         float dirtChance = getDirtSpawnChance(index);
         float diamondChance = getDiamondSpawnChance(index);
         float stoneChance = getStoneSpawnChance(index);
@@ -218,9 +223,11 @@ class MultiplayerMapGenerator : GameObject
         float goldChance = getGoldSpawnChance(index);
         float emeraldChance = getEmeraldSpawnChance(index);
 
-
+        //adding all spawnchances on oneanother, and get a random between 0 en the sum
         float randomNumb = Utils.Random(0, dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance + emeraldChance + 1);
 
+        //finding out between what numbers the random is
+        #region getting tile type
         if (randomNumb < dirtChance)
         { return DIRT; }
         else if (randomNumb < dirtChance + diamondChance)
@@ -237,10 +244,11 @@ class MultiplayerMapGenerator : GameObject
         { return GOLD; }
         else if (randomNumb < dirtChance + diamondChance + stoneChance + airChance + coalChance + ironChance + goldChance + emeraldChance)
         { return EMERALD; }
-
-        return 0;
+        else { return 0; }
+        #endregion
     }
 
+    #region spawnChances
     private float getDirtSpawnChance(int index)
     {
         float maxChance = 80.0f;
@@ -252,7 +260,7 @@ class MultiplayerMapGenerator : GameObject
 
     private float getDiamondSpawnChance(int index)
     {
-        float maxChance = 0.5f;
+        float maxChance = 1.0f;
         float minChance = 0.1f;
         bool isChanceHigherInMiddle = false;
 
@@ -261,7 +269,7 @@ class MultiplayerMapGenerator : GameObject
 
     private float getStoneSpawnChance(int index)
     {
-        float maxChance = 25.0f;
+        float maxChance = 22.0f;
         float minChance = 30.0f;
         bool isChanceHigherInMiddle = true;
 
@@ -270,8 +278,8 @@ class MultiplayerMapGenerator : GameObject
 
     private float getAirSpawnChance(int index)
     {
-        float maxChance = 5.0f;
-        float minChance = 2.0f;
+        float maxChance = 17.0f;
+        float minChance = 12.0f;
         bool isChanceHigherInMiddle = true;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -279,7 +287,7 @@ class MultiplayerMapGenerator : GameObject
 
     private float getCoalSpawnChance(int index)
     {
-        float maxChance = 5.0f;
+        float maxChance = 10.0f;
         float minChance = 5.0f;
         bool isChanceHigherInMiddle = true;
 
@@ -289,7 +297,7 @@ class MultiplayerMapGenerator : GameObject
     private float getEmeraldSpawnChance(int index)
     {
         float maxChance = 0.5f;
-        float minChance = 0.1f;
+        float minChance = 0.5f;
         bool isChanceHigherInMiddle = false;
 
         return calculateChance(maxChance, minChance, isChanceHigherInMiddle, index);
@@ -341,6 +349,7 @@ class MultiplayerMapGenerator : GameObject
 
         }
     }
+    #endregion
 
     private float getXLocation(int index)
     {
@@ -353,7 +362,9 @@ class MultiplayerMapGenerator : GameObject
     {
         return _tile.GetHeight() * lineNumb;
     }
+    #endregion
 
+    #region loading tiled map
     private void setupSpawn()
     {
         Map levelData = MapParser.ReadMap("startPoint.tmx");
@@ -363,8 +374,7 @@ class MultiplayerMapGenerator : GameObject
 
     private void spawnTiles(Map levelData)
     {
-        if (levelData.Layers == null || levelData.Layers.Length == 0)
-            return;
+        if (levelData.Layers == null || levelData.Layers.Length == 0) { return; }
 
         Layer mainLayer = levelData.Layers[0];
         short[,] tileNumbers = mainLayer.GetTileArray();
@@ -373,26 +383,46 @@ class MultiplayerMapGenerator : GameObject
             for (int column = 0; column < mainLayer.Width; column++)
             {
                 int tileNumber = tileNumbers[column, row];
-                if (tileNumber == STONE)
+                switch (tileNumber)
                 {
-                    Stone stone = new Stone(getXLocation(column), getYLocation(row));
-                    layers[0].AddChild(stone);
-                }
-                if (tileNumber == DIRT)
-                {
-                    Dirt dirt = new Dirt(getXLocation(column), getYLocation(row));
-                    layers[0].AddChild(dirt);
-                }
-                if (tileNumber == DIAMOND)
-                {
-                    DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
-                    layers[0].AddChild(diamond);
-                }
-                if (tileNumber == EDGESTONE)
-                {
-                    Stone edgeStone = new Stone(getXLocation(column), getYLocation(_lineNumb));
-                    layers[2].AddChild(edgeStone);
-                    break;
+                    case AIR:
+                        break;
+                    case DIRT:
+                        Dirt dirt = new Dirt(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(dirt);
+                        break;
+                    case STONE:
+                        Stone stone = new Stone(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(stone);
+                        break;
+                    case DIAMOND:
+                        DiamondOre diamond = new DiamondOre(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(diamond);
+                        break;
+                    case EDGESTONE:
+                        EdgeStone edge = new EdgeStone(getXLocation(column), getYLocation(row), true);
+                        layers[3].AddChild(edge);
+                        break;
+                    case DARKNESS:
+                        EdgeStone dark = new EdgeStone(getXLocation(column), getYLocation(row), false);
+                        layers[3].AddChild(dark);
+                        break;
+                    case IRON:
+                        Iron iron = new Iron(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(iron);
+                        break;
+                    case GOLD:
+                        Gold gold = new Gold(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(gold);
+                        break;
+                    case COAL:
+                        Coal coal = new Coal(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(coal);
+                        break;
+                    case EMERALD:
+                        Emerald emerald = new Emerald(getXLocation(column), getYLocation(row));
+                        layers[0].AddChild(emerald);
+                        break;
                 }
             }
         }
@@ -418,4 +448,5 @@ class MultiplayerMapGenerator : GameObject
             }
         }
     }
+    #endregion
 }

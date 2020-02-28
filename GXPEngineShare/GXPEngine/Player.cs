@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,16 +45,16 @@ class Player : Sprite
         AddChild(_fog);
         _fog.SetOrigin(_fog.width / 2 - width / 2, _fog.height / 2 - height / 2);
 
-        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1, - 1, false, false);
-        AddChild(_mining);
-        _mining.SetScaleXY(2.0f, 2.0f);
-        _mining.alpha = 0.0f;
-        _mining.SetOrigin(_mining.width/2 - width + 5, _mining.height/ 2 - height);
-
         _animation = new AnimationSprite("player_sprite_sheet.png", 8, 1, -1, false, false);
         AddChild(_animation);
         //_animation.alpha = 0.2f;
         _animation.SetOrigin(_animation.width / 2 - width / 2, _animation.height / 2 - height / 2);
+
+         _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1, - 1, false, false);
+        AddChild(_mining);
+        _mining.SetScaleXY(2.0f, 2.0f);
+        _mining.alpha = 0.0f;
+        _mining.SetOrigin(_mining.width/2 - width + 5, _mining.height/ 2 - height);
 
         _glow = new AnimationSprite("lavaPlayer.png", 4, 1, -1, false, false);
         AddChild(_glow);
@@ -394,7 +394,7 @@ class Player : Sprite
         }
         else
         {
-            _speed = 0.5f;
+            _speed = 0.4f;
             _boost--;
         }
 

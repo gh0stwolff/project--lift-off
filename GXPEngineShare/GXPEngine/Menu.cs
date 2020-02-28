@@ -6,6 +6,8 @@ using GXPEngine;
 
 class Menu : Canvas
 {
+    #region variables
+    //all screens
     private MultiplayerMapGenerator _multiPlayer;
     private SingleplayerMapGenerator _singlePlayer;
     private MainMenu _mainScreen;
@@ -13,30 +15,140 @@ class Menu : Canvas
     private ScoreScreen _scoreScreenMulti;
     private ScoreScreen _scoreScreenSingle;
     private HighScoreScreen _highScore;
+    
+    //all sounds
+    private Sound _backgroundMusic;
+    private SoundChannel _backgroundMusicChannel;
+    private Sound _boiling;
+    private SoundChannel _boilingChannel;
+    private Sound _thruster;
+    private SoundChannel _thrusterChannel;
+    private Sound _diggingSound;
+    private SoundChannel _diggingSoundChannel;
+    private Sound _distantGrowl;
+    private SoundChannel _distantGrowlChannel;
 
+    //values that need to be stored during session
     private int _scoreP1 = 0;
     private int _scoreP2 = 0;
     private int _playersReady = 0;
+    private int _randomGrowlTimer = 200;
 
+    //states for the menu to be in
     enum Scene { MainMenu, ReadyScreen, MultiplayerLevel, SinglePlayerLevel, ScoreScreen1, ScoreScreen2, HighScoreScreen}
     Scene SceneState = Scene.MainMenu;
+    #endregion
 
+    #region setup & update
     public Menu(int width, int height) : base(width, height)
     {
         ((MyGame)game).SetScreenForMenu();
         _mainScreen = new MainMenu(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         AddChild(_mainScreen);
+        setupSounds();
+    }
+
+    private void setupSounds()
+    {
+        _backgroundMusic = new Sound("Music.mp3", true, true);
+        _backgroundMusicChannel = new SoundChannel(1);
+        _backgroundMusicChannel.Volume = 0.15f;
+        _backgroundMusicChannel = _backgroundMusic.Play();
+        _boiling = new Sound("lavaSound.wav", true);
+        _thruster = new Sound("thruster.wav", true);
+        _diggingSound = new Sound("diggingSound.wav", true);
+        _distantGrowl = new Sound("wormGrowlFar.wav");
+        _distantGrowlChannel = new SoundChannel(7);
     }
 
     void Update()
     {
         displayScreen();
         screenState();
-
-        //checkButtonPresses();
-        //handleSceneState();
+        playingSound();
     }
 
+    private void playingSound()
+    {
+        #region lava sound
+        if (_multiPlayer != null || _singlePlayer != null)
+        {
+            if (_boilingChannel == null)
+            {
+                _boilingChannel = new SoundChannel(2);
+                _boilingChannel.IsPaused = false;
+                _boilingChannel = _boiling.Play();
+            }
+        }
+        else
+        {
+            if (_boilingChannel != null)
+            {
+                _boilingChannel.IsPaused = true;
+                _boilingChannel = null;
+            }
+        }
+        #endregion
+
+        #region Thruster
+        if (_singlePlayer != null || _multiPlayer != null)
+        {
+            if (Input.GetKey(Key.W) || Input.GetKey(Key.A) || Input.GetKey(Key.S) || Input.GetKey(Key.D))
+            {
+                if (_thrusterChannel == null)
+                {
+                    _thrusterChannel = new SoundChannel(3);
+                    _thrusterChannel = _thruster.Play();
+                }
+            }
+            else
+            {
+                if (_thrusterChannel != null)
+                {
+                    _thrusterChannel.IsPaused = true;
+                    _thrusterChannel = null;
+                }
+            }
+        }
+        #endregion
+
+        #region digging sound
+        if (_singlePlayer != null || _multiPlayer != null)
+        {
+            if (Input.GetKey(Key.Q))
+            {
+                if (_diggingSoundChannel == null)
+                {
+                    _diggingSoundChannel = new SoundChannel(6);
+                    _diggingSoundChannel = _diggingSound.Play();
+                }
+            }
+            else
+            {
+                if (_diggingSoundChannel != null)
+                {
+                    _diggingSoundChannel.IsPaused = true;
+                    _diggingSoundChannel = null;
+                }
+            }
+        }
+        #endregion
+
+        #region random Growl
+        if (_singlePlayer != null || _multiPlayer != null)
+        {
+            _randomGrowlTimer--;
+            if (_randomGrowlTimer <= 0)
+            {
+                _distantGrowlChannel = _distantGrowl.Play();
+                _randomGrowlTimer = Utils.Random(600, 2400);
+            }
+        }
+        #endregion
+    }
+    #endregion
+
+    #region handle screen state
     private void screenState()
     {
         if (_mainScreen != null && Input.GetKeyDown(Key.THREE))
@@ -60,17 +172,14 @@ class Menu : Canvas
             if (_scoreP2 == 0 && Input.GetKeyDown(Key.THREE))
             {
                 SceneState = Scene.MultiplayerLevel;
-                Console.WriteLine("load 2nd level");
             }
             else if (_scoreScreenMulti.IsComparing == true && Input.GetKeyUp(Key.THREE))
             {
                 SceneState = Scene.HighScoreScreen;
-                Console.WriteLine("highscore");
             }
             else if (_scoreP2 != 0 && Input.GetKeyUp(Key.THREE))
             {
                 _scoreScreenMulti.Compare();
-                Console.WriteLine("comparing");
             }
         }
         if ( _scoreScreenSingle != null)
@@ -210,11 +319,11 @@ class Menu : Canvas
         {
             if (other != objType)
             {
-                Console.WriteLine(other);
                 other.LateDestroy();
             }
         }
     }
+    #endregion
 
     public void GameOver(int score)
     {

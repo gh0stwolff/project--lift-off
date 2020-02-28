@@ -100,7 +100,6 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="SingleplayerMapGenerator.cs" />
     <Compile Include="Stone.cs" />
-    <Compile Include="TestPlayer.cs" />
     <Compile Include="TextBoard.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Worm.cs" />

@@ -7,7 +7,7 @@ using GXPEngine;
 class EdgeStone : Tile
 {
 
-    public EdgeStone(float x, float y, bool isEdge) : base( "EdgeStone.png", x, y, 3)
+    public EdgeStone(float x, float y, bool isEdge) : base( "EdgeStone.png", x, y, 3, 0)
     {
         checkSpawnLocation(x, isEdge);
     }

@@ -5,7 +5,7 @@ using System.Text;
 
 class Gold : Collectable
 {
-    private const int _pointsOnPickUp = 5;
+    private const int _pointsOnPickUp = 75;
 
     public Gold(float locX, float locY) : base("Gold.png", locX, locY, 2, _pointsOnPickUp)
     {
