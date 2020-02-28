@@ -9,17 +9,21 @@ using GXPEngine;
 {
     private AnimationSprite _mediumWorm;
     private AnimationSprite _bigWorm;
-    private AnimationSprite[] _arrow = new AnimationSprite[2];
     private Sound _growl;
     private SoundChannel _growlChannel;
+    private AnimationSprite _lavaSmall;
+    private AnimationSprite _lavaMedium;
+    private AnimationSprite _lavaBig;
     private float _speed = 10.0f;
     private int _state = 0;
     bool _shoot = false;
     private int _timer;
     private int _timer2;
     private int _scale = 1;
-    public Worm() : base("small_worm_sprite_sheet.png", 1, 4)
+    private int frame = 0;
+    public Worm(float arrowY) : base("small_worm_sprite_sheet.png", 1, 4)
     {
+        y = arrowY;
         SetOrigin(width / 2, height / 2);
         x = +1000;
         y = +1000;
@@ -39,21 +43,22 @@ using GXPEngine;
         _bigWorm.SetOrigin(_bigWorm.width / 2, _bigWorm.height / 2);
 
         // _bigWorm.alpha = 0.0f;
-        for (int i = 0; i < 2; i++)
-        {
-            _arrow[i] = new AnimationSprite("arrow.png", 3, 1);
 
-            AddChild(_arrow[i]);
+        _lavaSmall = new AnimationSprite("lava_small.png", 1, 4);
+        AddChild(_lavaSmall);
+        _lavaSmall.SetOrigin(width / 2, height / 2);
+        _lavaSmall.alpha = 0.0f;
+        
 
-            _arrow[i].SetOrigin(_arrow[i].width / 2, _arrow[i].height / 2);
+        _lavaMedium = new AnimationSprite("lava_medium.png", 1, 4);
+        AddChild(_lavaMedium);
+        _lavaMedium.SetOrigin(_lavaMedium.width / 2, _lavaMedium.height / 2);
+        _lavaMedium.alpha = 0.0f;
 
-            _arrow[i].SetFrame(0);
-
-            _arrow[i].alpha = 0.0f;
-        }
-        _arrow[0].x = ((MyGame)game).GetScreenX();
-        _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
-        _arrow[1].Mirror(true, false);
+        _lavaBig = new AnimationSprite("lava_big.png", 1, 4);
+        AddChild(_lavaBig);
+        _lavaBig.SetOrigin(_lavaBig.width / 2, _lavaBig.height / 2);
+        _lavaBig.alpha = 0.0f;
 
         _growl = new Sound("wormGrowlPassing.wav");
         _growlChannel = new SoundChannel(2);
@@ -62,7 +67,11 @@ using GXPEngine;
     void Update()
     {
         Movement();
-        if (_shoot == true) Animation();
+        if (_shoot == true)
+        {
+            Animation();
+        }
+
     }
 
     void Movement()
@@ -74,9 +83,10 @@ using GXPEngine;
             alpha = 0.0f;
             _mediumWorm.alpha = 0.0f;
             _bigWorm.alpha = 0.0f;
-            _arrow[0].x = _arrow[0].width;
-            _arrow[1].x = ((MyGame)game).GetScreenWidth() - _arrow[1].width;
-            if(Input.GetKeyDown(Key.O))
+            _lavaBig.alpha = 0.0f;
+            _lavaMedium.alpha = 0.0f;
+            _lavaSmall.alpha = 0.0f;
+            if (Input.GetKeyDown(Key.O))
             {
                 x = 0;
                 y = ((MyGame)game).GetScreenHeight() / 2 - ((MyGame)game).GetScreenY();
@@ -90,40 +100,27 @@ using GXPEngine;
                 Mirror(false, false);
                 _mediumWorm.Mirror(false, false);
                 _bigWorm.Mirror(false, false);
-                
-
-                
-
-                _arrow[0].alpha = 0.5f;
-                _arrow[1].alpha = 0.5f;
-
-                _arrow[0].Mirror(false, false);
-                _arrow[1].Mirror(true, false);
-
+                _lavaSmall.Mirror(true, false);
+                _lavaMedium.Mirror(true, false);
+                _lavaBig.Mirror(true, false);
                 _timer2++;
 
                 if (_timer2 <= 75)
                 {
                     _scale = 1;
                     SetFrame(0);
-                    _arrow[0].SetFrame(0);
-                    _arrow[1].SetFrame(0);
                 }
 
                 if (_timer2 > 150)
                 {
                     _scale = 2;
                     _mediumWorm.SetFrame(0);
-                    _arrow[0].SetFrame(1);
-                    _arrow[1].SetFrame(1);
                 }
 
                 if (_timer2 > 225)
                 {
                     _scale = 3;
                     _bigWorm.SetFrame(0);
-                    _arrow[0].SetFrame(2);
-                    _arrow[1].SetFrame(2);
                 }
                 if (_timer2 > 225)
                 {
@@ -144,6 +141,9 @@ using GXPEngine;
                 Mirror(true, false);
                 _mediumWorm.Mirror(true, false);
                 _bigWorm.Mirror(true, false);
+                _lavaSmall.Mirror(false, false);
+                _lavaMedium.Mirror(false, false);
+                _lavaBig.Mirror(false, false);
 
                 _timer2++;
 
@@ -151,44 +151,25 @@ using GXPEngine;
                 {
                     _scale = 1;
                     SetFrame(0);
-                    _arrow[0].SetFrame(0);
-                    _arrow[1].SetFrame(0);
                 }
 
                 if (_timer2 > 150)
                 {
                     _scale = 2;
                     _mediumWorm.SetFrame(0);
-                    _arrow[0].SetFrame(1);
-                    _arrow[1].SetFrame(1);
                 }
 
                 if (_timer2 > 225)
                 {
                     _scale = 3;
                     _bigWorm.SetFrame(0);
-                    _arrow[0].SetFrame(2);
-                    _arrow[1].SetFrame(2);
                 }
                 if (_timer2 > 225)
                 {
                     _timer2 = 225;
                 }
 
-                _arrow[0].alpha = 0.5f;
-                _arrow[1].alpha = 0.5f;
-
-                
-
-                _arrow[0].Mirror(true, false);
-                _arrow[1].Mirror(false, false);
-
-            }
-
-            if(_state == 2)
-            {
-                _arrow[0].x = -(_arrow[0].width);
-                _arrow[1].x = -(((MyGame)game).GetScreenWidth() - _arrow[1].width);
+             
             }
 
             if (Input.GetKey(Key.I))
@@ -201,19 +182,14 @@ using GXPEngine;
                 y += _speed;
             }
 
-            if (_timer2 > 225)
+            if (Input.GetKeyUp(Key.U) || Input.GetKeyUp(Key.O))
             {
-                _timer2 = 0;
+                _shoot = true;
+                ((MyGame)game).ShakeCamera(60);
+                _growlChannel = _growl.Play();
             }
-
-
         }
-        if (Input.GetKeyUp(Key.U) || Input.GetKeyUp(Key.O))
-        {
-            _shoot = true;
-            ((MyGame)game).ShakeCamera(60);
-            _growlChannel = _growl.Play();
-        }
+        
 
         if (x < -(width) || x > ((MyGame)game).GetScreenWidth() + width) 
         {
@@ -233,8 +209,6 @@ using GXPEngine;
 
         if (_shoot == true)
         {
-            _arrow[0].alpha = 0.0f;
-            _arrow[1].alpha = 0.0f;
             if (_scale == 1)
             {
                 SetScaleXY(1.0f, 1.0f);
@@ -244,6 +218,10 @@ using GXPEngine;
                 _mediumWorm.alpha = 0.0f;
 
                 _bigWorm.alpha = 0.0f;
+
+                _lavaBig.alpha = 0.0f;
+                _lavaMedium.alpha = 0.0f;
+                _lavaSmall.alpha = -((-((MyGame)game).GetScreenY() - y)) / ((MyGame)game).GetScreenHeight();
             }
 
             if (_scale == 2)
@@ -255,6 +233,10 @@ using GXPEngine;
                 _mediumWorm.alpha = 1.0f;
 
                 _bigWorm.alpha = 0.0f;
+
+                _lavaBig.alpha = 0.0f;
+                _lavaMedium.alpha = -((-((MyGame)game).GetScreenY() - y)) / ((MyGame)game).GetScreenHeight();
+                _lavaSmall.alpha = 0.0f;
             }
 
             if (_scale == 3)
@@ -266,37 +248,61 @@ using GXPEngine;
                 _mediumWorm.alpha = 0.0f;
 
                 _bigWorm.alpha = 1.0f;
+
+                _lavaBig.alpha = -((-((MyGame)game).GetScreenY() - y)) / ((MyGame)game).GetScreenHeight();
+                _lavaMedium.alpha = 0.0f;
+                _lavaSmall.alpha = 0.0f;
             }
         }
+        ((MyGame)game).SetShoot(_shoot);
     }
     void Animation()
     {
         if (_scale == 1)
         {
             _timer++;
-            if (_timer > 5) SetFrame(0);
-            if (_timer > 10) SetFrame(1);
-            if (_timer > 15) SetFrame(2);
-            if (_timer > 20) SetFrame(3);
-            if (_timer > 25) _timer = 0;
+            if (_timer > 5)
+            {
+                SetFrame(frame);
+                _lavaSmall.SetFrame(frame);
+                _timer = 0;
+                frame++;
+                
+            }
+            if (frame > 3)
+            {
+                frame = 0;
+            }
         }
         if (_scale == 2)
         {
             _timer++;
-            if (_timer > 5) _mediumWorm.SetFrame(0);
-            if (_timer > 10) _mediumWorm.SetFrame(1);
-            if (_timer > 15) _mediumWorm.SetFrame(2);
-            if (_timer > 20) _mediumWorm.SetFrame(3);
-            if (_timer > 25) _timer = 0;
+            if (_timer > 5)
+            {
+                _mediumWorm.SetFrame(frame);
+                _lavaMedium.SetFrame(frame);
+                _timer = 0;
+                frame++;
+            }
+            if (frame > 3)
+            {
+                frame = 0;
+            }
         }
         if (_scale == 3)
         {
             _timer++;
-            if (_timer > 5) _bigWorm.SetFrame(0);
-            if (_timer > 10) _bigWorm.SetFrame(1);
-            if (_timer > 15) _bigWorm.SetFrame(2);
-            if (_timer > 20) _bigWorm.SetFrame(3);
-            if (_timer > 25) _timer = 0;
+            if (_timer > 5)
+            {
+                _bigWorm.SetFrame(frame);
+                _lavaBig.SetFrame(frame);
+                _timer = 0;
+                frame++;
+            }
+            if (frame > 3)
+            {
+                frame = 0;
+            }
         }
 
     }
@@ -314,4 +320,5 @@ using GXPEngine;
             other.LateDestroy();
         }
     }
+
 }

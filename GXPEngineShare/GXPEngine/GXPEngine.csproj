@@ -37,6 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Air.cs" />
+    <Compile Include="Arrow.cs" />
+    <Compile Include="BoostBar.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Coal.cs" />
     <Compile Include="Collectable.cs" />

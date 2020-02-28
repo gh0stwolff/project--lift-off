@@ -65,8 +65,12 @@ class MultiplayerMapGenerator : GameObject
         layers[5].AddChild(_lava);
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[7].AddChild(hud);
-        Worm worm = new Worm();
-        layers[7].AddChild(worm);
+        Arrow arrow = new Arrow();
+        layers[7].AddChild(arrow);
+        Worm worm = new Worm(arrow.y);
+        layers[3].AddChild(worm);
+        BoostBar boostbar = new BoostBar();
+        layers[7].AddChild(boostbar);
 
         _targetLine = _lineNumb + _linesTillNarrowing;
     }
@@ -409,7 +413,7 @@ class MultiplayerMapGenerator : GameObject
             {
                 case "Player":
                     Player player = new Player(obj.X, obj.Y);
-                    layers[5].AddChild(player);
+                    layers[4].AddChild(player);
                     break;
             }
         }

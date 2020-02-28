@@ -10,10 +10,10 @@ class Player : Sprite
 {
     private AnimationSprite _animation;
     private AnimationSprite _mining;
+    private AnimationSprite _glow;
     private Sprite _drill;
     private Sprite _fog;
-
-    private float _gravity = 0.5f;
+    private int frame = 0;
     private float _deceleration = 0.9f;
     private float _vSpeed = 0.0f;
     private float _hSpeed = 0.0f;
@@ -22,8 +22,7 @@ class Player : Sprite
     private int _timer = 0;
     private int _timer2 = 0;
     private int _angleUp = 0, _angleDown = 180, _angleLeft = 270, _angleRight = 90;
-    private int boost = 200;
-    private float ogY;
+    private int _boost = 0;
 
     bool _miningAnimation = false;
     private bool _doOnce = true;
@@ -31,47 +30,50 @@ class Player : Sprite
     public Player(float x, float y) : base("collider.png")
     {
         SetXY(x, y);
-        ogY = y;
         //SetOrigin(width / 2, height / 2);
         // SetScaleXY(0.5f, 0.5f);
-        //alpha = 0.0f;
+        alpha = 0.0f;
 
-        _animation = new AnimationSprite("player_sprite_sheet.png", 8, 1, -1, false, false);
-        AddChild(_animation);
-        //_animation.alpha = 0.2f;
-        _animation.SetOrigin(width/2+3, height/2+5);
+        
 
         _drill = new Sprite("drill.png");
         AddChild(_drill);
         _drill.alpha = 0.0f;
-        _drill.SetOrigin(width/8-22, height/3-2);
-
-        
+        _drill.SetOrigin(_drill.width / 2 - width / 2, _drill.height / 2);
 
         _fog = new Sprite("fog.png");
         AddChild(_fog);
-        _fog.SetOrigin(_fog.width / 2, _fog.height / 2);
+        _fog.SetOrigin(_fog.width / 2 - width / 2, _fog.height / 2 - height / 2);
 
-        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1);
+        _mining = new AnimationSprite("mining_sprite_sheet.png", 4, 1, - 1, false, false);
         AddChild(_mining);
         _mining.SetScaleXY(2.0f, 2.0f);
         _mining.alpha = 0.0f;
-        _mining.SetOrigin(width / 4 + 5, height / 4);
+        _mining.SetOrigin(_mining.width/2 - width + 5, _mining.height/ 2 - height);
 
+        _animation = new AnimationSprite("player_sprite_sheet.png", 8, 1, -1, false, false);
+        AddChild(_animation);
+        //_animation.alpha = 0.2f;
+        _animation.SetOrigin(_animation.width / 2 - width / 2, _animation.height / 2 - height / 2);
 
+        _glow = new AnimationSprite("lavaPlayer.png", 4, 1, -1, false, false);
+        AddChild(_glow);
+        _glow.SetOrigin(_animation.width / 2 - width / 2 - 12, _animation.height / 2 - height / 2);
+        _glow.SetFrame(3);
     }
 
     void Update()
     {
-        //Gravity();
         Movement();
         Break();
         Animation();
         Boost();
+
     }
 
     void Movement()
     {
+        _glow.alpha = -((-((MyGame)game).GetScreenY() - y)) / ((MyGame)game).GetScreenHeight();
         _state = 1;
 
         if (Input.GetKey(Key.Q))
@@ -87,18 +89,23 @@ class Player : Sprite
             {
                 _state = 3;
             }
-
-            _animation.SetOrigin(width / 2 + 60, height / 2 +6);
+            _animation.SetOrigin(_animation.width / 2 + width / 2, _animation.height / 2 - height / 2);
 
             _animation.rotation = _angleLeft;
 
-            _drill.SetOrigin(width / 2 + 15, height / 2 - 13);
+            _drill.SetOrigin(_drill.width / 2 + width / 2, _drill.height / 2);
 
             _drill.rotation = _angleLeft;
 
-            _mining.SetOrigin(width / 2 + 19, height / 2 - 13);
+            _mining.SetOrigin(_mining.width / 2 - 20 , _mining.height / 2 - height);
 
             _mining.rotation = _angleLeft;
+
+            _glow.SetOrigin(_animation.width / 2 + width / 2 - 12, _animation.height / 2 - height / 2);
+
+            _glow.rotation = _angleLeft;
+
+            _glow.SetFrame(1);
         }
 
         if (Input.GetKey(Key.D))
@@ -109,18 +116,23 @@ class Player : Sprite
             {
                 _state = 3;
             }
+            _animation.SetOrigin(_animation.width / 2 - width / 2, _animation.height / 2 + height / 2);
 
-            _animation.SetOrigin(width/ 2 + 2, height / 2 + 60);
+            _animation.rotation = _angleRight;
 
-           _animation.rotation = _angleRight;
-
-            _drill.SetOrigin(width / 8 - 22, height / 3 + 50);
+            _drill.SetOrigin(_drill.width / 2 - width / 2, _drill.height / 2 + height);
 
             _drill.rotation = _angleRight;
 
-            _mining.SetOrigin(width / 2 - 10 , height / 3 + 23);
+            _mining.SetOrigin(_mining.width / 2 - width + 5, _mining.height / 2 - height / 2);
 
             _mining.rotation = _angleRight;
+
+            _glow.SetOrigin(_animation.width / 2 - width / 2 - 12, _animation.height / 2 + height / 2);
+
+            _glow.rotation = _angleRight;
+
+            _glow.SetFrame(0);
         }
 
         
@@ -133,18 +145,23 @@ class Player : Sprite
             {
                 _state = 3;
             }
-
-            _animation.SetOrigin(width / 2 + 3, height / 2 + 5);
+            _animation.SetOrigin(_animation.width / 2 - width / 2, _animation.height / 2 - height / 2);
 
             _animation.rotation = _angleUp;
 
-            _drill.SetOrigin(width / 8 - 22, height / 3 - 2);
+            _drill.SetOrigin(_drill.width / 2 - width / 2, _drill.height / 2);
 
             _drill.rotation = _angleUp;
 
-            _mining.SetOrigin(width / 4 + 5, height / 4);
+            _mining.SetOrigin(_mining.width / 2 - width + 5, _mining.height / 2 - height);
 
             _mining.rotation = _angleUp;
+
+            _glow.SetOrigin(_animation.width / 2 - width / 2 - 12 , _animation.height / 2 - height / 2);
+
+            _glow.rotation = _angleUp;
+
+            _glow.SetFrame(3);
         }
 
         if (Input.GetKey(Key.S))
@@ -155,18 +172,23 @@ class Player : Sprite
             {
                 _state = 3;
             }
+            _animation.SetOrigin(_animation.width / 2 + width / 2, _animation.height / 2 + height / 2);
 
-            _animation.SetOrigin(width * 2 - 25, height * 2 - 20);
+            _animation.rotation = _angleDown;
 
-           _animation.rotation = _angleDown;
-
-            _drill.SetOrigin(width / 8 + 28, height / 3 + 60);
+            _drill.SetOrigin(_drill.width / 2 + width / 2, _drill.height / 2 + height);
 
             _drill.rotation = _angleDown;
 
-            _mining.SetOrigin(width / 2 + 18, height / 2 +16);
+            _mining.SetOrigin(_mining.width / 2 - width /2 + 5, _mining.height / 2 - height / 2);
 
             _mining.rotation = _angleDown;
+
+            _glow.SetOrigin(_animation.width / 2 + width / 2 - 12, _animation.height / 2 + height / 2);
+
+            _glow.rotation = _angleDown;
+
+            _glow.SetFrame(2);
         }
 
 
@@ -250,41 +272,81 @@ class Player : Sprite
         if(_state == 1)
         {
             _timer++;
-            if(_timer > 5) _animation.SetFrame(1);
-            if(_timer > 10) _animation.SetFrame(0);
-            if (_timer > 15) _timer = 0;
+            if(_timer > 5)
+            {
+                _animation.SetFrame(frame);
+                frame++;
+                _timer = 0;
+            }
+            if(frame > 1)
+            {
+                frame = 0;
+            }
         }
         if(_state == 2)
         {
+            if (frame == 0)
+            {
+                frame = 2;
+            }
             _timer++;
-            if (_timer > 5) _animation.SetFrame(3);
-            if (_timer > 10) _animation.SetFrame(2);
-            if (_timer > 15) _timer = 0;
+            if (_timer > 5)
+            {
+                _animation.SetFrame(frame);
+                frame++;
+                _timer = 0;
+            }
+            if (frame > 3)
+            {
+                frame = 2;
+            }
         }
 
         if (_state == 3)
         {
+            if (frame == 0)
+            {
+                frame = 4;
+            }
             _timer++;
-            if (_timer > 5) _animation.SetFrame(5);
-            if (_timer > 10) _animation.SetFrame(4);
-            if (_timer > 15) _timer = 0;
+            if (_timer > 5)
+            {
+                _animation.SetFrame(frame);
+                frame++;
+                _timer = 0;
+            }
+            if (frame > 5)
+            {
+                frame = 4;
+            }
         }
         if (_state == 4)
         {
+            if (frame == 0)
+            {
+                frame = 6;
+            }
             _timer++;
-            if (_timer > 5) _animation.SetFrame(7);
-            if (_timer > 10) _animation.SetFrame(6);
-            if (_timer > 15) _timer = 0;
+            if (_timer > 5)
+            {
+                _animation.SetFrame(frame);
+                frame++;
+                _timer = 0;
+            }
+            if (frame > 7)
+            {
+                frame = 6;
+            }
         }
 
-     
+
         if (_miningAnimation == true)
         {
-        _timer2++;
-        if (_timer2 > 3) _mining.SetFrame(0);
-        if (_timer2 > 6) _mining.SetFrame(1);
-        if (_timer2 > 9) _mining.SetFrame(2);
-        if (_timer2 > 12) _mining.SetFrame(3);
+            _timer2++;
+            if (_timer2 > 3) _mining.SetFrame(0);
+            if (_timer2 > 6) _mining.SetFrame(1);
+            if (_timer2 > 9) _mining.SetFrame(2);
+            if (_timer2 > 12) _mining.SetFrame(3);
             if (_timer2 > 15)
             {
                 _timer2 = 0;
@@ -325,20 +387,28 @@ class Player : Sprite
 
     void Boost()
     {
-        if (Input.GetKey(Key.E))
+        if (Input.GetKey(Key.E) && _boost < 540)
         {
-            _speed = 1.0f;
+            _speed = 2.0f;
+            _boost += 5;           
         }
         else
         {
             _speed = 0.5f;
+            _boost--;
         }
 
+        if (_boost < 0)
+        {
+            _boost = 0;
+        }
 
-    }
-    void Gravity()
-    {
-        y += _gravity;
+        if(_boost > 600)
+        {
+            _boost = 600;
+        }
+
+        ((MyGame)game).SetBooster(_boost);
     }
 
 }

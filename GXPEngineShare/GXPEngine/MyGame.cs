@@ -8,6 +8,8 @@ public class MyGame : Game
     private Menu _menu;
     private int _shakeTime = 0;
     private int _score = 0;
+    private int _boost = 0;
+    private bool _shoot = false;
 
     //arcade screen res: 1366x768
     public MyGame() : base(1408, 720, true, true, 1366, 768)		// Create a window that's 800x600 and NOT fullscreen
@@ -117,5 +119,25 @@ public class MyGame : Game
     public void IncreaseSpeed()
     {
         _speed += 0.0001f;
+    }
+
+    public void SetBooster(int value)
+    {
+        _boost = value;
+    }
+
+    public int GetBooster()
+    {
+        return _boost;
+    }
+
+    public void SetShoot(bool boolean)
+    {
+        _shoot = boolean;
+    }
+
+    public bool GetShoot()
+    {
+        return _shoot;
     }
 }
