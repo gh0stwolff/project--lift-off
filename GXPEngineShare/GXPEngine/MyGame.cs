@@ -18,7 +18,7 @@ public class MyGame : Game
 
     #region setup & update
     //arcade screen res: 1366x768
-    public MyGame() : base(1408, 720, false, true, 1366, 768)		// Create a window that's 800x600 and NOT fullscreen
+    public MyGame() : base(1408, 720, true, true, 1366, 768)		// Create a window that's 800x600 and NOT fullscreen
 	{
         _menu = new Menu(width, height);
         AddChild(_menu);

@@ -42,7 +42,7 @@ class SingleplayerMapGenerator : GameObject
     private Lava _lava;
     private Sprite _background;
 
-    private ScreenLayer[] layers = new ScreenLayer[4];
+    private ScreenLayer[] layers = new ScreenLayer[8];
     #endregion
 
     #region setup & update
@@ -85,6 +85,8 @@ class SingleplayerMapGenerator : GameObject
         //adding a hud
         HUD hud = new HUD(((MyGame)game).GetScreenWidth(), ((MyGame)game).GetScreenHeight());
         layers[3].AddChild(hud);
+        BoostBar boostbar = new BoostBar();
+        layers[7].AddChild(boostbar);
         //adding a background
         _background = new Sprite("inGameBackground.png");
         layers[0].AddChild(_background);

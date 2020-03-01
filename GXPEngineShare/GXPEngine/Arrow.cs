@@ -90,6 +90,16 @@ class Arrow : AnimationSprite
             {
                 y += _speed;
             }
+
+            if (y < -((MyGame)game).GetScreenY() + width)
+            {
+                y = -((MyGame)game).GetScreenY() + width;
+            }
+
+            if (y > ((MyGame)game).GetScreenHeight() - ((MyGame)game).GetScreenY() - width)
+            {
+                y = ((MyGame)game).GetScreenHeight() - ((MyGame)game).GetScreenY() - width;
+            }
         } 
         
         if(_shoot == true)
